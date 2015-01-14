@@ -1,4 +1,4 @@
-package com.example.takawo.fan.db.adaptor;
+package com.example.takawo.fan.adaptor;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.takawo.fan.R;
+import com.example.takawo.fan.db.data.PlayerData;
+import com.example.takawo.fan.db.view.Player;
 
 import java.util.ArrayList;
 
@@ -17,9 +19,9 @@ import java.util.ArrayList;
 public class PlayerAdaptor extends RecyclerView.Adapter<PlayerAdaptor.ViewHolder>{
 
     private LayoutInflater inf;
-    private ArrayList<String> dataList;
+    private ArrayList<PlayerData> dataList;
 
-    public PlayerAdaptor(Context context, ArrayList<String> dataList){
+    public PlayerAdaptor(Context context, ArrayList<PlayerData> dataList){
         super();
         inf = LayoutInflater.from(context);
         this.dataList = dataList;
@@ -34,22 +36,25 @@ public class PlayerAdaptor extends RecyclerView.Adapter<PlayerAdaptor.ViewHolder
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
-        String data = (String)dataList.get(i);
-        viewHolder.text.setText(data);
-
+        PlayerData data = (PlayerData)dataList.get(i);
+//        viewHolder.text.setText(data);
+        viewHolder.playerName.setText(data.getPlayerName());
+        viewHolder.gameEvent.setText(data.getGameEvent());
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return dataList.size();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView text;
+        TextView playerName;
+        TextView gameEvent;
 
         public ViewHolder(View v) {
             super(v);
-            text = (TextView) v.findViewById(R.id.text);
+            playerName = (TextView)v.findViewById(R.id.playerName);
+            gameEvent = (TextView)v.findViewById(R.id.gameEvent);
         }
     }
 }

@@ -9,11 +9,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.couchbase.lite.Query;
+import com.example.takawo.fan.adaptor.PlayerAdaptor;
 import com.example.takawo.fan.db.DBManager;
-import com.example.takawo.fan.db.adaptor.PlayerAdaptor;
+import com.example.takawo.fan.db.data.PlayerData;
 import com.example.takawo.fan.db.view.Player;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -31,17 +33,28 @@ public class MainActivity extends ActionBarActivity {
         toolbar.setTitle("FAN --toolbar");
         setSupportActionBar(toolbar);
 
+        /***********************************
+         データ作成
+         **********************************/
+        PlayerData player1 = new PlayerData();
+        player1.setPlayerId(1);
+        player1.setPlayerName("柏レイソル");
+        player1.setGameEvent("サッカー");
+        PlayerData player2 = new PlayerData();
+        player2.setPlayerId(2);
+        player2.setPlayerName("Takumi");
+        player2.setGameEvent("水泳");
+        ArrayList<PlayerData> results = new ArrayList<>();
+        results.add(player1);
+        results.add(player2);
+
         recyclerViewPlayer = (RecyclerView)findViewById(R.id.list_player);
         recyclerViewPlayer.setHasFixedSize(true);
 
         layoutManagerPlayer = new LinearLayoutManager(this);
         recyclerViewPlayer.setLayoutManager(layoutManagerPlayer);
+        recyclerViewPlayer.setAdapter(new PlayerAdaptor(this, results));
 
-        DBManager dbManager = new DBManager(this);
-        Player playerView = new Player();
-        Query playerList = playerView.getQuery(dbManager.createDB());
-
-//        adapterPlayer = new PlayerAdaptor(new ArrayList<String>(), )
     }
 
 
@@ -66,4 +79,6 @@ public class MainActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
 }
