@@ -1,15 +1,19 @@
 package com.example.takawo.fan.adaptor;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.takawo.fan.R;
 import com.example.takawo.fan.db.data.PlayerData;
 import com.example.takawo.fan.db.view.Player;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -36,8 +40,9 @@ public class PlayerAdaptor extends RecyclerView.Adapter<PlayerAdaptor.ViewHolder
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
-        PlayerData data = (PlayerData)dataList.get(i);
+        PlayerData data = dataList.get(i);
 //        viewHolder.text.setText(data);
+        viewHolder.playerImage.setImageBitmap(data.getPlayerImg());
         viewHolder.playerName.setText(data.getPlayerName());
         viewHolder.gameEvent.setText(data.getGameEvent());
     }
@@ -48,11 +53,13 @@ public class PlayerAdaptor extends RecyclerView.Adapter<PlayerAdaptor.ViewHolder
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView playerImage;
         TextView playerName;
         TextView gameEvent;
 
         public ViewHolder(View v) {
             super(v);
+            playerImage = (ImageView)v.findViewById(R.id.playerImg);
             playerName = (TextView)v.findViewById(R.id.playerName);
             gameEvent = (TextView)v.findViewById(R.id.gameEvent);
         }

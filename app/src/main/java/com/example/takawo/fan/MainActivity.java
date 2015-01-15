@@ -1,5 +1,7 @@
 package com.example.takawo.fan;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -29,19 +31,22 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar =(Toolbar) findViewById(R.id.activity_my_toolbar);
-        toolbar.setTitle("FAN --toolbar");
-        setSupportActionBar(toolbar);
+//        Toolbar toolbar =(Toolbar) findViewById(R.id.activity_my_toolbar);
+//        toolbar.setTitle("FAN --toolbar");
+//        setSupportActionBar(toolbar);
 
         /***********************************
          データ作成
          **********************************/
+        Bitmap img = BitmapFactory.decodeResource(getResources(), R.drawable.no_image);
         PlayerData player1 = new PlayerData();
         player1.setPlayerId(1);
+        player1.setPlayerImg(img);
         player1.setPlayerName("柏レイソル");
         player1.setGameEvent("サッカー");
         PlayerData player2 = new PlayerData();
         player2.setPlayerId(2);
+        player2.setPlayerImg(img);
         player2.setPlayerName("Takumi");
         player2.setGameEvent("水泳");
         ArrayList<PlayerData> results = new ArrayList<>();
