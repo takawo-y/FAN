@@ -55,6 +55,7 @@ public class MainActivity extends ActionBarActivity {
 
         recyclerViewPlayer = (RecyclerView)findViewById(R.id.list_player);
         recyclerViewPlayer.setHasFixedSize(true);
+        recyclerViewPlayer.addItemDecoration(new MyItemDecoration(this));
 
         layoutManagerPlayer = new LinearLayoutManager(this);
         recyclerViewPlayer.setLayoutManager(layoutManagerPlayer);
