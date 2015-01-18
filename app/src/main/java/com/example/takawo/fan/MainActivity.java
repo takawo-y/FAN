@@ -49,9 +49,15 @@ public class MainActivity extends ActionBarActivity {
         player2.setPlayerImg(img);
         player2.setPlayerName("Takumi");
         player2.setGameEvent("水泳");
+        PlayerData player3 = new PlayerData();
+        player3.setPlayerId(3);
+        player3.setPlayerImg(img);
+        player3.setPlayerName("西武ライオンズ");
+        player3.setGameEvent("野球");
         ArrayList<PlayerData> results = new ArrayList<>();
         results.add(player1);
         results.add(player2);
+        results.add(player3);
 
         recyclerViewPlayer = (RecyclerView)findViewById(R.id.list_player);
         recyclerViewPlayer.setHasFixedSize(true);
