@@ -1,5 +1,6 @@
 package com.example.takawo.fan;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.app.ActionBarActivity;
@@ -9,6 +10,8 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.couchbase.lite.Query;
 import com.example.takawo.fan.adaptor.PlayerAdaptor;
@@ -67,6 +70,16 @@ public class MainActivity extends ActionBarActivity {
         recyclerViewPlayer.setLayoutManager(layoutManagerPlayer);
         recyclerViewPlayer.setAdapter(new PlayerAdaptor(this, results));
 
+        Button fab = (Button)findViewById(R.id.fab_player);
+        fab.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(MainActivity.this, PlayerRegistrationActivity.class);
+                        startActivity(intent);
+                    }
+                }
+        );
     }
 
 
