@@ -11,13 +11,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 
 import com.couchbase.lite.Query;
 import com.example.takawo.fan.adaptor.PlayerAdaptor;
 import com.example.takawo.fan.db.DBManager;
 import com.example.takawo.fan.db.data.PlayerData;
 import com.example.takawo.fan.db.view.Player;
+import com.melnykov.fab.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,9 +34,11 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        Toolbar toolbar =(Toolbar) findViewById(R.id.activity_my_toolbar);
-//        toolbar.setTitle("FAN --toolbar");
-//        setSupportActionBar(toolbar);
+        //ToolBar設定
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        setSupportActionBar(toolbar);
+        toolbar.setLogo(R.drawable.ic_launcher);
+        toolbar.setTitle(R.string.player_list_view_name);
 
         /***********************************
          データ作成
@@ -70,7 +72,7 @@ public class MainActivity extends ActionBarActivity {
         recyclerViewPlayer.setLayoutManager(layoutManagerPlayer);
         recyclerViewPlayer.setAdapter(new PlayerAdaptor(this, results));
 
-        Button fab = (Button)findViewById(R.id.fab_player);
+        FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab_player);
         fab.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -86,7 +88,7 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+//        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 

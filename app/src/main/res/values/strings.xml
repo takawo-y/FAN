@@ -5,14 +5,17 @@
     <string name="hello_world">Hello FAN app!</string>
     <string name="action_settings">Settings</string>
 
-    <string name="player_registration_player_name">プレーヤー名</string>
-    <string name="player_registration_game_event">種目</string>
-    <string name="player_registration_category">カテゴリー</string>
-    <string name="player_registration_result_type">結果種類</string>
+    <string name="player_list_view_name">プレーヤー一覧</string>
+
+    <string name="player_registration_view_name">プレーヤー登録画面</string>
+    <string name="player_registration_player_name">プレーヤー名：</string>
+    <string name="player_registration_game_event">種目：</string>
+    <string name="player_registration_category">カテゴリー：</string>
+    <string name="player_registration_result_type">結果種類：</string>
     <string name="player_registration_result_type_score">スコア</string>
     <string name="player_registration_result_type_time">タイム</string>
-    <string name="player_registration_player_color">イメージカラー</string>
-    <string name="player_registration_player_image">画像</string>
-    <string name="player_registration_player_comment">コメント</string>
+    <string name="player_registration_player_color">イメージカラー：</string>
+    <string name="player_registration_player_image">画像：</string>
+    <string name="player_registration_player_comment">コメント：</string>
 
 </resources>
