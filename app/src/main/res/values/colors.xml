@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="primary_color">@color/blue_500</color>
-    <color name="primary_dark_color">@color/blue_700</color>
+    <color name="primary_dark_color">@color/blue_900</color>
     <color name="accent_color">@color/red_500</color>
 
     <color name="floating_button_primary">#3f51b5</color>
     <color name="floating_button_primary_pressed">#303f9f</color>
     <color name="floating_button_ripple">#ff80ab</color>
-
+9
     <color name="red_50">#fde0dc</color>
     <color name="red_100">#f9bdbb</color>
     <color name="red_200">#f69988</color>
