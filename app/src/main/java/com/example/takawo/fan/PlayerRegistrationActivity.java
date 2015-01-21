@@ -21,7 +21,7 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(R.string.player_registration_view_name);
-        toolbar.setSubtitle("サブタイトル");
+//        toolbar.setSubtitle("サブタイトル");
 
     }
 }
