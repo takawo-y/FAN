@@ -22,6 +22,10 @@ import com.melnykov.fab.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
+
 
 public class MainActivity extends ActionBarActivity {
 
@@ -29,13 +33,22 @@ public class MainActivity extends ActionBarActivity {
     private RecyclerView.Adapter adapterPlayer;
     private RecyclerView.LayoutManager layoutManagerPlayer;
 
+    @InjectView(R.id.tool_bar)
+    Toolbar toolbar;
+
+    @OnClick(R.id.fab_player)
+    void onClickAdd(){
+        Intent intent = new Intent(MainActivity.this, PlayerRegistrationActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.inject(this);
 
         //ToolBar設定
-        Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
         toolbar.setLogo(R.drawable.ic_launcher);
         toolbar.setTitle(R.string.player_list_view_name);
@@ -72,16 +85,6 @@ public class MainActivity extends ActionBarActivity {
         recyclerViewPlayer.setLayoutManager(layoutManagerPlayer);
         recyclerViewPlayer.setAdapter(new PlayerAdaptor(this, results));
 
-        FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab_player);
-        fab.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(MainActivity.this, PlayerRegistrationActivity.class);
-                        startActivity(intent);
-                    }
-                }
-        );
     }
 
 
