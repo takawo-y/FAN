@@ -1,6 +1,9 @@
 package com.example.takawo.fan;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.preference.DialogPreference;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -23,7 +26,21 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
 
     @OnClick(R.id.button_player_registration)
     void onClickRegist(){
-
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("プレイヤー登録")
+        .setMessage("登録しますか？")
+        .setPositiveButton("はい",
+            new DialogInterface.OnClickListener(){
+                public void onClick(DialogInterface dialog, int which){
+                }
+            }
+        )
+        .setNegativeButton("いいえ",
+            new DialogInterface.OnClickListener(){
+                public void onClick(DialogInterface dialog, int which){}
+            }
+        )
+        .show();
     }
 
     @Override
