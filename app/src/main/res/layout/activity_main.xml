@@ -12,7 +12,8 @@
         android:layout_width="match_parent"
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         android:minHeight="?attr/actionBarSize"
-        android:background="?attr/colorPrimary" />
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"/>
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:fab="http://schemas.android.com/apk/res-auto"

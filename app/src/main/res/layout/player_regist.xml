@@ -12,7 +12,19 @@
         android:layout_width="match_parent"
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         android:minHeight="?attr/actionBarSize"
-        android:background="?attr/colorPrimary" />
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        app:title="@string/player_registration_view_name"
+        app:navigationIcon="@drawable/ic_done_white_36dp"
+        >
+        <ImageView
+            android:id="@+id/button_player_registration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginRight="16dp"
+            android:src="@drawable/ic_done_white_36dp"/>
+    </android.support.v7.widget.Toolbar>
 
     <TableLayout
         android:layout_width="match_parent"
