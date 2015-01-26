@@ -12,13 +12,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.couchbase.lite.Query;
 import com.example.takawo.fan.adaptor.PlayerAdaptor;
-import com.example.takawo.fan.db.DBManager;
 import com.example.takawo.fan.db.data.PlayerData;
-import com.example.takawo.fan.db.view.Player;
-import com.melnykov.fab.FloatingActionButton;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +29,8 @@ public class MainActivity extends ActionBarActivity {
     private RecyclerView recyclerViewPlayer;
     private RecyclerView.Adapter adapterPlayer;
     private RecyclerView.LayoutManager layoutManagerPlayer;
+
+    private String TAG = this.getClass().getName();
 
     @InjectView(R.id.tool_bar)
     Toolbar toolbar;
@@ -109,6 +108,5 @@ public class MainActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
 
 }

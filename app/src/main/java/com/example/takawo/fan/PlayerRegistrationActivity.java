@@ -27,7 +27,7 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
     @OnClick(R.id.button_player_registration)
     void onClickRegist(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("プレイヤー登録")
+        builder.setTitle("Player登録")
         .setMessage("登録しますか？")
         .setPositiveButton("はい",
             new DialogInterface.OnClickListener(){
