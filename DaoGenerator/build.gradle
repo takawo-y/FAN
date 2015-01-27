@@ -1,0 +1,73 @@
+import de.greenrobot.daogenerator.DaoGenerator;
+import de.greenrobot.daogenerator.Entity;
+import de.greenrobot.daogenerator.Schema;
+
+// DBのバージョン
+def dbVersion = 3
+// 出力先のパッケージ名
+def daoOutputPackage = "com.takawo.fan.db"
+// 出力先のディレクトリパス（generator実行前にcleanするのでソースは分けたほうがいい）
+def daoOutputDirPath = "app/src-gen/main/java"
+
+// generatorで作成したディレクトリを削除する
+task daoGeneratorClean(type: Delete) {
+    delete "../${daoOutputDirPath}"
+}
+
+task daoGenerator {
+    description 'daoを生成します'
+
+    doLast {
+        Schema schema = new Schema(dbVersion, daoOutputPackage);
+
+        // ------------- この辺でテーブル定義 START -------------------
+
+        Entity player = schema.addEntity("fandb_player");
+        player.addLongProperty("player_id").primaryKey().autoincrement().notNull().unique();
+        player.addStringProperty("player_name").notNull();
+        player.addStringProperty("game_event").notNull();
+        player.addLongProperty("result_type").notNull();  //0:score, 1:time
+        player.addStringProperty("category_id");
+        player.addStringProperty("player_color");
+        player.addStringProperty("player_image");
+        player.addStringProperty("player_comment");
+
+        Entity game = schema.addEntity("fandb_game");
+        game.addLongProperty("player_id").primaryKey().notNull();
+        game.addLongProperty("game_id").primaryKey().autoincrement().notNull();
+        game.addLongProperty("game_type").notNull();  //0:生観戦、1:TV生観戦、2:TV録画観戦、3:出場
+        game.addStringProperty("game_category");
+        game.addStringProperty("place");
+        game.addStringProperty("weather");
+        game.addStringProperty("temperature");
+        game.addDateProperty("game_day").notNull();
+        game.addStringProperty("start_time");
+        game.addStringProperty("end_time");
+        game.addStringProperty("opposition");
+        game.addStringProperty("result");
+        game.addStringProperty("result_score");
+        game.addStringProperty("result_time");
+        game.addStringProperty("comment");
+
+        Entity content = schema.addEntity("fandb_content");
+        content.addLongProperty("game_id").primaryKey().notNull();
+        content.addLongProperty("content_id").primaryKey().autoincrement().notNull();
+        content.addStringProperty("path");
+        content.addStringProperty("comment");
+
+
+        // ------------- この辺でテーブル定義 END -------------------
+
+        try {
+            // 未作成ならディレクトリを作る
+            File file = new File(daoOutputDirPath);
+            if (!file.exists()) {
+                file.mkdirs();
+            }
+            // Dao生成!
+            new DaoGenerator().generateAll(schema, daoOutputDirPath);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
