@@ -22,36 +22,36 @@ task daoGenerator {
 
         // ------------- この辺でテーブル定義 START -------------------
 
-        Entity player = schema.addEntity("fandb_player");
-        player.addLongProperty("player_id").primaryKey().autoincrement().notNull().unique();
-        player.addStringProperty("player_name").notNull();
-        player.addStringProperty("game_event").notNull();
-        player.addLongProperty("result_type").notNull();  //0:score, 1:time
-        player.addStringProperty("category_id");
-        player.addStringProperty("player_color");
-        player.addStringProperty("player_image");
-        player.addStringProperty("player_comment");
+        Entity player = schema.addEntity("FandbPlayer");
+        player.addLongProperty("playerId").primaryKey().autoincrement().notNull().unique();
+        player.addStringProperty("playerName").notNull();
+        player.addStringProperty("gameEvent").notNull();
+        player.addLongProperty("resultType").notNull();  //0:score, 1:time
+        player.addStringProperty("categoryId");
+        player.addStringProperty("playerColor");
+        player.addStringProperty("playerImagePath");
+        player.addStringProperty("playerComment");
 
-        Entity game = schema.addEntity("fandb_game");
-        game.addLongProperty("player_id").primaryKey().notNull();
-        game.addLongProperty("game_id").primaryKey().autoincrement().notNull();
-        game.addLongProperty("game_type").notNull();  //0:生観戦、1:TV生観戦、2:TV録画観戦、3:出場
-        game.addStringProperty("game_category");
+        Entity game = schema.addEntity("FandbGame");
+        game.addLongProperty("playerId").primaryKey().notNull();
+        game.addLongProperty("gameId").primaryKey().autoincrement().notNull();
+        game.addLongProperty("gameType").notNull();  //0:生観戦、1:TV生観戦、2:TV録画観戦、3:出場
+        game.addStringProperty("gameCategory");
         game.addStringProperty("place");
         game.addStringProperty("weather");
         game.addStringProperty("temperature");
-        game.addDateProperty("game_day").notNull();
-        game.addStringProperty("start_time");
-        game.addStringProperty("end_time");
+        game.addDateProperty("gameDay").notNull();
+        game.addStringProperty("startTime");
+        game.addStringProperty("endTime");
         game.addStringProperty("opposition");
         game.addStringProperty("result");
-        game.addStringProperty("result_score");
-        game.addStringProperty("result_time");
+        game.addStringProperty("resultScore");
+        game.addStringProperty("resultTime");
         game.addStringProperty("comment");
 
-        Entity content = schema.addEntity("fandb_content");
-        content.addLongProperty("game_id").primaryKey().notNull();
-        content.addLongProperty("content_id").primaryKey().autoincrement().notNull();
+        Entity content = schema.addEntity("FandbContent");
+        content.addLongProperty("gameId").primaryKey().notNull();
+        content.addLongProperty("contentId").primaryKey().autoincrement().notNull();
         content.addStringProperty("path");
         content.addStringProperty("comment");
 

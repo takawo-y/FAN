@@ -1,6 +1,7 @@
 package com.example.takawo.fan;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.app.ActionBarActivity;
@@ -13,7 +14,12 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.example.takawo.fan.adaptor.PlayerAdaptor;
+import com.example.takawo.fan.adaptor.PlayerDemoAdaptor;
 import com.example.takawo.fan.db.data.PlayerData;
+import com.takawo.fan.db.DaoMaster;
+import com.takawo.fan.db.DaoSession;
+import com.takawo.fan.db.FandbPlayer;
+import com.takawo.fan.db.FandbPlayerDao;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -76,13 +82,19 @@ public class MainActivity extends ActionBarActivity {
         results.add(player2);
         results.add(player3);
 
+        //DB接続
+        SQLiteDatabase db = new DaoMaster.DevOpenHelper(this, "fandb", null).getWritableDatabase();
+        DaoSession daoSession = new DaoMaster(db).newSession();
+        FandbPlayerDao playerDao = daoSession.getFandbPlayerDao();
+        List<FandbPlayer> playerList = playerDao.loadAll();
+
         recyclerViewPlayer = (RecyclerView)findViewById(R.id.list_player);
         recyclerViewPlayer.setHasFixedSize(true);
         recyclerViewPlayer.addItemDecoration(new MyItemDecoration(this));
 
         layoutManagerPlayer = new LinearLayoutManager(this);
         recyclerViewPlayer.setLayoutManager(layoutManagerPlayer);
-        recyclerViewPlayer.setAdapter(new PlayerAdaptor(this, results));
+        recyclerViewPlayer.setAdapter(new PlayerDemoAdaptor(this, results));  //デモ用Adaptor
 
     }
 
