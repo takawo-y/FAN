@@ -23,7 +23,7 @@ task daoGenerator {
         // ------------- この辺でテーブル定義 START -------------------
 
         Entity player = schema.addEntity("FandbPlayer");
-        player.addLongProperty("playerId").primaryKey().autoincrement().notNull().unique();
+        player.addIdProperty().primaryKey().autoincrement().notNull().unique();
         player.addStringProperty("playerName").notNull();
         player.addStringProperty("gameEvent").notNull();
         player.addLongProperty("resultType").notNull();  //0:score, 1:time
@@ -33,8 +33,8 @@ task daoGenerator {
         player.addStringProperty("playerComment");
 
         Entity game = schema.addEntity("FandbGame");
-        game.addLongProperty("playerId").primaryKey().notNull();
-        game.addLongProperty("gameId").primaryKey().autoincrement().notNull();
+        game.addLongProperty("playerId").notNull();
+        game.addLongProperty("gameId").notNull().unique();
         game.addLongProperty("gameType").notNull();  //0:生観戦、1:TV生観戦、2:TV録画観戦、3:出場
         game.addStringProperty("gameCategory");
         game.addStringProperty("place");
@@ -50,8 +50,8 @@ task daoGenerator {
         game.addStringProperty("comment");
 
         Entity content = schema.addEntity("FandbContent");
-        content.addLongProperty("gameId").primaryKey().notNull();
-        content.addLongProperty("contentId").primaryKey().autoincrement().notNull();
+        content.addLongProperty("gameId").notNull();
+        content.addLongProperty("contentId").notNull();
         content.addStringProperty("path");
         content.addStringProperty("comment");
 

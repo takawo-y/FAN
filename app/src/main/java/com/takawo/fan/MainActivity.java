@@ -1,4 +1,4 @@
-package com.example.takawo.fan;
+package com.takawo.fan;
 
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,17 +11,15 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
-import com.example.takawo.fan.adaptor.PlayerAdaptor;
-import com.example.takawo.fan.adaptor.PlayerDemoAdaptor;
-import com.example.takawo.fan.db.data.PlayerData;
+import com.takawo.fan.adaptor.PlayerAdaptor;
+import com.takawo.fan.adaptor.PlayerDemoAdaptor;
+import com.takawo.fan.db.data.PlayerData;
 import com.takawo.fan.db.DaoMaster;
 import com.takawo.fan.db.DaoSession;
 import com.takawo.fan.db.FandbPlayer;
 import com.takawo.fan.db.FandbPlayerDao;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,7 +92,8 @@ public class MainActivity extends ActionBarActivity {
 
         layoutManagerPlayer = new LinearLayoutManager(this);
         recyclerViewPlayer.setLayoutManager(layoutManagerPlayer);
-        recyclerViewPlayer.setAdapter(new PlayerDemoAdaptor(this, results));  //デモ用Adaptor
+        //recyclerViewPlayer.setAdapter(new PlayerDemoAdaptor(this, results));  //デモ用Adaptor
+        recyclerViewPlayer.setAdapter(new PlayerAdaptor(this, playerList));  //本番Adaptor
 
     }
 

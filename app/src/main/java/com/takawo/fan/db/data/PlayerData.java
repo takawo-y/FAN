@@ -1,4 +1,4 @@
-package com.example.takawo.fan.db.data;
+package com.takawo.fan.db.data;
 
 import android.graphics.Bitmap;
 

@@ -23,8 +23,8 @@ public class FandbContentDao extends AbstractDao<FandbContent, Void> {
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {
-        public final static Property GameId = new Property(0, long.class, "gameId", true, "GAME_ID");
-        public final static Property ContentId = new Property(1, long.class, "contentId", true, "CONTENT_ID");
+        public final static Property GameId = new Property(0, long.class, "gameId", false, "GAME_ID");
+        public final static Property ContentId = new Property(1, long.class, "contentId", false, "CONTENT_ID");
         public final static Property Path = new Property(2, String.class, "path", false, "PATH");
         public final static Property Comment = new Property(3, String.class, "comment", false, "COMMENT");
     };
@@ -42,8 +42,8 @@ public class FandbContentDao extends AbstractDao<FandbContent, Void> {
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "'FANDB_CONTENT' (" + //
-                "'GAME_ID' INTEGER PRIMARY KEY NOT NULL ," + // 0: gameId
-                "'CONTENT_ID' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ," + // 1: contentId
+                "'GAME_ID' INTEGER NOT NULL ," + // 0: gameId
+                "'CONTENT_ID' INTEGER NOT NULL ," + // 1: contentId
                 "'PATH' TEXT," + // 2: path
                 "'COMMENT' TEXT);"); // 3: comment
     }

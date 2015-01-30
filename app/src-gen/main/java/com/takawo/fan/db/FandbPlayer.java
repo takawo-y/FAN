@@ -6,7 +6,7 @@ package com.takawo.fan.db;
  */
 public class FandbPlayer {
 
-    private long playerId;
+    private long id;
     /** Not-null value. */
     private String playerName;
     /** Not-null value. */
@@ -20,12 +20,12 @@ public class FandbPlayer {
     public FandbPlayer() {
     }
 
-    public FandbPlayer(long playerId) {
-        this.playerId = playerId;
+    public FandbPlayer(long id) {
+        this.id = id;
     }
 
-    public FandbPlayer(long playerId, String playerName, String gameEvent, long resultType, String categoryId, String playerColor, String playerImagePath, String playerComment) {
-        this.playerId = playerId;
+    public FandbPlayer(long id, String playerName, String gameEvent, long resultType, String categoryId, String playerColor, String playerImagePath, String playerComment) {
+        this.id = id;
         this.playerName = playerName;
         this.gameEvent = gameEvent;
         this.resultType = resultType;
@@ -35,12 +35,12 @@ public class FandbPlayer {
         this.playerComment = playerComment;
     }
 
-    public long getPlayerId() {
-        return playerId;
+    public long getId() {
+        return id;
     }
 
-    public void setPlayerId(long playerId) {
-        this.playerId = playerId;
+    public void setId(long id) {
+        this.id = id;
     }
 
     /** Not-null value. */

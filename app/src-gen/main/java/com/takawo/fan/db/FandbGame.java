@@ -26,11 +26,6 @@ public class FandbGame {
     public FandbGame() {
     }
 
-    public FandbGame(long playerId, long gameId) {
-        this.playerId = playerId;
-        this.gameId = gameId;
-    }
-
     public FandbGame(long playerId, long gameId, long gameType, String gameCategory, String place, String weather, String temperature, java.util.Date gameDay, String startTime, String endTime, String opposition, String result, String resultScore, String resultTime, String comment) {
         this.playerId = playerId;
         this.gameId = gameId;

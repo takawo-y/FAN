@@ -1,4 +1,4 @@
-package com.example.takawo.fan;
+package com.takawo.fan;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

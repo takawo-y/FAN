@@ -14,11 +14,6 @@ public class FandbContent {
     public FandbContent() {
     }
 
-    public FandbContent(long gameId, long contentId) {
-        this.gameId = gameId;
-        this.contentId = contentId;
-    }
-
     public FandbContent(long gameId, long contentId, String path, String comment) {
         this.gameId = gameId;
         this.contentId = contentId;

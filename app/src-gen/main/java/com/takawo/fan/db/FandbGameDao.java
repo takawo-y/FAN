@@ -23,8 +23,8 @@ public class FandbGameDao extends AbstractDao<FandbGame, Void> {
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {
-        public final static Property PlayerId = new Property(0, long.class, "playerId", true, "PLAYER_ID");
-        public final static Property GameId = new Property(1, long.class, "gameId", true, "GAME_ID");
+        public final static Property PlayerId = new Property(0, long.class, "playerId", false, "PLAYER_ID");
+        public final static Property GameId = new Property(1, long.class, "gameId", false, "GAME_ID");
         public final static Property GameType = new Property(2, long.class, "gameType", false, "GAME_TYPE");
         public final static Property GameCategory = new Property(3, String.class, "gameCategory", false, "GAME_CATEGORY");
         public final static Property Place = new Property(4, String.class, "place", false, "PLACE");
@@ -53,8 +53,8 @@ public class FandbGameDao extends AbstractDao<FandbGame, Void> {
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "'FANDB_GAME' (" + //
-                "'PLAYER_ID' INTEGER PRIMARY KEY NOT NULL ," + // 0: playerId
-                "'GAME_ID' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ," + // 1: gameId
+                "'PLAYER_ID' INTEGER NOT NULL ," + // 0: playerId
+                "'GAME_ID' INTEGER NOT NULL UNIQUE ," + // 1: gameId
                 "'GAME_TYPE' INTEGER NOT NULL ," + // 2: gameType
                 "'GAME_CATEGORY' TEXT," + // 3: gameCategory
                 "'PLACE' TEXT," + // 4: place

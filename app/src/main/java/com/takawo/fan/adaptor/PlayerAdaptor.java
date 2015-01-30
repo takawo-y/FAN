@@ -1,6 +1,7 @@
-package com.example.takawo.fan.adaptor;
+package com.takawo.fan.adaptor;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,27 +9,34 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.takawo.fan.R;
-import com.example.takawo.fan.db.data.PlayerData;
+import com.squareup.picasso.Picasso;
+import com.takawo.fan.R;
+import com.takawo.fan.db.FandbPlayer;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Takawo on 2014/12/31.
  */
-public class PlayerDemoAdaptor extends RecyclerView.Adapter<PlayerDemoAdaptor.ViewHolder>{
+public class PlayerAdaptor extends RecyclerView.Adapter<PlayerAdaptor.ViewHolder>{
 
     private LayoutInflater inf;
-    private ArrayList<PlayerData> dataList;
+    private List<FandbPlayer> dataList;
+    private Context context;
+    private Bitmap noImage;
+    public void setNoImage(Bitmap noImage) {
+        this.noImage = noImage;
+    }
 
-    public PlayerDemoAdaptor(Context context, ArrayList<PlayerData> dataList){
+    public PlayerAdaptor(Context context, List<FandbPlayer> dataList){
         super();
+        this.context = context;
         inf = LayoutInflater.from(context);
         this.dataList = dataList;
     }
 
     @Override
-    public PlayerDemoAdaptor.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public PlayerAdaptor.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view = inf.inflate(R.layout.player_list, null);
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
@@ -36,9 +44,14 @@ public class PlayerDemoAdaptor extends RecyclerView.Adapter<PlayerDemoAdaptor.Vi
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
-        PlayerData data = dataList.get(i);
-//        viewHolder.text.setText(data);
-        viewHolder.playerImage.setImageBitmap(data.getPlayerImg());
+        FandbPlayer data = dataList.get(i);
+        String imgPath = data.getPlayerImagePath();
+        if(imgPath == null || "".equals(imgPath)){
+            //画像パスがない場合、NoImage
+            viewHolder.playerImage.setImageBitmap(noImage);
+        }else{
+            Picasso.with(context).load(data.getPlayerImagePath()).into(viewHolder.playerImage);
+        }
         viewHolder.playerName.setText(data.getPlayerName());
         viewHolder.gameEvent.setText(data.getGameEvent());
     }
@@ -47,6 +60,7 @@ public class PlayerDemoAdaptor extends RecyclerView.Adapter<PlayerDemoAdaptor.Vi
     public int getItemCount() {
         return dataList.size();
     }
+
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView playerImage;

@@ -1,13 +1,10 @@
-package com.example.takawo.fan;
+package com.takawo.fan;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.preference.DialogPreference;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.widget.ImageView;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
