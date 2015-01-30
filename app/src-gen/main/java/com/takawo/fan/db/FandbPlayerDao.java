@@ -33,6 +33,8 @@ public class FandbPlayerDao extends AbstractDao<FandbPlayer, Long> {
         public final static Property PlayerComment = new Property(7, String.class, "playerComment", false, "PLAYER_COMMENT");
     };
 
+    private DaoSession daoSession;
+
 
     public FandbPlayerDao(DaoConfig config) {
         super(config);
@@ -40,6 +42,7 @@ public class FandbPlayerDao extends AbstractDao<FandbPlayer, Long> {
     
     public FandbPlayerDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
+        this.daoSession = daoSession;
     }
 
     /** Creates the underlying database table. */
@@ -90,6 +93,12 @@ public class FandbPlayerDao extends AbstractDao<FandbPlayer, Long> {
         if (playerComment != null) {
             stmt.bindString(8, playerComment);
         }
+    }
+
+    @Override
+    protected void attachEntity(FandbPlayer entity) {
+        super.attachEntity(entity);
+        entity.__setDaoSession(daoSession);
     }
 
     /** @inheritdoc */

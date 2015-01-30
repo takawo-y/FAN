@@ -1,12 +1,17 @@
 package com.takawo.fan.db;
 
+import java.util.List;
+import java.util.ArrayList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
 import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.Property;
+import de.greenrobot.dao.internal.SqlUtils;
 import de.greenrobot.dao.internal.DaoConfig;
+import de.greenrobot.dao.query.Query;
+import de.greenrobot.dao.query.QueryBuilder;
 
 import com.takawo.fan.db.FandbGame;
 
@@ -14,7 +19,7 @@ import com.takawo.fan.db.FandbGame;
 /** 
  * DAO for table FANDB_GAME.
 */
-public class FandbGameDao extends AbstractDao<FandbGame, Void> {
+public class FandbGameDao extends AbstractDao<FandbGame, Long> {
 
     public static final String TABLENAME = "FANDB_GAME";
 
@@ -24,7 +29,7 @@ public class FandbGameDao extends AbstractDao<FandbGame, Void> {
     */
     public static class Properties {
         public final static Property PlayerId = new Property(0, long.class, "playerId", false, "PLAYER_ID");
-        public final static Property GameId = new Property(1, long.class, "gameId", false, "GAME_ID");
+        public final static Property GameId = new Property(1, long.class, "gameId", true, "GAME_ID");
         public final static Property GameType = new Property(2, long.class, "gameType", false, "GAME_TYPE");
         public final static Property GameCategory = new Property(3, String.class, "gameCategory", false, "GAME_CATEGORY");
         public final static Property Place = new Property(4, String.class, "place", false, "PLACE");
@@ -40,6 +45,9 @@ public class FandbGameDao extends AbstractDao<FandbGame, Void> {
         public final static Property Comment = new Property(14, String.class, "comment", false, "COMMENT");
     };
 
+    private DaoSession daoSession;
+
+    private Query<FandbGame> fandbPlayer_GamesQuery;
 
     public FandbGameDao(DaoConfig config) {
         super(config);
@@ -47,6 +55,7 @@ public class FandbGameDao extends AbstractDao<FandbGame, Void> {
     
     public FandbGameDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
+        this.daoSession = daoSession;
     }
 
     /** Creates the underlying database table. */
@@ -54,7 +63,7 @@ public class FandbGameDao extends AbstractDao<FandbGame, Void> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "'FANDB_GAME' (" + //
                 "'PLAYER_ID' INTEGER NOT NULL ," + // 0: playerId
-                "'GAME_ID' INTEGER NOT NULL UNIQUE ," + // 1: gameId
+                "'GAME_ID' INTEGER PRIMARY KEY NOT NULL UNIQUE ," + // 1: gameId
                 "'GAME_TYPE' INTEGER NOT NULL ," + // 2: gameType
                 "'GAME_CATEGORY' TEXT," + // 3: gameCategory
                 "'PLACE' TEXT," + // 4: place
@@ -141,10 +150,16 @@ public class FandbGameDao extends AbstractDao<FandbGame, Void> {
         }
     }
 
+    @Override
+    protected void attachEntity(FandbGame entity) {
+        super.attachEntity(entity);
+        entity.__setDaoSession(daoSession);
+    }
+
     /** @inheritdoc */
     @Override
-    public Void readKey(Cursor cursor, int offset) {
-        return null;
+    public Long readKey(Cursor cursor, int offset) {
+        return cursor.getLong(offset + 1);
     }    
 
     /** @inheritdoc */
@@ -192,15 +207,19 @@ public class FandbGameDao extends AbstractDao<FandbGame, Void> {
     
     /** @inheritdoc */
     @Override
-    protected Void updateKeyAfterInsert(FandbGame entity, long rowId) {
-        // Unsupported or missing PK type
-        return null;
+    protected Long updateKeyAfterInsert(FandbGame entity, long rowId) {
+        entity.setGameId(rowId);
+        return rowId;
     }
     
     /** @inheritdoc */
     @Override
-    public Void getKey(FandbGame entity) {
-        return null;
+    public Long getKey(FandbGame entity) {
+        if(entity != null) {
+            return entity.getGameId();
+        } else {
+            return null;
+        }
     }
 
     /** @inheritdoc */
@@ -209,4 +228,111 @@ public class FandbGameDao extends AbstractDao<FandbGame, Void> {
         return true;
     }
     
+    /** Internal query to resolve the "games" to-many relationship of FandbPlayer. */
+    public List<FandbGame> _queryFandbPlayer_Games(long playerId) {
+        synchronized (this) {
+            if (fandbPlayer_GamesQuery == null) {
+                QueryBuilder<FandbGame> queryBuilder = queryBuilder();
+                queryBuilder.where(Properties.PlayerId.eq(null));
+                fandbPlayer_GamesQuery = queryBuilder.build();
+            }
+        }
+        Query<FandbGame> query = fandbPlayer_GamesQuery.forCurrentThread();
+        query.setParameter(0, playerId);
+        return query.list();
+    }
+
+    private String selectDeep;
+
+    protected String getSelectDeep() {
+        if (selectDeep == null) {
+            StringBuilder builder = new StringBuilder("SELECT ");
+            SqlUtils.appendColumns(builder, "T", getAllColumns());
+            builder.append(',');
+            SqlUtils.appendColumns(builder, "T0", daoSession.getFandbPlayerDao().getAllColumns());
+            builder.append(" FROM FANDB_GAME T");
+            builder.append(" LEFT JOIN FANDB_PLAYER T0 ON T.'PLAYER_ID'=T0.'_id'");
+            builder.append(' ');
+            selectDeep = builder.toString();
+        }
+        return selectDeep;
+    }
+    
+    protected FandbGame loadCurrentDeep(Cursor cursor, boolean lock) {
+        FandbGame entity = loadCurrent(cursor, 0, lock);
+        int offset = getAllColumns().length;
+
+        FandbPlayer fandbPlayer = loadCurrentOther(daoSession.getFandbPlayerDao(), cursor, offset);
+         if(fandbPlayer != null) {
+            entity.setFandbPlayer(fandbPlayer);
+        }
+
+        return entity;    
+    }
+
+    public FandbGame loadDeep(Long key) {
+        assertSinglePk();
+        if (key == null) {
+            return null;
+        }
+
+        StringBuilder builder = new StringBuilder(getSelectDeep());
+        builder.append("WHERE ");
+        SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
+        String sql = builder.toString();
+        
+        String[] keyArray = new String[] { key.toString() };
+        Cursor cursor = db.rawQuery(sql, keyArray);
+        
+        try {
+            boolean available = cursor.moveToFirst();
+            if (!available) {
+                return null;
+            } else if (!cursor.isLast()) {
+                throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
+            }
+            return loadCurrentDeep(cursor, true);
+        } finally {
+            cursor.close();
+        }
+    }
+    
+    /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
+    public List<FandbGame> loadAllDeepFromCursor(Cursor cursor) {
+        int count = cursor.getCount();
+        List<FandbGame> list = new ArrayList<FandbGame>(count);
+        
+        if (cursor.moveToFirst()) {
+            if (identityScope != null) {
+                identityScope.lock();
+                identityScope.reserveRoom(count);
+            }
+            try {
+                do {
+                    list.add(loadCurrentDeep(cursor, false));
+                } while (cursor.moveToNext());
+            } finally {
+                if (identityScope != null) {
+                    identityScope.unlock();
+                }
+            }
+        }
+        return list;
+    }
+    
+    protected List<FandbGame> loadDeepAllAndCloseCursor(Cursor cursor) {
+        try {
+            return loadAllDeepFromCursor(cursor);
+        } finally {
+            cursor.close();
+        }
+    }
+    
+
+    /** A raw-style query where you can pass any WHERE clause and arguments. */
+    public List<FandbGame> queryDeep(String where, String... selectionArg) {
+        Cursor cursor = db.rawQuery(getSelectDeep() + where, selectionArg);
+        return loadDeepAllAndCloseCursor(cursor);
+    }
+ 
 }

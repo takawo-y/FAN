@@ -5,9 +5,9 @@
     <string name="hello_world">Hello FAN app!</string>
     <string name="action_settings">Settings</string>
 
-    <string name="player_list_view_name">Player List</string>
+    <string name="player_list_view_name">Player 一覧</string>
 
-    <string name="player_registration_view_name">Player Registration</string>
+    <string name="player_registration_view_name">Player 登録</string>
     <string name="player_registration_player_name">名称：</string>
     <string name="player_registration_game_event">種目：</string>
     <string name="player_registration_category">カテゴリー：</string>
