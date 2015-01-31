@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 /**
  * Created by Takawo on 2015/01/14.
  */
-public class PlayerData {
+public class PlayerDemoData {
     private int playerId;
     private Bitmap playerImg;
     private String playerName;

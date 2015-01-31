@@ -1,5 +1,6 @@
 package com.takawo.fan;
 
+import android.app.Application;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -13,8 +14,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.takawo.fan.adaptor.PlayerAdaptor;
-import com.takawo.fan.adaptor.PlayerDemoAdaptor;
-import com.takawo.fan.db.data.PlayerData;
+import com.takawo.fan.db.data.DBHelper;
+import com.takawo.fan.db.data.PlayerDemoData;
 import com.takawo.fan.db.DaoMaster;
 import com.takawo.fan.db.DaoSession;
 import com.takawo.fan.db.FandbPlayer;
@@ -56,35 +57,9 @@ public class MainActivity extends ActionBarActivity {
         toolbar.setLogo(R.drawable.ic_launcher);
         toolbar.setTitle(R.string.player_list_view_name);
 
-        /***********************************
-         データ作成
-         **********************************/
-        Bitmap img = BitmapFactory.decodeResource(getResources(), R.drawable.no_image);
-        PlayerData player1 = new PlayerData();
-        player1.setPlayerId(1);
-        player1.setPlayerImg(img);
-        player1.setPlayerName("柏レイソル");
-        player1.setGameEvent("サッカー");
-        PlayerData player2 = new PlayerData();
-        player2.setPlayerId(2);
-        player2.setPlayerImg(img);
-        player2.setPlayerName("Takumi");
-        player2.setGameEvent("水泳");
-        PlayerData player3 = new PlayerData();
-        player3.setPlayerId(3);
-        player3.setPlayerImg(img);
-        player3.setPlayerName("西武ライオンズ");
-        player3.setGameEvent("野球");
-        ArrayList<PlayerData> results = new ArrayList<>();
-        results.add(player1);
-        results.add(player2);
-        results.add(player3);
-
         //DB接続
-        SQLiteDatabase db = new DaoMaster.DevOpenHelper(this, "fandb", null).getWritableDatabase();
-        DaoSession daoSession = new DaoMaster(db).newSession();
-        FandbPlayerDao playerDao = daoSession.getFandbPlayerDao();
-        List<FandbPlayer> playerList = playerDao.loadAll();
+        MyApplication app = (MyApplication)getApplication();
+        List<FandbPlayer> playerList = app.getDaoSession().getFandbPlayerDao().loadAll(); //Player検索
 
         recyclerViewPlayer = (RecyclerView)findViewById(R.id.list_player);
         recyclerViewPlayer.setHasFixedSize(true);
@@ -92,8 +67,8 @@ public class MainActivity extends ActionBarActivity {
 
         layoutManagerPlayer = new LinearLayoutManager(this);
         recyclerViewPlayer.setLayoutManager(layoutManagerPlayer);
-        //recyclerViewPlayer.setAdapter(new PlayerDemoAdaptor(this, results));  //デモ用Adaptor
-        recyclerViewPlayer.setAdapter(new PlayerAdaptor(this, playerList));  //本番Adaptor
+        //recyclerViewPlayer.setAdapter(new PlayerDemoAdaptor(this, getDemoPlayerList()));  //デモ用Adaptor
+        recyclerViewPlayer.setAdapter(new PlayerAdaptor(this, playerList, getResources().getDrawable(R.drawable.no_image)));  //本番Adaptor
 
     }
 
@@ -120,4 +95,31 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private List<PlayerDemoData> getDemoPlayerList(){
+        /***********************************
+         データ作成
+         **********************************/
+        Bitmap img = BitmapFactory.decodeResource(getResources(), R.drawable.no_image);
+        PlayerDemoData player1 = new PlayerDemoData();
+        player1.setPlayerId(1);
+        player1.setPlayerImg(img);
+        player1.setPlayerName("柏レイソル");
+        player1.setGameEvent("サッカー");
+        PlayerDemoData player2 = new PlayerDemoData();
+        player2.setPlayerId(2);
+        player2.setPlayerImg(img);
+        player2.setPlayerName("Takumi");
+        player2.setGameEvent("水泳");
+        PlayerDemoData player3 = new PlayerDemoData();
+        player3.setPlayerId(3);
+        player3.setPlayerImg(img);
+        player3.setPlayerName("西武ライオンズ");
+        player3.setGameEvent("野球");
+        ArrayList<PlayerDemoData> results = new ArrayList<>();
+        results.add(player1);
+        results.add(player2);
+        results.add(player3);
+
+        return results;
+    }
 }

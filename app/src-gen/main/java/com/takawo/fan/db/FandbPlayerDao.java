@@ -27,7 +27,7 @@ public class FandbPlayerDao extends AbstractDao<FandbPlayer, Long> {
         public final static Property PlayerName = new Property(1, String.class, "playerName", false, "PLAYER_NAME");
         public final static Property GameEvent = new Property(2, String.class, "gameEvent", false, "GAME_EVENT");
         public final static Property ResultType = new Property(3, long.class, "resultType", false, "RESULT_TYPE");
-        public final static Property CategoryId = new Property(4, String.class, "categoryId", false, "CATEGORY_ID");
+        public final static Property Category = new Property(4, String.class, "category", false, "CATEGORY");
         public final static Property PlayerColor = new Property(5, String.class, "playerColor", false, "PLAYER_COLOR");
         public final static Property PlayerImagePath = new Property(6, String.class, "playerImagePath", false, "PLAYER_IMAGE_PATH");
         public final static Property PlayerComment = new Property(7, String.class, "playerComment", false, "PLAYER_COMMENT");
@@ -53,7 +53,7 @@ public class FandbPlayerDao extends AbstractDao<FandbPlayer, Long> {
                 "'PLAYER_NAME' TEXT NOT NULL ," + // 1: playerName
                 "'GAME_EVENT' TEXT NOT NULL ," + // 2: gameEvent
                 "'RESULT_TYPE' INTEGER NOT NULL ," + // 3: resultType
-                "'CATEGORY_ID' TEXT," + // 4: categoryId
+                "'CATEGORY' TEXT," + // 4: category
                 "'PLAYER_COLOR' TEXT," + // 5: playerColor
                 "'PLAYER_IMAGE_PATH' TEXT," + // 6: playerImagePath
                 "'PLAYER_COMMENT' TEXT);"); // 7: playerComment
@@ -74,9 +74,9 @@ public class FandbPlayerDao extends AbstractDao<FandbPlayer, Long> {
         stmt.bindString(3, entity.getGameEvent());
         stmt.bindLong(4, entity.getResultType());
  
-        String categoryId = entity.getCategoryId();
-        if (categoryId != null) {
-            stmt.bindString(5, categoryId);
+        String category = entity.getCategory();
+        if (category != null) {
+            stmt.bindString(5, category);
         }
  
         String playerColor = entity.getPlayerColor();
@@ -115,7 +115,7 @@ public class FandbPlayerDao extends AbstractDao<FandbPlayer, Long> {
             cursor.getString(offset + 1), // playerName
             cursor.getString(offset + 2), // gameEvent
             cursor.getLong(offset + 3), // resultType
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // categoryId
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // category
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // playerColor
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // playerImagePath
             cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7) // playerComment
@@ -130,7 +130,7 @@ public class FandbPlayerDao extends AbstractDao<FandbPlayer, Long> {
         entity.setPlayerName(cursor.getString(offset + 1));
         entity.setGameEvent(cursor.getString(offset + 2));
         entity.setResultType(cursor.getLong(offset + 3));
-        entity.setCategoryId(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setCategory(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setPlayerColor(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setPlayerImagePath(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
         entity.setPlayerComment(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));

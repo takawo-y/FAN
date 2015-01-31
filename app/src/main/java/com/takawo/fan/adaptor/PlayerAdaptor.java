@@ -2,6 +2,7 @@ package com.takawo.fan.adaptor;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,16 +24,21 @@ public class PlayerAdaptor extends RecyclerView.Adapter<PlayerAdaptor.ViewHolder
     private LayoutInflater inf;
     private List<FandbPlayer> dataList;
     private Context context;
-    private Bitmap noImage;
-    public void setNoImage(Bitmap noImage) {
-        this.noImage = noImage;
-    }
+    private Drawable noImage;
 
     public PlayerAdaptor(Context context, List<FandbPlayer> dataList){
         super();
         this.context = context;
         inf = LayoutInflater.from(context);
         this.dataList = dataList;
+    }
+
+    public PlayerAdaptor(Context context, List<FandbPlayer> dataList, Drawable noImage){
+        super();
+        this.context = context;
+        inf = LayoutInflater.from(context);
+        this.dataList = dataList;
+        this.noImage = noImage;
     }
 
     @Override
@@ -45,13 +51,10 @@ public class PlayerAdaptor extends RecyclerView.Adapter<PlayerAdaptor.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
         FandbPlayer data = dataList.get(i);
-        String imgPath = data.getPlayerImagePath();
-        if(imgPath == null || "".equals(imgPath)){
-            //画像パスがない場合、NoImage
-            viewHolder.playerImage.setImageBitmap(noImage);
-        }else{
-            Picasso.with(context).load(data.getPlayerImagePath()).into(viewHolder.playerImage);
-        }
+        Picasso.with(context)
+                .load(data.getPlayerImagePath())
+                .error(noImage)  //存在しない場合、NoImage
+                .into(viewHolder.playerImage);
         viewHolder.playerName.setText(data.getPlayerName());
         viewHolder.gameEvent.setText(data.getGameEvent());
     }

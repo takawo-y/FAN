@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.takawo.fan.R;
-import com.takawo.fan.db.data.PlayerData;
+import com.takawo.fan.db.data.PlayerDemoData;
 
 import java.util.ArrayList;
 
@@ -19,9 +19,9 @@ import java.util.ArrayList;
 public class PlayerDemoAdaptor extends RecyclerView.Adapter<PlayerDemoAdaptor.ViewHolder>{
 
     private LayoutInflater inf;
-    private ArrayList<PlayerData> dataList;
+    private ArrayList<PlayerDemoData> dataList;
 
-    public PlayerDemoAdaptor(Context context, ArrayList<PlayerData> dataList){
+    public PlayerDemoAdaptor(Context context, ArrayList<PlayerDemoData> dataList){
         super();
         inf = LayoutInflater.from(context);
         this.dataList = dataList;
@@ -36,7 +36,7 @@ public class PlayerDemoAdaptor extends RecyclerView.Adapter<PlayerDemoAdaptor.Vi
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
-        PlayerData data = dataList.get(i);
+        PlayerDemoData data = dataList.get(i);
 //        viewHolder.text.setText(data);
         viewHolder.playerImage.setImageBitmap(data.getPlayerImg());
         viewHolder.playerName.setText(data.getPlayerName());

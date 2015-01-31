@@ -16,7 +16,7 @@ public class FandbPlayer {
     /** Not-null value. */
     private String gameEvent;
     private long resultType;
-    private String categoryId;
+    private String category;
     private String playerColor;
     private String playerImagePath;
     private String playerComment;
@@ -36,12 +36,12 @@ public class FandbPlayer {
         this.id = id;
     }
 
-    public FandbPlayer(long id, String playerName, String gameEvent, long resultType, String categoryId, String playerColor, String playerImagePath, String playerComment) {
+    public FandbPlayer(long id, String playerName, String gameEvent, long resultType, String category, String playerColor, String playerImagePath, String playerComment) {
         this.id = id;
         this.playerName = playerName;
         this.gameEvent = gameEvent;
         this.resultType = resultType;
-        this.categoryId = categoryId;
+        this.category = category;
         this.playerColor = playerColor;
         this.playerImagePath = playerImagePath;
         this.playerComment = playerComment;
@@ -89,12 +89,12 @@ public class FandbPlayer {
         this.resultType = resultType;
     }
 
-    public String getCategoryId() {
-        return categoryId;
+    public String getCategory() {
+        return category;
     }
 
-    public void setCategoryId(String categoryId) {
-        this.categoryId = categoryId;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public String getPlayerColor() {

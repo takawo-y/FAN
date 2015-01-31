@@ -15,7 +15,6 @@
         android:background="?attr/colorPrimary"
         android:elevation="4dp"
         app:title="@string/player_registration_view_name"
-        app:navigationIcon="@drawable/ic_done_white_36dp"
         >
         <ImageView
             android:id="@+id/button_player_registration"
@@ -40,7 +39,7 @@
                 android:textSize="18sp"
                 android:text="@string/player_registration_player_name"/>
             <EditText
-                android:id="@+id/playerName"
+                android:id="@+id/inputPlayerName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.6"
@@ -55,7 +54,7 @@
                 android:textSize="18sp"
                 android:text="@string/player_registration_game_event"/>
             <EditText
-                android:id="@+id/gameEvent"
+                android:id="@+id/inputGameEvent"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.6"
@@ -70,7 +69,7 @@
                 android:textSize="18sp"
                 android:text="@string/player_registration_category"/>
             <EditText
-                android:id="@+id/playerCategory"
+                android:id="@+id/inputPlayerCategory"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.6"
@@ -85,23 +84,38 @@
                 android:textSize="18sp"
                 android:text="@string/player_registration_result_type"/>
             <RadioGroup
-                android:id="@+id/playerResultType"
+                android:id="@+id/inputPlayerResultType"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.6">
                 <RadioButton
-                    android:id="@+id/rb1"
+                    android:id="@+id/playerResultTypeRB0"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/player_registration_result_type_score"/>
+                    android:text="@string/player_registration_result_type_score"
+                    android:checked="true"/>
                 <RadioButton
-                    android:id="@+id/rb2"
+                    android:id="@+id/playerResultTypeRB1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/player_registration_result_type_time"/>
             </RadioGroup>
         </TableRow>
         <TableRow>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_weight="0.4"
+                android:textSize="18sp"
+                android:text="@string/player_registration_player_comment"/>
+            <EditText
+                android:id="@+id/inputPlayerComment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.6"
+                android:lines="3"
+                />
         </TableRow>
     </TableLayout>
 </LinearLayout>

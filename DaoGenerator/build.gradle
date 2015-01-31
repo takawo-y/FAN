@@ -29,7 +29,7 @@ task daoGenerator {
         player.addStringProperty("playerName").notNull();
         player.addStringProperty("gameEvent").notNull();
         player.addLongProperty("resultType").notNull();  //0:score, 1:time
-        player.addStringProperty("categoryId");
+        player.addStringProperty("category");
         player.addStringProperty("playerColor");
         player.addStringProperty("playerImagePath");
         player.addStringProperty("playerComment");
