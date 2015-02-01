@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -69,7 +70,15 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.player_regist);
         ButterKnife.inject(this);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(PlayerRegistrationActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }
+            }
 
+        );
         //ToolBar設定
         setSupportActionBar(toolbar);
     }
