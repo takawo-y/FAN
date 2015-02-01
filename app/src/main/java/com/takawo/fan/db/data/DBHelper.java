@@ -13,7 +13,7 @@ public class DBHelper extends DaoMaster.OpenHelper{
     private SQLiteDatabase db = null;
     private DaoMaster daoMaster = null;
     private DaoSession daoSession = null;
-    private static String DB_NAME = "fandb";
+    private static String DB_NAME = "fandb.sqlite";
 
     public DBHelper(Context context, SQLiteDatabase.CursorFactory factory){
         super(context, DB_NAME, factory);

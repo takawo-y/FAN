@@ -51,10 +51,16 @@ public class PlayerAdaptor extends RecyclerView.Adapter<PlayerAdaptor.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
         FandbPlayer data = dataList.get(i);
-        Picasso.with(context)
-                .load(data.getPlayerImagePath())
-                .error(noImage)  //存在しない場合、NoImage
-                .into(viewHolder.playerImage);
+
+        if(null == data.getPlayerImagePath() || "".equals(data.getPlayerImagePath())){
+            Picasso.with(context)
+                    .load(R.drawable.no_image)
+                    .into(viewHolder.playerImage);
+        }else{
+            Picasso.with(context)
+                    .load(data.getPlayerImagePath())
+                    .into(viewHolder.playerImage);
+        }
         viewHolder.playerName.setText(data.getPlayerName());
         viewHolder.gameEvent.setText(data.getGameEvent());
     }
