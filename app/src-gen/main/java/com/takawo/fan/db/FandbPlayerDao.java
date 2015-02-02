@@ -23,7 +23,7 @@ public class FandbPlayerDao extends AbstractDao<FandbPlayer, Long> {
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {
-        public final static Property Id = new Property(0, long.class, "id", true, "_id");
+        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property PlayerName = new Property(1, String.class, "playerName", false, "PLAYER_NAME");
         public final static Property GameEvent = new Property(2, String.class, "gameEvent", false, "GAME_EVENT");
         public final static Property ResultType = new Property(3, long.class, "resultType", false, "RESULT_TYPE");
@@ -49,7 +49,7 @@ public class FandbPlayerDao extends AbstractDao<FandbPlayer, Long> {
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "'FANDB_PLAYER' (" + //
-                "'_id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE ," + // 0: id
+                "'_id' INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE ," + // 0: id
                 "'PLAYER_NAME' TEXT NOT NULL ," + // 1: playerName
                 "'GAME_EVENT' TEXT NOT NULL ," + // 2: gameEvent
                 "'RESULT_TYPE' INTEGER NOT NULL ," + // 3: resultType
@@ -69,7 +69,11 @@ public class FandbPlayerDao extends AbstractDao<FandbPlayer, Long> {
     @Override
     protected void bindValues(SQLiteStatement stmt, FandbPlayer entity) {
         stmt.clearBindings();
-        stmt.bindLong(1, entity.getId());
+ 
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(1, id);
+        }
         stmt.bindString(2, entity.getPlayerName());
         stmt.bindString(3, entity.getGameEvent());
         stmt.bindLong(4, entity.getResultType());
@@ -104,14 +108,14 @@ public class FandbPlayerDao extends AbstractDao<FandbPlayer, Long> {
     /** @inheritdoc */
     @Override
     public Long readKey(Cursor cursor, int offset) {
-        return cursor.getLong(offset + 0);
+        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
     }    
 
     /** @inheritdoc */
     @Override
     public FandbPlayer readEntity(Cursor cursor, int offset) {
         FandbPlayer entity = new FandbPlayer( //
-            cursor.getLong(offset + 0), // id
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.getString(offset + 1), // playerName
             cursor.getString(offset + 2), // gameEvent
             cursor.getLong(offset + 3), // resultType
@@ -126,7 +130,7 @@ public class FandbPlayerDao extends AbstractDao<FandbPlayer, Long> {
     /** @inheritdoc */
     @Override
     public void readEntity(Cursor cursor, FandbPlayer entity, int offset) {
-        entity.setId(cursor.getLong(offset + 0));
+        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setPlayerName(cursor.getString(offset + 1));
         entity.setGameEvent(cursor.getString(offset + 2));
         entity.setResultType(cursor.getLong(offset + 3));

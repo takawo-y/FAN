@@ -29,7 +29,7 @@ public class FandbGameDao extends AbstractDao<FandbGame, Long> {
     */
     public static class Properties {
         public final static Property PlayerId = new Property(0, long.class, "playerId", false, "PLAYER_ID");
-        public final static Property GameId = new Property(1, long.class, "gameId", true, "GAME_ID");
+        public final static Property Id = new Property(1, Long.class, "id", true, "_id");
         public final static Property GameType = new Property(2, long.class, "gameType", false, "GAME_TYPE");
         public final static Property GameCategory = new Property(3, String.class, "gameCategory", false, "GAME_CATEGORY");
         public final static Property Place = new Property(4, String.class, "place", false, "PLACE");
@@ -63,7 +63,7 @@ public class FandbGameDao extends AbstractDao<FandbGame, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "'FANDB_GAME' (" + //
                 "'PLAYER_ID' INTEGER NOT NULL ," + // 0: playerId
-                "'GAME_ID' INTEGER PRIMARY KEY NOT NULL UNIQUE ," + // 1: gameId
+                "'_id' INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE ," + // 1: id
                 "'GAME_TYPE' INTEGER NOT NULL ," + // 2: gameType
                 "'GAME_CATEGORY' TEXT," + // 3: gameCategory
                 "'PLACE' TEXT," + // 4: place
@@ -90,7 +90,11 @@ public class FandbGameDao extends AbstractDao<FandbGame, Long> {
     protected void bindValues(SQLiteStatement stmt, FandbGame entity) {
         stmt.clearBindings();
         stmt.bindLong(1, entity.getPlayerId());
-        stmt.bindLong(2, entity.getGameId());
+ 
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(2, id);
+        }
         stmt.bindLong(3, entity.getGameType());
  
         String gameCategory = entity.getGameCategory();
@@ -159,7 +163,7 @@ public class FandbGameDao extends AbstractDao<FandbGame, Long> {
     /** @inheritdoc */
     @Override
     public Long readKey(Cursor cursor, int offset) {
-        return cursor.getLong(offset + 1);
+        return cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1);
     }    
 
     /** @inheritdoc */
@@ -167,7 +171,7 @@ public class FandbGameDao extends AbstractDao<FandbGame, Long> {
     public FandbGame readEntity(Cursor cursor, int offset) {
         FandbGame entity = new FandbGame( //
             cursor.getLong(offset + 0), // playerId
-            cursor.getLong(offset + 1), // gameId
+            cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // id
             cursor.getLong(offset + 2), // gameType
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // gameCategory
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // place
@@ -189,7 +193,7 @@ public class FandbGameDao extends AbstractDao<FandbGame, Long> {
     @Override
     public void readEntity(Cursor cursor, FandbGame entity, int offset) {
         entity.setPlayerId(cursor.getLong(offset + 0));
-        entity.setGameId(cursor.getLong(offset + 1));
+        entity.setId(cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1));
         entity.setGameType(cursor.getLong(offset + 2));
         entity.setGameCategory(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setPlace(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
@@ -208,7 +212,7 @@ public class FandbGameDao extends AbstractDao<FandbGame, Long> {
     /** @inheritdoc */
     @Override
     protected Long updateKeyAfterInsert(FandbGame entity, long rowId) {
-        entity.setGameId(rowId);
+        entity.setId(rowId);
         return rowId;
     }
     
@@ -216,7 +220,7 @@ public class FandbGameDao extends AbstractDao<FandbGame, Long> {
     @Override
     public Long getKey(FandbGame entity) {
         if(entity != null) {
-            return entity.getGameId();
+            return entity.getId();
         } else {
             return null;
         }

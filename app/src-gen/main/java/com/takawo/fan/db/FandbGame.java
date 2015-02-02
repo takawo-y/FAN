@@ -10,7 +10,7 @@ import de.greenrobot.dao.DaoException;
 public class FandbGame {
 
     private long playerId;
-    private long gameId;
+    private Long id;
     private long gameType;
     private String gameCategory;
     private String place;
@@ -39,13 +39,13 @@ public class FandbGame {
     public FandbGame() {
     }
 
-    public FandbGame(long gameId) {
-        this.gameId = gameId;
+    public FandbGame(Long id) {
+        this.id = id;
     }
 
-    public FandbGame(long playerId, long gameId, long gameType, String gameCategory, String place, String weather, String temperature, java.util.Date gameDay, String startTime, String endTime, String opposition, String result, String resultScore, String resultTime, String comment) {
+    public FandbGame(long playerId, Long id, long gameType, String gameCategory, String place, String weather, String temperature, java.util.Date gameDay, String startTime, String endTime, String opposition, String result, String resultScore, String resultTime, String comment) {
         this.playerId = playerId;
-        this.gameId = gameId;
+        this.id = id;
         this.gameType = gameType;
         this.gameCategory = gameCategory;
         this.place = place;
@@ -75,12 +75,12 @@ public class FandbGame {
         this.playerId = playerId;
     }
 
-    public long getGameId() {
-        return gameId;
+    public Long getId() {
+        return id;
     }
 
-    public void setGameId(long gameId) {
-        this.gameId = gameId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public long getGameType() {

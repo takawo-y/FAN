@@ -70,17 +70,18 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.player_regist);
         ButterKnife.inject(this);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(PlayerRegistrationActivity.this, MainActivity.class);
-                    startActivity(intent);
-                }
-            }
-
-        );
         //ToolBar設定
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);  //UPナビゲーションをON
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                                                 @Override
+                                                 public void onClick(View v) {
+                                                     Intent intent = new Intent(PlayerRegistrationActivity.this, MainActivity.class);
+                                                     startActivity(intent);
+                                                 }
+                                             }
+
+        );
     }
 
     /**
@@ -88,7 +89,7 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
      */
     private void registPlayer(){
         FandbPlayer player = new FandbPlayer(
-                0,  //id,autoincrementだからnullを渡したい
+                null,  //id,autoincrementだからnullを渡したい
                 inputPlayerName.getText().toString(),
                 inputGameEvent.getText().toString(),
                 getResultType(),

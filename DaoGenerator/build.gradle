@@ -25,7 +25,7 @@ task daoGenerator {
         // ------------- この辺でテーブル定義 START -------------------
 
         Entity player = schema.addEntity("FandbPlayer");
-        player.addIdProperty().primaryKey().autoincrement().notNull().unique();
+        player.addIdProperty().autoincrement().unique();
         player.addStringProperty("playerName").notNull();
         player.addStringProperty("gameEvent").notNull();
         player.addLongProperty("resultType").notNull();  //0:score, 1:time
@@ -36,7 +36,7 @@ task daoGenerator {
 
         Entity game = schema.addEntity("FandbGame");
         Property playerId = game.addLongProperty("playerId").notNull().getProperty();
-        game.addLongProperty("gameId").primaryKey().notNull().unique();
+        game.addIdProperty().autoincrement().unique();
         game.addLongProperty("gameType").notNull();  //0:生観戦、1:TV生観戦、2:TV録画観戦、3:出場
         game.addStringProperty("gameCategory");
         game.addStringProperty("place");

@@ -10,7 +10,7 @@ import de.greenrobot.dao.DaoException;
  */
 public class FandbPlayer {
 
-    private long id;
+    private Long id;
     /** Not-null value. */
     private String playerName;
     /** Not-null value. */
@@ -32,11 +32,11 @@ public class FandbPlayer {
     public FandbPlayer() {
     }
 
-    public FandbPlayer(long id) {
+    public FandbPlayer(Long id) {
         this.id = id;
     }
 
-    public FandbPlayer(long id, String playerName, String gameEvent, long resultType, String category, String playerColor, String playerImagePath, String playerComment) {
+    public FandbPlayer(Long id, String playerName, String gameEvent, long resultType, String category, String playerColor, String playerImagePath, String playerComment) {
         this.id = id;
         this.playerName = playerName;
         this.gameEvent = gameEvent;
@@ -53,11 +53,11 @@ public class FandbPlayer {
         myDao = daoSession != null ? daoSession.getFandbPlayerDao() : null;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
