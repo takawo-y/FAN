@@ -31,12 +31,13 @@ import butterknife.OnClick;
 
 public class MainActivity extends ActionBarActivity {
 
-    private RecyclerView recyclerViewPlayer;
-    private RecyclerView.Adapter adapterPlayer;
     private RecyclerView.LayoutManager layoutManagerPlayer;
 
     @InjectView(R.id.tool_bar)
     Toolbar toolbar;
+
+    @InjectView(R.id.list_player)
+    RecyclerView recyclerViewPlayer;
 
     @OnClick(R.id.fab_player)
     void onClickAdd(){
@@ -59,7 +60,6 @@ public class MainActivity extends ActionBarActivity {
         MyApplication app = (MyApplication)getApplication();
         List<FandbPlayer> playerList = app.getDaoSession().getFandbPlayerDao().loadAll(); //Player検索
 
-        recyclerViewPlayer = (RecyclerView)findViewById(R.id.list_player);
         recyclerViewPlayer.setHasFixedSize(true);
         recyclerViewPlayer.addItemDecoration(new MyItemDecoration(this));
 

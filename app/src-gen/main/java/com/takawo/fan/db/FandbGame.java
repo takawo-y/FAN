@@ -13,6 +13,7 @@ public class FandbGame {
     private Long id;
     private long gameType;
     private String gameCategory;
+    private String gameInfo;
     private String place;
     private String weather;
     private String temperature;
@@ -43,11 +44,12 @@ public class FandbGame {
         this.id = id;
     }
 
-    public FandbGame(long playerId, Long id, long gameType, String gameCategory, String place, String weather, String temperature, java.util.Date gameDay, String startTime, String endTime, String opposition, String result, String resultScore, String resultTime, String comment) {
+    public FandbGame(long playerId, Long id, long gameType, String gameCategory, String gameInfo, String place, String weather, String temperature, java.util.Date gameDay, String startTime, String endTime, String opposition, String result, String resultScore, String resultTime, String comment) {
         this.playerId = playerId;
         this.id = id;
         this.gameType = gameType;
         this.gameCategory = gameCategory;
+        this.gameInfo = gameInfo;
         this.place = place;
         this.weather = weather;
         this.temperature = temperature;
@@ -97,6 +99,14 @@ public class FandbGame {
 
     public void setGameCategory(String gameCategory) {
         this.gameCategory = gameCategory;
+    }
+
+    public String getGameInfo() {
+        return gameInfo;
+    }
+
+    public void setGameInfo(String gameInfo) {
+        this.gameInfo = gameInfo;
     }
 
     public String getPlace() {

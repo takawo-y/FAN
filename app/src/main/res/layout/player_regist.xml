@@ -14,6 +14,7 @@
         android:minHeight="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:elevation="4dp"
+        android:navigationIcon="@drawable/ic_done_grey600_24dp"
         app:title="@string/player_registration_view_name"
         >
         <ImageView

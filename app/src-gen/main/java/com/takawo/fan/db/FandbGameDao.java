@@ -32,17 +32,18 @@ public class FandbGameDao extends AbstractDao<FandbGame, Long> {
         public final static Property Id = new Property(1, Long.class, "id", true, "_id");
         public final static Property GameType = new Property(2, long.class, "gameType", false, "GAME_TYPE");
         public final static Property GameCategory = new Property(3, String.class, "gameCategory", false, "GAME_CATEGORY");
-        public final static Property Place = new Property(4, String.class, "place", false, "PLACE");
-        public final static Property Weather = new Property(5, String.class, "weather", false, "WEATHER");
-        public final static Property Temperature = new Property(6, String.class, "temperature", false, "TEMPERATURE");
-        public final static Property GameDay = new Property(7, java.util.Date.class, "gameDay", false, "GAME_DAY");
-        public final static Property StartTime = new Property(8, String.class, "startTime", false, "START_TIME");
-        public final static Property EndTime = new Property(9, String.class, "endTime", false, "END_TIME");
-        public final static Property Opposition = new Property(10, String.class, "opposition", false, "OPPOSITION");
-        public final static Property Result = new Property(11, String.class, "result", false, "RESULT");
-        public final static Property ResultScore = new Property(12, String.class, "resultScore", false, "RESULT_SCORE");
-        public final static Property ResultTime = new Property(13, String.class, "resultTime", false, "RESULT_TIME");
-        public final static Property Comment = new Property(14, String.class, "comment", false, "COMMENT");
+        public final static Property GameInfo = new Property(4, String.class, "gameInfo", false, "GAME_INFO");
+        public final static Property Place = new Property(5, String.class, "place", false, "PLACE");
+        public final static Property Weather = new Property(6, String.class, "weather", false, "WEATHER");
+        public final static Property Temperature = new Property(7, String.class, "temperature", false, "TEMPERATURE");
+        public final static Property GameDay = new Property(8, java.util.Date.class, "gameDay", false, "GAME_DAY");
+        public final static Property StartTime = new Property(9, String.class, "startTime", false, "START_TIME");
+        public final static Property EndTime = new Property(10, String.class, "endTime", false, "END_TIME");
+        public final static Property Opposition = new Property(11, String.class, "opposition", false, "OPPOSITION");
+        public final static Property Result = new Property(12, String.class, "result", false, "RESULT");
+        public final static Property ResultScore = new Property(13, String.class, "resultScore", false, "RESULT_SCORE");
+        public final static Property ResultTime = new Property(14, String.class, "resultTime", false, "RESULT_TIME");
+        public final static Property Comment = new Property(15, String.class, "comment", false, "COMMENT");
     };
 
     private DaoSession daoSession;
@@ -66,17 +67,18 @@ public class FandbGameDao extends AbstractDao<FandbGame, Long> {
                 "'_id' INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE ," + // 1: id
                 "'GAME_TYPE' INTEGER NOT NULL ," + // 2: gameType
                 "'GAME_CATEGORY' TEXT," + // 3: gameCategory
-                "'PLACE' TEXT," + // 4: place
-                "'WEATHER' TEXT," + // 5: weather
-                "'TEMPERATURE' TEXT," + // 6: temperature
-                "'GAME_DAY' INTEGER NOT NULL ," + // 7: gameDay
-                "'START_TIME' TEXT," + // 8: startTime
-                "'END_TIME' TEXT," + // 9: endTime
-                "'OPPOSITION' TEXT," + // 10: opposition
-                "'RESULT' TEXT," + // 11: result
-                "'RESULT_SCORE' TEXT," + // 12: resultScore
-                "'RESULT_TIME' TEXT," + // 13: resultTime
-                "'COMMENT' TEXT);"); // 14: comment
+                "'GAME_INFO' TEXT," + // 4: gameInfo
+                "'PLACE' TEXT," + // 5: place
+                "'WEATHER' TEXT," + // 6: weather
+                "'TEMPERATURE' TEXT," + // 7: temperature
+                "'GAME_DAY' INTEGER NOT NULL ," + // 8: gameDay
+                "'START_TIME' TEXT," + // 9: startTime
+                "'END_TIME' TEXT," + // 10: endTime
+                "'OPPOSITION' TEXT," + // 11: opposition
+                "'RESULT' TEXT," + // 12: result
+                "'RESULT_SCORE' TEXT," + // 13: resultScore
+                "'RESULT_TIME' TEXT," + // 14: resultTime
+                "'COMMENT' TEXT);"); // 15: comment
     }
 
     /** Drops the underlying database table. */
@@ -102,55 +104,60 @@ public class FandbGameDao extends AbstractDao<FandbGame, Long> {
             stmt.bindString(4, gameCategory);
         }
  
+        String gameInfo = entity.getGameInfo();
+        if (gameInfo != null) {
+            stmt.bindString(5, gameInfo);
+        }
+ 
         String place = entity.getPlace();
         if (place != null) {
-            stmt.bindString(5, place);
+            stmt.bindString(6, place);
         }
  
         String weather = entity.getWeather();
         if (weather != null) {
-            stmt.bindString(6, weather);
+            stmt.bindString(7, weather);
         }
  
         String temperature = entity.getTemperature();
         if (temperature != null) {
-            stmt.bindString(7, temperature);
+            stmt.bindString(8, temperature);
         }
-        stmt.bindLong(8, entity.getGameDay().getTime());
+        stmt.bindLong(9, entity.getGameDay().getTime());
  
         String startTime = entity.getStartTime();
         if (startTime != null) {
-            stmt.bindString(9, startTime);
+            stmt.bindString(10, startTime);
         }
  
         String endTime = entity.getEndTime();
         if (endTime != null) {
-            stmt.bindString(10, endTime);
+            stmt.bindString(11, endTime);
         }
  
         String opposition = entity.getOpposition();
         if (opposition != null) {
-            stmt.bindString(11, opposition);
+            stmt.bindString(12, opposition);
         }
  
         String result = entity.getResult();
         if (result != null) {
-            stmt.bindString(12, result);
+            stmt.bindString(13, result);
         }
  
         String resultScore = entity.getResultScore();
         if (resultScore != null) {
-            stmt.bindString(13, resultScore);
+            stmt.bindString(14, resultScore);
         }
  
         String resultTime = entity.getResultTime();
         if (resultTime != null) {
-            stmt.bindString(14, resultTime);
+            stmt.bindString(15, resultTime);
         }
  
         String comment = entity.getComment();
         if (comment != null) {
-            stmt.bindString(15, comment);
+            stmt.bindString(16, comment);
         }
     }
 
@@ -174,17 +181,18 @@ public class FandbGameDao extends AbstractDao<FandbGame, Long> {
             cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // id
             cursor.getLong(offset + 2), // gameType
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // gameCategory
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // place
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // weather
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // temperature
-            new java.util.Date(cursor.getLong(offset + 7)), // gameDay
-            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // startTime
-            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // endTime
-            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // opposition
-            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // result
-            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // resultScore
-            cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13), // resultTime
-            cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14) // comment
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // gameInfo
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // place
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // weather
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // temperature
+            new java.util.Date(cursor.getLong(offset + 8)), // gameDay
+            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // startTime
+            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // endTime
+            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // opposition
+            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // result
+            cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13), // resultScore
+            cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14), // resultTime
+            cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15) // comment
         );
         return entity;
     }
@@ -196,17 +204,18 @@ public class FandbGameDao extends AbstractDao<FandbGame, Long> {
         entity.setId(cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1));
         entity.setGameType(cursor.getLong(offset + 2));
         entity.setGameCategory(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setPlace(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setWeather(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setTemperature(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setGameDay(new java.util.Date(cursor.getLong(offset + 7)));
-        entity.setStartTime(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
-        entity.setEndTime(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
-        entity.setOpposition(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
-        entity.setResult(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
-        entity.setResultScore(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
-        entity.setResultTime(cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13));
-        entity.setComment(cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14));
+        entity.setGameInfo(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setPlace(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setWeather(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setTemperature(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setGameDay(new java.util.Date(cursor.getLong(offset + 8)));
+        entity.setStartTime(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
+        entity.setEndTime(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
+        entity.setOpposition(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
+        entity.setResult(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
+        entity.setResultScore(cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13));
+        entity.setResultTime(cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14));
+        entity.setComment(cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15));
      }
     
     /** @inheritdoc */

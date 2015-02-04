@@ -53,6 +53,8 @@ public class PlayerAdaptor extends RecyclerView.Adapter<PlayerAdaptor.ViewHolder
             public void onClick(View v) {
                 Intent intent = new Intent(context, GameActivity.class);
                 intent.putExtra("playerId", data.getId());
+                intent.putExtra("playerName", data.getPlayerName());
+                intent.putExtra("playerImage", data.getPlayerImagePath());
                 context.startActivity(intent);
             }
         });

@@ -84,7 +84,12 @@ public class GameAdaptor extends RecyclerView.Adapter<GameAdaptor.ViewHolder>{
             linearLayout = (LinearLayout)v.findViewById(R.id.lily_player);
 
             v.setOnClickListener(this);
-//            playerImage = (ImageView)v.findViewById(R.id.playerImg);
+            gameDay = (TextView)v.findViewById(R.id.gameDay);
+            gameCategory = (TextView)v.findViewById(R.id.gameCategory);
+            gameInfo = (TextView)v.findViewById(R.id.gameInfo);
+            opposition = (TextView)v.findViewById(R.id.gameOpposition);
+            result = (TextView)v.findViewById(R.id.gameResult);
+            resultScoreTime = (TextView)v.findViewById(R.id.gameScoreTime);
         }
 
         public void setItem(FandbGame data){
@@ -94,7 +99,14 @@ public class GameAdaptor extends RecyclerView.Adapter<GameAdaptor.ViewHolder>{
             String formatDate = formatA.format(data.getGameDay());
             gameDay.setText(formatDate);
             gameCategory.setText(data.getGameCategory());
-            //gameInfo.setText(data.getga);
+            gameInfo.setText(data.getGameInfo());
+            opposition.setText(data.getOpposition());
+            result.setText(data.getResult());
+            if(data.getResultScore().isEmpty() == false){
+                resultScoreTime.setText(data.getResultScore());
+            }else if (data.getResultTime().isEmpty() == false){
+                resultScoreTime.setText(data.getResultTime());
+            }
 
         }
 
