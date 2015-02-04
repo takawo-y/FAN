@@ -35,8 +35,6 @@ public class MainActivity extends ActionBarActivity {
     private RecyclerView.Adapter adapterPlayer;
     private RecyclerView.LayoutManager layoutManagerPlayer;
 
-    private String TAG = this.getClass().getName();
-
     @InjectView(R.id.tool_bar)
     Toolbar toolbar;
 
@@ -68,7 +66,7 @@ public class MainActivity extends ActionBarActivity {
         layoutManagerPlayer = new LinearLayoutManager(this);
         recyclerViewPlayer.setLayoutManager(layoutManagerPlayer);
         //recyclerViewPlayer.setAdapter(new PlayerDemoAdaptor(this, getDemoPlayerList()));  //デモ用Adaptor
-        recyclerViewPlayer.setAdapter(new PlayerAdaptor(this, playerList, getResources().getDrawable(R.drawable.no_image)));  //本番Adaptor
+        recyclerViewPlayer.setAdapter(new PlayerAdaptor(this, playerList));  //本番Adaptor
 
     }
 

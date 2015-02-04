@@ -3,7 +3,6 @@ package com.takawo.fan.adaptor;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,22 +12,23 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.takawo.fan.GameActivity;
-import com.takawo.fan.MainActivity;
 import com.takawo.fan.R;
+import com.takawo.fan.db.FandbGame;
 import com.takawo.fan.db.FandbPlayer;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
  * Created by Takawo on 2014/12/31.
  */
-public class PlayerAdaptor extends RecyclerView.Adapter<PlayerAdaptor.ViewHolder>{
+public class GameAdaptor extends RecyclerView.Adapter<GameAdaptor.ViewHolder>{
 
     private LayoutInflater inf;
-    private List<FandbPlayer> dataList;
+    private List<FandbGame> dataList;
     private Context context;
 
-    public PlayerAdaptor(Context context, List<FandbPlayer> dataList){
+    public GameAdaptor(Context context, List<FandbGame> dataList){
         super();
         this.context = context;
         inf = LayoutInflater.from(context);
@@ -37,13 +37,13 @@ public class PlayerAdaptor extends RecyclerView.Adapter<PlayerAdaptor.ViewHolder
     }
 
     @Override
-    public PlayerAdaptor.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public GameAdaptor.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view = inf.inflate(R.layout.player_list, null);
         ViewHolder viewHolder = new ViewHolder(context, view);
         return viewHolder;
     }
 
-    FandbPlayer data;
+    FandbGame data;
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
         data = dataList.get(i);
@@ -70,9 +70,13 @@ public class PlayerAdaptor extends RecyclerView.Adapter<PlayerAdaptor.ViewHolder
         LinearLayout linearLayout;
 
         Long playerId;
-        ImageView playerImage;
-        TextView playerName;
-        TextView gameEvent;
+        Long id;
+        TextView gameDay;
+        TextView gameCategory;
+        TextView gameInfo;
+        TextView opposition;
+        TextView result;
+        TextView resultScoreTime;
 
         public ViewHolder(Context context, View v) {
             super(v);
@@ -80,24 +84,17 @@ public class PlayerAdaptor extends RecyclerView.Adapter<PlayerAdaptor.ViewHolder
             linearLayout = (LinearLayout)v.findViewById(R.id.lily_player);
 
             v.setOnClickListener(this);
-            playerImage = (ImageView)v.findViewById(R.id.playerImg);
-            playerName = (TextView)v.findViewById(R.id.playerName);
-            gameEvent = (TextView)v.findViewById(R.id.gameEvent);
+//            playerImage = (ImageView)v.findViewById(R.id.playerImg);
         }
 
-        public void setItem(FandbPlayer data){
-            playerId = data.getId();
-            if(null == data.getPlayerImagePath() || "".equals(data.getPlayerImagePath())){
-                Picasso.with(context)
-                        .load(R.drawable.no_image)
-                        .into(playerImage);
-            }else{
-                Picasso.with(context)
-                        .load(data.getPlayerImagePath())
-                        .into(playerImage);
-            }
-            playerName.setText(data.getPlayerName());
-            gameEvent.setText(data.getGameEvent());
+        public void setItem(FandbGame data){
+            playerId = data.getPlayerId();
+            id = data.getId();
+            SimpleDateFormat formatA = new SimpleDateFormat("yyyy/MM/dd");
+            String formatDate = formatA.format(data.getGameDay());
+            gameDay.setText(formatDate);
+            gameCategory.setText(data.getGameCategory());
+            //gameInfo.setText(data.getga);
 
         }
 

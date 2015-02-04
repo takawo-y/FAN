@@ -39,6 +39,7 @@ task daoGenerator {
         game.addIdProperty().autoincrement().unique();
         game.addLongProperty("gameType").notNull();  //0:生観戦、1:TV生観戦、2:TV録画観戦、3:出場
         game.addStringProperty("gameCategory");
+        game.addStringProperty("gameInfo");
         game.addStringProperty("place");
         game.addStringProperty("weather");
         game.addStringProperty("temperature");
