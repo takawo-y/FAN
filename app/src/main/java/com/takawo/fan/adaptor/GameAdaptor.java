@@ -3,18 +3,16 @@ package com.takawo.fan.adaptor;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-import com.takawo.fan.GameActivity;
+import com.takawo.fan.activity.GameActivity;
 import com.takawo.fan.R;
 import com.takawo.fan.db.FandbGame;
-import com.takawo.fan.db.FandbPlayer;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -102,9 +100,9 @@ public class GameAdaptor extends RecyclerView.Adapter<GameAdaptor.ViewHolder>{
             gameInfo.setText(data.getGameInfo());
             opposition.setText(data.getOpposition());
             result.setText(data.getResult());
-            if(data.getResultScore().isEmpty() == false){
+            if(data.getResultScore() != null || TextUtils.isEmpty(data.getResultScore()) == false){
                 resultScoreTime.setText(data.getResultScore());
-            }else if (data.getResultTime().isEmpty() == false){
+            }else if (data.getResultTime() != null || TextUtils.isEmpty(data.getResultTime()) == false){
                 resultScoreTime.setText(data.getResultTime());
             }
 

@@ -1,4 +1,4 @@
-package com.takawo.fan;
+package com.takawo.fan.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -8,9 +8,10 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.takawo.fan.MyApplication;
+import com.takawo.fan.R;
 import com.takawo.fan.db.FandbPlayer;
 
 import butterknife.ButterKnife;
@@ -70,7 +71,11 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.player_regist);
         ButterKnife.inject(this);
-        //ToolBar設定
+
+        setToolbar();  //ToolBar設定
+    }
+
+    private void setToolbar(){
         toolbar.setNavigationIcon(R.drawable.ic_done_grey600_36dp);
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {

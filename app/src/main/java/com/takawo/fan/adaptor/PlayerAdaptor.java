@@ -3,7 +3,6 @@ package com.takawo.fan.adaptor;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-import com.takawo.fan.GameActivity;
-import com.takawo.fan.MainActivity;
+import com.takawo.fan.activity.GameActivity;
 import com.takawo.fan.R;
 import com.takawo.fan.db.FandbPlayer;
 

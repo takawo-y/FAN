@@ -1,17 +1,17 @@
-package com.takawo.fan;
+package com.takawo.fan.activity;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 
+import com.takawo.fan.MyApplication;
+import com.takawo.fan.MyItemDecoration;
+import com.takawo.fan.R;
 import com.takawo.fan.adaptor.GameAdaptor;
-import com.takawo.fan.adaptor.PlayerAdaptor;
 import com.takawo.fan.db.FandbGame;
 import com.takawo.fan.db.FandbGameDao;
 
@@ -25,6 +25,10 @@ import butterknife.OnClick;
  * Created by 9004027600 on 2015/02/04.
  */
 public class GameActivity extends ActionBarActivity {
+
+    private Long id;
+    private String playerName;
+    private String playerImage;
 
     private RecyclerView.LayoutManager layoutManagerGame;
 
@@ -49,12 +53,16 @@ public class GameActivity extends ActionBarActivity {
 
         //Intent
         Intent intent = getIntent();
-        Long id = intent.getLongExtra("playerId", 0);
-        String playerName = intent.getStringExtra("playerName");
-        String playerImage = intent.getStringExtra("playerImage");
-        Log.d("Game","PlayerName="+playerName);
+        id = intent.getLongExtra("playerId", 0);
+        playerName = intent.getStringExtra("playerName");
+        playerImage = intent.getStringExtra("playerImage");
 
-        //ToolBar設定
+        setToolbar();  //ToolBar設定
+        setList();  //一覧取得
+
+    }
+
+    private void setToolbar(){
         if(playerImage == null || playerImage.isEmpty()){
             toolbar.setLogo(R.drawable.no_image);
         }else{
@@ -72,8 +80,9 @@ public class GameActivity extends ActionBarActivity {
                                              }
 
         );
+    }
 
-        //DB接続
+    private void setList(){
         MyApplication app = (MyApplication)getApplication();
         List<FandbGame> list = app.getDaoSession().getFandbGameDao().queryBuilder()
                 .where(FandbGameDao.Properties.PlayerId.eq(id)).list();
@@ -84,6 +93,6 @@ public class GameActivity extends ActionBarActivity {
         layoutManagerGame = new LinearLayoutManager(this);
         recyclerViewGame.setLayoutManager(layoutManagerGame);
         recyclerViewGame.setAdapter(new GameAdaptor(this, list));
-
     }
+
 }

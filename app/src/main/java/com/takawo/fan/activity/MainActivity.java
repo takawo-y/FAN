@@ -1,8 +1,6 @@
-package com.takawo.fan;
+package com.takawo.fan.activity;
 
-import android.app.Application;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.app.ActionBarActivity;
@@ -13,13 +11,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.takawo.fan.MyApplication;
+import com.takawo.fan.MyItemDecoration;
+import com.takawo.fan.R;
 import com.takawo.fan.adaptor.PlayerAdaptor;
-import com.takawo.fan.db.data.DBHelper;
 import com.takawo.fan.db.data.PlayerDemoData;
-import com.takawo.fan.db.DaoMaster;
-import com.takawo.fan.db.DaoSession;
 import com.takawo.fan.db.FandbPlayer;
-import com.takawo.fan.db.FandbPlayerDao;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,12 +48,17 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
 
-        //ToolBar設定
+        setToolbar();  //ToolBar設定
+        setList();  //一覧取得
+    }
+
+    private void setToolbar(){
         setSupportActionBar(toolbar);
         toolbar.setLogo(R.drawable.ic_launcher);
         toolbar.setTitle(R.string.player_list_view_name);
+    }
 
-        //DB接続
+    private void setList(){
         MyApplication app = (MyApplication)getApplication();
         List<FandbPlayer> playerList = app.getDaoSession().getFandbPlayerDao().loadAll(); //Player検索
 
@@ -69,7 +71,6 @@ public class MainActivity extends ActionBarActivity {
         recyclerViewPlayer.setAdapter(new PlayerAdaptor(this, playerList));  //本番Adaptor
 
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
