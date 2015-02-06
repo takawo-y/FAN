@@ -67,8 +67,7 @@ public class MainActivity extends ActionBarActivity {
 
         layoutManagerPlayer = new LinearLayoutManager(this);
         recyclerViewPlayer.setLayoutManager(layoutManagerPlayer);
-        //recyclerViewPlayer.setAdapter(new PlayerDemoAdaptor(this, getDemoPlayerList()));  //デモ用Adaptor
-        recyclerViewPlayer.setAdapter(new PlayerAdaptor(this, playerList));  //本番Adaptor
+        recyclerViewPlayer.setAdapter(new PlayerAdaptor(this, playerList));
 
     }
 
@@ -94,31 +93,4 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private List<PlayerDemoData> getDemoPlayerList(){
-        /***********************************
-         データ作成
-         **********************************/
-        Bitmap img = BitmapFactory.decodeResource(getResources(), R.drawable.no_image);
-        PlayerDemoData player1 = new PlayerDemoData();
-        player1.setPlayerId(1);
-        player1.setPlayerImg(img);
-        player1.setPlayerName("柏レイソル");
-        player1.setGameEvent("サッカー");
-        PlayerDemoData player2 = new PlayerDemoData();
-        player2.setPlayerId(2);
-        player2.setPlayerImg(img);
-        player2.setPlayerName("Takumi");
-        player2.setGameEvent("水泳");
-        PlayerDemoData player3 = new PlayerDemoData();
-        player3.setPlayerId(3);
-        player3.setPlayerImg(img);
-        player3.setPlayerName("西武ライオンズ");
-        player3.setGameEvent("野球");
-        ArrayList<PlayerDemoData> results = new ArrayList<>();
-        results.add(player1);
-        results.add(player2);
-        results.add(player3);
-
-        return results;
-    }
 }

@@ -151,7 +151,7 @@
                     android:layout_weight="0.4"
                     android:textSize="18sp"
                     android:text="@string/game_registration_start_time"/>
-                <EditText
+                <TimePicker
                     android:id="@+id/inputGameStartTime"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -166,7 +166,7 @@
                     android:layout_weight="0.4"
                     android:textSize="18sp"
                     android:text="@string/game_registration_end_time"/>
-                <EditText
+                <TimePicker
                     android:id="@+id/inputGameEndTime"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

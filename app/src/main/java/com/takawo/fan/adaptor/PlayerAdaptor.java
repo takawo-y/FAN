@@ -2,6 +2,7 @@ package com.takawo.fan.adaptor;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.takawo.fan.FanConst;
 import com.takawo.fan.activity.GameActivity;
 import com.takawo.fan.R;
 import com.takawo.fan.db.FandbPlayer;
@@ -44,15 +46,16 @@ public class PlayerAdaptor extends RecyclerView.Adapter<PlayerAdaptor.ViewHolder
     FandbPlayer data;
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
-        data = dataList.get(i);
+                data = dataList.get(i);
         viewHolder.setItem(data);
         viewHolder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, GameActivity.class);
-                intent.putExtra("playerId", data.getId());
-                intent.putExtra("playerName", data.getPlayerName());
-                intent.putExtra("playerImage", data.getPlayerImagePath());
+                intent.putExtra(FanConst.INTENT_PLAYER_ID, data.getId());
+                intent.putExtra(FanConst.INTENT_PLAYER_NAME, data.getPlayerName());
+                intent.putExtra(FanConst.INTENT_PLAYER_IMAGE, data.getPlayerImagePath());
+                intent.putExtra(FanConst.INTENT_RESULT_TYPE, data.getResultType());
                 context.startActivity(intent);
             }
         });

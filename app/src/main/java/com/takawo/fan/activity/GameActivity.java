@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.takawo.fan.FanConst;
 import com.takawo.fan.MyApplication;
 import com.takawo.fan.MyItemDecoration;
 import com.takawo.fan.R;
@@ -29,6 +30,7 @@ public class GameActivity extends ActionBarActivity {
     private Long id;
     private String playerName;
     private String playerImage;
+    private long resultType;
 
     private RecyclerView.LayoutManager layoutManagerGame;
 
@@ -42,6 +44,10 @@ public class GameActivity extends ActionBarActivity {
     void onClickAdd(){
         //Game新規登録画面を開く
         Intent intent = new Intent(GameActivity.this, GameRegistrationActivity.class);
+        intent.putExtra(FanConst.INTENT_PLAYER_ID, id);
+        intent.putExtra(FanConst.INTENT_PLAYER_NAME, playerName);
+        intent.putExtra(FanConst.INTENT_PLAYER_IMAGE, playerImage);
+        intent.putExtra(FanConst.INTENT_RESULT_TYPE, resultType);
         startActivity(intent);
     }
 
@@ -50,16 +56,22 @@ public class GameActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         ButterKnife.inject(this);
-
-        //Intent
-        Intent intent = getIntent();
-        id = intent.getLongExtra("playerId", 0);
-        playerName = intent.getStringExtra("playerName");
-        playerImage = intent.getStringExtra("playerImage");
+        getValueFromIntent();
 
         setToolbar();  //ToolBar設定
         setList();  //一覧取得
 
+    }
+
+    /**
+     * Intentから値の取得
+     */
+    private void getValueFromIntent(){
+        Intent intent = getIntent();
+        id = intent.getLongExtra(FanConst.INTENT_PLAYER_ID, 0);
+        playerName = intent.getStringExtra(FanConst.INTENT_PLAYER_NAME);
+        playerImage = intent.getStringExtra(FanConst.INTENT_PLAYER_IMAGE);
+        resultType = intent.getLongExtra(FanConst.INTENT_RESULT_TYPE, 0);
     }
 
     private void setToolbar(){
