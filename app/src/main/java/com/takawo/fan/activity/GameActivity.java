@@ -41,8 +41,8 @@ public class GameActivity extends ActionBarActivity {
     @OnClick(R.id.fab_game)
     void onClickAdd(){
         //Game新規登録画面を開く
-//        Intent intent = new Intent(MainActivity.this, PlayerRegistrationActivity.class);
-//        startActivity(intent);
+        Intent intent = new Intent(GameActivity.this, GameRegistrationActivity.class);
+        startActivity(intent);
     }
 
     @Override

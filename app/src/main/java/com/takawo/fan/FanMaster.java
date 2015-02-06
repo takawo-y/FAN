@@ -1,6 +1,8 @@
 package com.takawo.fan;
 
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -8,13 +10,18 @@ import java.util.Map;
  */
 public class FanMaster {
 
-    public Map<Integer, String> getGameType(){
-        Map<Integer, String> map = new LinkedHashMap<>();
-        map.put(0, "生観戦");
-        map.put(1, "TV生観戦");
-        map.put(2, "TV録画観戦");
-        map.put(3, "出場");
-        map.put(4, "その他");
-        return map;
+    /**
+     * 試合タイプ
+     *
+     * @return
+     */
+    static public List<KeyValuePair> getGameType(){
+        LinkedList<KeyValuePair> list = new LinkedList<>();
+        list.add(new KeyValuePair(0, "生観戦"));
+        list.add(new KeyValuePair(1, "TV生観戦"));
+        list.add(new KeyValuePair(2, "TV録画観戦"));
+        list.add(new KeyValuePair(3, "出場"));
+        list.add(new KeyValuePair(4, "その他"));
+        return list;
     }
 }

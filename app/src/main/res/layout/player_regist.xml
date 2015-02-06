@@ -15,7 +15,6 @@
         android:background="?attr/colorPrimary"
         android:elevation="4dp"
         android:navigationIcon="@drawable/ic_done_grey600_24dp"
-        app:title="@string/player_registration_view_name"
         >
         <ImageView
             android:id="@+id/button_player_registration"

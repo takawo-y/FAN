@@ -6,15 +6,23 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Pair;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.Toast;
 
+import com.takawo.fan.FanMaster;
 import com.takawo.fan.KeyValuePair;
 import com.takawo.fan.MyApplication;
 import com.takawo.fan.R;
+import com.takawo.fan.adaptor.KeyValuePairArrayAdapter;
 import com.takawo.fan.db.FandbPlayer;
+
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -33,29 +41,43 @@ public class GameRegistrationActivity extends ActionBarActivity {
 
     @InjectView(R.id.inputGameType)
     Spinner inputGameType;
-
     @InjectView(R.id.inputGameCategory)
     EditText inputGameCategory;
-
     @InjectView(R.id.inputGameInfo)
     EditText inputGameInfo;
-
     @InjectView(R.id.inputGamePlace)
-    RadioGroup inputGamePlace;
-
+    EditText inputGamePlace;
     @InjectView(R.id.inputGameWeather)
     EditText inputGameWeather;
+    @InjectView(R.id.inputGameTemperature)
+    EditText inputGameTemperature;
+    @InjectView(R.id.inputGameDate)
+    DatePicker inputGameDate;
+    @InjectView(R.id.inputGameStartTime)
+    EditText inputGameStartTime;
+    @InjectView(R.id.inputGameEndTime)
+    EditText inputGameEndTime;
+    @InjectView(R.id.inputGameOpposition)
+    EditText inputGameOpposition;
+    @InjectView(R.id.inputGameResult)
+    EditText inputGameResult;
+    @InjectView(R.id.inputGameResultScore)
+    EditText inputGameResultScore;
+    @InjectView(R.id.inputGameResultTime)
+    EditText inputGameResultTime;
+    @InjectView(R.id.inputGameComment)
+    EditText inputGameComment;
 
     @OnClick(R.id.button_player_registration)
     void onClickRegist(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Player登録")
+        builder.setTitle("試合情報登録")
         .setMessage("登録しますか？")
         .setPositiveButton("はい",
             new DialogInterface.OnClickListener(){
                 public void onClick(DialogInterface dialog, int which){
-                    registPlayer();
-                    Intent intent = new Intent(GameRegistrationActivity.this, MainActivity.class);
+                    registGame();
+                    Intent intent = new Intent(GameRegistrationActivity.this, GameActivity.class);
                     startActivity(intent);
                 }
             }
@@ -71,10 +93,11 @@ public class GameRegistrationActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.player_regist);
+        setContentView(R.layout.game_regist);
         ButterKnife.inject(this);
 
         setToolbar();  //ToolBar設定
+        setSpinnerGameType();
     }
 
     private void setToolbar(){
@@ -83,7 +106,7 @@ public class GameRegistrationActivity extends ActionBarActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                                                  @Override
                                                  public void onClick(View v) {
-                                                     Intent intent = new Intent(GameRegistrationActivity.this, MainActivity.class);
+                                                     Intent intent = new Intent(GameRegistrationActivity.this, GameActivity.class);
                                                      startActivity(intent);
                                                  }
                                              }
@@ -92,39 +115,30 @@ public class GameRegistrationActivity extends ActionBarActivity {
     }
 
     private void setSpinnerGameType(){
+        inputGameType.setOnItemSelectedListener(onItemSelectedListener);
+        KeyValuePairArrayAdapter adapter = new KeyValuePairArrayAdapter(this, android.R.layout.simple_spinner_item, FanMaster.getGameType());
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        inputGameType.setAdapter(adapter);
+        inputGameType.setSelection(adapter.getPosition(0));
 
     }
 
     /**
-     * Player登録
+     * @brief スピナーのOnItemSelectedListener
      */
-    private void registPlayer(){
-        FandbPlayer player = new FandbPlayer(
-                null,
-                inputPlayerName.getText().toString(),
-                inputGameEvent.getText().toString(),
-                getResultType(),
-                inputPlayerCategory.getText().toString(),
-                null,
-                null,
-                inputPlayerComment.getText().toString());
-        MyApplication app = (MyApplication)getApplication();
-        app.getDaoSession().getFandbPlayerDao().insert(player);
-    }
-
-    /**
-     * ResultType取得
-     * 0:スコア、1:タイム
-     * @return
-     */
-    private long getResultType(){
-        int resultTypeId = inputPlayerResultType.getCheckedRadioButtonId();
-        long resultType = 0;
-        if (resultTypeId == R.id.playerResultTypeRB0){
-            resultType = 0;
-        }else if (resultTypeId == R.id.playerResultTypeRB1){
-            resultType = 1;
+    private AdapterView.OnItemSelectedListener onItemSelectedListener = new AdapterView.OnItemSelectedListener() {
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            KeyValuePair item = (KeyValuePair)inputGameType.getSelectedItem();
+            Toast.makeText(GameRegistrationActivity.this, item.getKey().toString(), Toast.LENGTH_LONG).show();
         }
-        return resultType;
+        public void onNothingSelected(AdapterView<?> arg0) {
+        }
+    };
+
+    /**
+     * Game登録
+     */
+    private void registGame(){
     }
+
 }

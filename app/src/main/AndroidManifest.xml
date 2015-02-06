@@ -25,6 +25,11 @@
             android:name=".activity.GameActivity"
             android:icon="@drawable/ic_launcher"
             />
+        <activity
+            android:name=".activity.GameRegistrationActivity"
+            android:icon="@drawable/ic_launcher"
+            android:label="@string/game_registration_view_name"
+            />
     </application>
 
 </manifest>

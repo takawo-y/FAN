@@ -20,9 +20,11 @@
     <string name="game_list_view_name">試合一覧</string>
 
     <string name="game_registration_view_name">試合情報 登録</string>
-    <string name="game_registration_type">試合タイプ：</string>
+    <string name="game_registration_type">タイプ：</string>
     <string name="game_registration_category">カテゴリ：</string>
+    <string name="game_registration_category_hint">J1リーグ</string>
     <string name="game_registration_info">試合情報：</string>
+    <string name="game_registration_info_hint">第1節</string>
     <string name="game_registration_date">開催日：</string>
     <string name="game_registration_start_time">開始時間：</string>
     <string name="game_registration_end_time">終了時間：</string>
