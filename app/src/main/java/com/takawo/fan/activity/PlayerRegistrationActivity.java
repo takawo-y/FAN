@@ -3,12 +3,16 @@ package com.takawo.fan.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.takawo.fan.MyApplication;
 import com.takawo.fan.R;
@@ -25,6 +29,8 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
     public PlayerRegistrationActivity() {
         super();
     }
+
+    private int RESULT_PICK_FILENAME = 1;
 
     @InjectView(R.id.tool_bar)
     Toolbar toolbar;
@@ -43,6 +49,14 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
 
     @InjectView(R.id.inputPlayerComment)
     EditText inputPlayerComment;
+
+    @OnClick(R.id.inputPlayerImage)
+    void onClickImage(){
+        Intent i = new Intent(
+                Intent.ACTION_PICK,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(i, RESULT_PICK_FILENAME);
+    }
 
     @OnClick(R.id.button_player_registration)
     void onClickRegist(){
@@ -120,5 +134,38 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
             resultType = 1;
         }
         return resultType;
+    }
+
+    /**
+     * 画像選択後
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RESULT_PICK_FILENAME
+                && resultCode == RESULT_OK
+                && null != data) {
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+            Cursor cursor = getContentResolver().query(
+                    selectedImage,
+                    filePathColumn, null, null, null);
+            cursor.moveToFirst();
+
+            int columnIndex
+                    = cursor.getColumnIndex(filePathColumn[0]);
+            String picturePath = cursor.getString(columnIndex);
+            cursor.close();
+
+            Toast.makeText(
+                    this,
+                    picturePath,
+                    Toast.LENGTH_LONG).show();
+        }
     }
 }

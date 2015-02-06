@@ -37,6 +37,22 @@
                 android:layout_weight="0.4"
                 android:layout_gravity="right"
                 android:textSize="18sp"
+                android:text="@string/player_registration_player_image"/>
+            <ImageView
+                android:id="@+id/inputPlayerImage"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.6"
+                android:src="@drawable/no_image"
+                />
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.4"
+                android:layout_gravity="right"
+                android:textSize="18sp"
                 android:text="@string/player_registration_player_name"/>
             <EditText
                 android:id="@+id/inputPlayerName"
