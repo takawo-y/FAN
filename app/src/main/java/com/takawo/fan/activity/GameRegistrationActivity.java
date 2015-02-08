@@ -13,13 +13,15 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.takawo.fan.FanConst;
 import com.takawo.fan.FanMaster;
+import com.takawo.fan.FanUtil;
 import com.takawo.fan.KeyValuePair;
+import com.takawo.fan.MyApplication;
 import com.takawo.fan.R;
 import com.takawo.fan.adaptor.KeyValuePairArrayAdapter;
+import com.takawo.fan.db.FandbGame;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -74,7 +76,7 @@ public class GameRegistrationActivity extends ActionBarActivity {
     @InjectView(R.id.inputGameComment)
     EditText inputGameComment;
 
-    @OnClick(R.id.button_player_registration)
+    @OnClick(R.id.button_game_registration)
     void onClickRegist(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("試合情報登録")
@@ -84,6 +86,10 @@ public class GameRegistrationActivity extends ActionBarActivity {
                 public void onClick(DialogInterface dialog, int which){
                     registGame();
                     Intent intent = new Intent(GameRegistrationActivity.this, GameActivity.class);
+                    intent.putExtra(FanConst.INTENT_PLAYER_ID, playerId);
+                    intent.putExtra(FanConst.INTENT_PLAYER_NAME, playerName);
+                    intent.putExtra(FanConst.INTENT_PLAYER_IMAGE, playerImage);
+                    intent.putExtra(FanConst.INTENT_RESULT_TYPE, resultType);
                     startActivity(intent);
                 }
             }
@@ -105,6 +111,7 @@ public class GameRegistrationActivity extends ActionBarActivity {
 
         setToolbar();  //ToolBar設定
         setSpinnerGameType();
+        setTimePicker();
         if(resultType == 0){
             //スコア
             tableResultTime.setVisibility(View.GONE);
@@ -125,13 +132,27 @@ public class GameRegistrationActivity extends ActionBarActivity {
         resultType = intent.getLongExtra(FanConst.INTENT_RESULT_TYPE, 0);
     }
 
+    /**
+     * Toolbar設定
+     */
     private void setToolbar(){
         toolbar.setNavigationIcon(R.drawable.ic_done_grey600_36dp);
+        if(playerImage == null || playerImage.isEmpty()){
+            toolbar.setLogo(R.drawable.no_image);
+        }else{
+
+        }
+        toolbar.setTitle(playerName);
+        toolbar.setSubtitle(R.string.game_registration_view_name);
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                                                  @Override
                                                  public void onClick(View v) {
                                                      Intent intent = new Intent(GameRegistrationActivity.this, GameActivity.class);
+                                                     intent.putExtra(FanConst.INTENT_PLAYER_ID, playerId);
+                                                     intent.putExtra(FanConst.INTENT_PLAYER_NAME, playerName);
+                                                     intent.putExtra(FanConst.INTENT_PLAYER_IMAGE, playerImage);
+                                                     intent.putExtra(FanConst.INTENT_RESULT_TYPE, resultType);
                                                      startActivity(intent);
                                                  }
                                              }
@@ -154,16 +175,40 @@ public class GameRegistrationActivity extends ActionBarActivity {
     private AdapterView.OnItemSelectedListener onItemSelectedListener = new AdapterView.OnItemSelectedListener() {
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             KeyValuePair item = (KeyValuePair)inputGameType.getSelectedItem();
-            Toast.makeText(GameRegistrationActivity.this, item.getKey().toString(), Toast.LENGTH_LONG).show();
         }
         public void onNothingSelected(AdapterView<?> arg0) {
         }
     };
 
+    private void setTimePicker(){
+        inputGameStartTime.setIs24HourView(true);
+        inputGameEndTime.setIs24HourView(true);
+    }
+
     /**
      * Game登録
      */
     private void registGame(){
+        FandbGame game = new FandbGame(
+                playerId,
+                null,
+                new Long(((KeyValuePair)inputGameType.getSelectedItem()).getKey()),
+                inputGameCategory.getText().toString(),
+                inputGameInfo.getText().toString(),
+                inputGamePlace.getText().toString(),
+                inputGameWeather.getText().toString(),
+                inputGameTemperature.getText().toString(),
+                FanUtil.getDate(inputGameDate),
+                FanUtil.getTimeString(inputGameStartTime),
+                FanUtil.getTimeString(inputGameEndTime),
+                inputGameOpposition.getText().toString(),
+                inputGameResult.getText().toString(),
+                inputGameResultScore.getText().toString(),
+                inputGameResultTime.getText().toString(),
+                inputGameComment.getText().toString()
+        );
+        MyApplication app = (MyApplication)getApplication();
+        app.getDaoSession().getFandbGameDao().insert(game);
     }
 
 }

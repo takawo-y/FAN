@@ -46,7 +46,7 @@ public class PlayerAdaptor extends RecyclerView.Adapter<PlayerAdaptor.ViewHolder
     FandbPlayer data;
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
-                data = dataList.get(i);
+        data = dataList.get(i);
         viewHolder.setItem(data);
         viewHolder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override

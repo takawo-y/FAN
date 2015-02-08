@@ -21,7 +21,7 @@
             android:navigationIcon="@drawable/ic_done_grey600_24dp"
             >
             <ImageView
-                android:id="@+id/button_player_registration"
+                android:id="@+id/button_game_registration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -80,51 +80,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.6"
                     android:hint="@string/game_registration_info_hint"
-                    />
-            </TableRow>
-            <TableRow>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:layout_weight="0.4"
-                    android:textSize="18sp"
-                    android:text="@string/game_registration_place"/>
-                <EditText
-                    android:id="@+id/inputGamePlace"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.6"
-                    />
-            </TableRow>
-            <TableRow>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:layout_weight="0.4"
-                    android:textSize="18sp"
-                    android:text="@string/game_registration_weather"/>
-                <EditText
-                    android:id="@+id/inputGameWeather"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.6"
-                    />
-            </TableRow>
-            <TableRow>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:layout_weight="0.4"
-                    android:textSize="18sp"
-                    android:text="@string/game_registration_temperature"/>
-                <EditText
-                    android:id="@+id/inputGameTemperature"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.6"
                     />
             </TableRow>
             <TableRow>
@@ -235,8 +190,51 @@
                     android:layout_weight="0.6"
                     />
             </TableRow>
-
-
+            <TableRow>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_weight="0.4"
+                    android:textSize="18sp"
+                    android:text="@string/game_registration_place"/>
+                <EditText
+                    android:id="@+id/inputGamePlace"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.6"
+                    />
+            </TableRow>
+            <TableRow>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_weight="0.4"
+                    android:textSize="18sp"
+                    android:text="@string/game_registration_weather"/>
+                <EditText
+                    android:id="@+id/inputGameWeather"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.6"
+                    />
+            </TableRow>
+            <TableRow>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_weight="0.4"
+                    android:textSize="18sp"
+                    android:text="@string/game_registration_temperature"/>
+                <EditText
+                    android:id="@+id/inputGameTemperature"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.6"
+                    />
+            </TableRow>
             <TableRow>
                 <TextView
                     android:layout_width="0dp"

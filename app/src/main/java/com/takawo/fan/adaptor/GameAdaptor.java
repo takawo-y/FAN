@@ -4,18 +4,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.takawo.fan.FanConst;
 import com.takawo.fan.activity.GameActivity;
 import com.takawo.fan.R;
 import com.takawo.fan.db.FandbGame;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+
+import butterknife.InjectView;
 
 /**
  * Created by Takawo on 2014/12/31.
@@ -36,7 +40,7 @@ public class GameAdaptor extends RecyclerView.Adapter<GameAdaptor.ViewHolder>{
 
     @Override
     public GameAdaptor.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View view = inf.inflate(R.layout.player_list, null);
+        View view = inf.inflate(R.layout.game_list, null);
         ViewHolder viewHolder = new ViewHolder(context, view);
         return viewHolder;
     }
@@ -50,7 +54,8 @@ public class GameAdaptor extends RecyclerView.Adapter<GameAdaptor.ViewHolder>{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, GameActivity.class);
-                intent.putExtra("playerId", data.getId());
+                intent.putExtra(FanConst.INTENT_PLAYER_ID, data.getPlayerId());
+                intent.putExtra(FanConst.INTENT_GAME_ID, data.getId());
                 context.startActivity(intent);
             }
         });
@@ -79,7 +84,7 @@ public class GameAdaptor extends RecyclerView.Adapter<GameAdaptor.ViewHolder>{
         public ViewHolder(Context context, View v) {
             super(v);
             this.context = context;
-            linearLayout = (LinearLayout)v.findViewById(R.id.lily_player);
+            linearLayout = (LinearLayout)v.findViewById(R.id.lily_game);
 
             v.setOnClickListener(this);
             gameDay = (TextView)v.findViewById(R.id.gameDay);
@@ -95,6 +100,7 @@ public class GameAdaptor extends RecyclerView.Adapter<GameAdaptor.ViewHolder>{
             id = data.getId();
             SimpleDateFormat formatA = new SimpleDateFormat("yyyy/MM/dd");
             String formatDate = formatA.format(data.getGameDay());
+            Log.d("GameAdapter", "試合日："+gameDay.getGravity());
             gameDay.setText(formatDate);
             gameCategory.setText(data.getGameCategory());
             gameInfo.setText(data.getGameInfo());

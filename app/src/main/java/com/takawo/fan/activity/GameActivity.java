@@ -74,6 +74,9 @@ public class GameActivity extends ActionBarActivity {
         resultType = intent.getLongExtra(FanConst.INTENT_RESULT_TYPE, 0);
     }
 
+    /**
+     * Toolbar設定
+     */
     private void setToolbar(){
         if(playerImage == null || playerImage.isEmpty()){
             toolbar.setLogo(R.drawable.no_image);
@@ -81,6 +84,7 @@ public class GameActivity extends ActionBarActivity {
 
         }
         toolbar.setTitle(playerName);
+        toolbar.setSubtitle(R.string.game_list_view_name);
         toolbar.setNavigationIcon(R.drawable.ic_done_grey600_36dp);
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -97,7 +101,7 @@ public class GameActivity extends ActionBarActivity {
     private void setList(){
         MyApplication app = (MyApplication)getApplication();
         List<FandbGame> list = app.getDaoSession().getFandbGameDao().queryBuilder()
-                .where(FandbGameDao.Properties.PlayerId.eq(id)).list();
+                .where(FandbGameDao.Properties.PlayerId.eq(id)).orderDesc(FandbGameDao.Properties.GameDay).list();
 
         recyclerViewGame.setHasFixedSize(true);
         recyclerViewGame.addItemDecoration(new MyItemDecoration(this));
