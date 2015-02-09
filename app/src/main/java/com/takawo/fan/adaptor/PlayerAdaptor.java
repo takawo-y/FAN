@@ -17,6 +17,7 @@ import com.takawo.fan.activity.GameActivity;
 import com.takawo.fan.R;
 import com.takawo.fan.db.FandbPlayer;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -96,7 +97,7 @@ public class PlayerAdaptor extends RecyclerView.Adapter<PlayerAdaptor.ViewHolder
                         .into(playerImage);
             }else{
                 Picasso.with(context)
-                        .load(data.getPlayerImagePath())
+                        .load(new File(data.getPlayerImagePath()))
                         .into(playerImage);
             }
             playerName.setText(data.getPlayerName());

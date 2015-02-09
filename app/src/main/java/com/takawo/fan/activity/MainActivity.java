@@ -39,6 +39,7 @@ public class MainActivity extends ActionBarActivity {
     @OnClick(R.id.fab_player)
     void onClickAdd(){
         Intent intent = new Intent(MainActivity.this, PlayerRegistrationActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 

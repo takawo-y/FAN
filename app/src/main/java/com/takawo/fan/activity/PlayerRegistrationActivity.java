@@ -3,14 +3,18 @@ package com.takawo.fan.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
@@ -31,22 +35,22 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
     }
 
     private int RESULT_PICK_FILENAME = 1;
+    private SharedPreferences sharePre;
+    private final String SHARE_IMAGE_PATH_KEY = "imagePath";
 
     @InjectView(R.id.tool_bar)
     Toolbar toolbar;
 
+    @InjectView(R.id.inputPlayerImage)
+    ImageView inputPlayerImage;
     @InjectView(R.id.inputPlayerName)
     EditText inputPlayerName;
-
     @InjectView(R.id.inputGameEvent)
     EditText inputGameEvent;
-
     @InjectView(R.id.inputPlayerCategory)
     EditText inputPlayerCategory;
-
     @InjectView(R.id.inputPlayerResultType)
     RadioGroup inputPlayerResultType;
-
     @InjectView(R.id.inputPlayerComment)
     EditText inputPlayerComment;
 
@@ -87,6 +91,8 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
         ButterKnife.inject(this);
 
         setToolbar();  //ToolBar設定
+        sharePre = PreferenceManager.getDefaultSharedPreferences(this);
+        sharePre.edit().clear().commit();
     }
 
     private void setToolbar(){
@@ -107,6 +113,8 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
      * Player登録
      */
     private void registPlayer(){
+        sharePre = PreferenceManager.getDefaultSharedPreferences(this);
+        String path = sharePre.getString(SHARE_IMAGE_PATH_KEY, "");
         FandbPlayer player = new FandbPlayer(
                 null,
                 inputPlayerName.getText().toString(),
@@ -114,7 +122,7 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
                 getResultType(),
                 inputPlayerCategory.getText().toString(),
                 null,
-                null,
+                path,
                 inputPlayerComment.getText().toString());
         MyApplication app = (MyApplication)getApplication();
         app.getDaoSession().getFandbPlayerDao().insert(player);
@@ -157,15 +165,15 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
                     filePathColumn, null, null, null);
             cursor.moveToFirst();
 
-            int columnIndex
-                    = cursor.getColumnIndex(filePathColumn[0]);
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             String picturePath = cursor.getString(columnIndex);
             cursor.close();
 
-            Toast.makeText(
-                    this,
-                    picturePath,
-                    Toast.LENGTH_LONG).show();
+            Toast.makeText(this, picturePath, Toast.LENGTH_LONG).show();
+            inputPlayerImage.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+            sharePre = PreferenceManager.getDefaultSharedPreferences(this);
+            sharePre.edit().putString(SHARE_IMAGE_PATH_KEY, picturePath).commit();
         }
     }
+
 }
