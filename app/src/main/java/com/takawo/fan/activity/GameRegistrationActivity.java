@@ -3,6 +3,7 @@ package com.takawo.fan.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -140,7 +141,7 @@ public class GameRegistrationActivity extends ActionBarActivity {
         if(playerImage == null || playerImage.isEmpty()){
             toolbar.setLogo(R.drawable.no_image);
         }else{
-
+            toolbar.setLogo(new BitmapDrawable(getResources(), FanUtil.resizeImage(playerImage, 100)));
         }
         toolbar.setTitle(playerName);
         toolbar.setSubtitle(R.string.game_registration_view_name);

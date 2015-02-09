@@ -3,6 +3,7 @@ package com.takawo.fan.adaptor;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ import java.util.List;
  */
 public class PlayerAdaptor extends RecyclerView.Adapter<PlayerAdaptor.ViewHolder>{
 
+    private RecyclerView recyclerView;
     private LayoutInflater inf;
     private List<FandbPlayer> dataList;
     private Context context;
@@ -34,7 +36,18 @@ public class PlayerAdaptor extends RecyclerView.Adapter<PlayerAdaptor.ViewHolder
         this.context = context;
         inf = LayoutInflater.from(context);
         this.dataList = dataList;
-        data = null;
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        this.recyclerView= recyclerView;
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        this.recyclerView = null;
     }
 
     @Override
@@ -44,15 +57,16 @@ public class PlayerAdaptor extends RecyclerView.Adapter<PlayerAdaptor.ViewHolder
         return viewHolder;
     }
 
-    FandbPlayer data;
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
-        data = dataList.get(i);
-        viewHolder.setItem(data);
+        viewHolder.setItem(dataList.get(i));
         viewHolder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(context, GameActivity.class);
+                FandbPlayer data = dataList.get(recyclerView.getChildPosition(v));
+                Log.d("PlayerList","id:"+data.getId());
                 intent.putExtra(FanConst.INTENT_PLAYER_ID, data.getId());
                 intent.putExtra(FanConst.INTENT_PLAYER_NAME, data.getPlayerName());
                 intent.putExtra(FanConst.INTENT_PLAYER_IMAGE, data.getPlayerImagePath());

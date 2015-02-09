@@ -1,5 +1,9 @@
 package com.takawo.fan.util;
 
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TimePicker;
@@ -23,15 +27,9 @@ public class FanUtil {
         return time.getCurrentHour()+":"+time.getCurrentMinute();
     }
 
-    static public Integer getCurrentHour(){
-        Calendar caledar = Calendar.getInstance();
-        int hour = caledar.get(Calendar.HOUR_OF_DAY);
-        return new Integer(hour);
-    }
-
-    static public Integer getCurrentMinite(){
-        Calendar caledar = Calendar.getInstance();
-        int minite = caledar.get(Calendar.MINUTE);
-        return new Integer(minite);
+    static public Bitmap resizeImage(String path, int size){
+        Drawable img = Drawable.createFromPath(path);
+        Bitmap imgBitmap = ((BitmapDrawable)img).getBitmap();
+        return Bitmap.createScaledBitmap(imgBitmap, size, size, false);
     }
 }
