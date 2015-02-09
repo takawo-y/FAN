@@ -94,12 +94,12 @@ public class PlayerAdaptor extends RecyclerView.Adapter<PlayerAdaptor.ViewHolder
             if(null == data.getPlayerImagePath() || "".equals(data.getPlayerImagePath())){
                 Picasso.with(context)
                         .load(R.drawable.no_image)
-                        .transform(new BitmapTransformation())
+                        .transform(new BitmapTransformation()).resize(250, 250)
                         .into(playerImage);
             }else{
                 Picasso.with(context)
                         .load(new File(data.getPlayerImagePath()))
-                        .transform(new BitmapTransformation())
+                        .transform(new BitmapTransformation()).resize(250, 250)
                         .into(playerImage);
             }
             playerName.setText(data.getPlayerName());
