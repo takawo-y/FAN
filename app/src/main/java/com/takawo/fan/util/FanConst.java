@@ -1,4 +1,4 @@
-package com.takawo.fan;
+package com.takawo.fan.util;
 
 /**
  * Created by 9004027600 on 2015/02/06.

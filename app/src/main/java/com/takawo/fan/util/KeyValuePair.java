@@ -1,4 +1,4 @@
-package com.takawo.fan;
+package com.takawo.fan.util;
 
 
 import android.util.Pair;

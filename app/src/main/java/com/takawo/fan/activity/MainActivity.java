@@ -1,8 +1,6 @@
 package com.takawo.fan.activity;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,13 +10,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.takawo.fan.MyApplication;
-import com.takawo.fan.MyItemDecoration;
+import com.takawo.fan.util.MyItemDecoration;
 import com.takawo.fan.R;
 import com.takawo.fan.adaptor.PlayerAdaptor;
-import com.takawo.fan.db.data.PlayerDemoData;
 import com.takawo.fan.db.FandbPlayer;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;

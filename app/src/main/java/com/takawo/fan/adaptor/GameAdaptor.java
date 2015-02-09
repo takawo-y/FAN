@@ -11,15 +11,13 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.takawo.fan.FanConst;
+import com.takawo.fan.util.FanConst;
 import com.takawo.fan.activity.GameActivity;
 import com.takawo.fan.R;
 import com.takawo.fan.db.FandbGame;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
-
-import butterknife.InjectView;
 
 /**
  * Created by Takawo on 2014/12/31.

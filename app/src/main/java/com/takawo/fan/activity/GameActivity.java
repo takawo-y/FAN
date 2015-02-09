@@ -8,9 +8,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import com.takawo.fan.FanConst;
+import com.takawo.fan.util.FanConst;
 import com.takawo.fan.MyApplication;
-import com.takawo.fan.MyItemDecoration;
+import com.takawo.fan.util.MyItemDecoration;
 import com.takawo.fan.R;
 import com.takawo.fan.adaptor.GameAdaptor;
 import com.takawo.fan.db.FandbGame;

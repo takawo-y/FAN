@@ -1,4 +1,4 @@
-package com.takawo.fan;
+package com.takawo.fan.util;
 
 import android.content.Context;
 import android.content.res.TypedArray;

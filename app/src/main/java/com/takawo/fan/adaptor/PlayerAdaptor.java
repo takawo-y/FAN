@@ -2,7 +2,6 @@ package com.takawo.fan.adaptor;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +11,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-import com.takawo.fan.FanConst;
+import com.takawo.fan.util.BitmapTransformation;
+import com.takawo.fan.util.FanConst;
 import com.takawo.fan.activity.GameActivity;
 import com.takawo.fan.R;
 import com.takawo.fan.db.FandbPlayer;
@@ -94,10 +94,12 @@ public class PlayerAdaptor extends RecyclerView.Adapter<PlayerAdaptor.ViewHolder
             if(null == data.getPlayerImagePath() || "".equals(data.getPlayerImagePath())){
                 Picasso.with(context)
                         .load(R.drawable.no_image)
+                        .transform(new BitmapTransformation())
                         .into(playerImage);
             }else{
                 Picasso.with(context)
                         .load(new File(data.getPlayerImagePath()))
+                        .transform(new BitmapTransformation())
                         .into(playerImage);
             }
             playerName.setText(data.getPlayerName());

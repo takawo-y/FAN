@@ -18,9 +18,12 @@ import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
 import com.takawo.fan.MyApplication;
 import com.takawo.fan.R;
 import com.takawo.fan.db.FandbPlayer;
+
+import java.io.File;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -170,7 +173,8 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
             cursor.close();
 
             Toast.makeText(this, picturePath, Toast.LENGTH_LONG).show();
-            inputPlayerImage.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+            //inputPlayerImage.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+            Picasso.with(this).load(new File(picturePath)).into(inputPlayerImage);
             sharePre = PreferenceManager.getDefaultSharedPreferences(this);
             sharePre.edit().putString(SHARE_IMAGE_PATH_KEY, picturePath).commit();
         }

@@ -1,9 +1,7 @@
-package com.takawo.fan;
+package com.takawo.fan.util;
 
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by 9004027600 on 2015/02/05.

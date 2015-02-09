@@ -14,10 +14,10 @@ import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.TimePicker;
 
-import com.takawo.fan.FanConst;
-import com.takawo.fan.FanMaster;
-import com.takawo.fan.FanUtil;
-import com.takawo.fan.KeyValuePair;
+import com.takawo.fan.util.FanConst;
+import com.takawo.fan.util.FanMaster;
+import com.takawo.fan.util.FanUtil;
+import com.takawo.fan.util.KeyValuePair;
 import com.takawo.fan.MyApplication;
 import com.takawo.fan.R;
 import com.takawo.fan.adaptor.KeyValuePairArrayAdapter;

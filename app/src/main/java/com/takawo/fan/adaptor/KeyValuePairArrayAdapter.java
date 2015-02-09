@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.takawo.fan.KeyValuePair;
+import com.takawo.fan.util.KeyValuePair;
 
 import java.util.List;
 
