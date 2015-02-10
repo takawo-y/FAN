@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <LinearLayout
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tool_bar"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:minHeight="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:navigationIcon="@drawable/ic_done_grey600_24dp">
+        <ImageView
+            android:id="@+id/button_game_registration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginRight="16dp"
+            android:src="@drawable/ic_done_white_36dp"/>
+    </android.support.v7.widget.Toolbar>
+
+
+    <ScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/tool_bar"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            android:minHeight="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            android:elevation="4dp"
-            android:navigationIcon="@drawable/ic_done_grey600_24dp"
-            >
-            <ImageView
-                android:id="@+id/button_game_registration"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_marginRight="16dp"
-                android:src="@drawable/ic_done_white_36dp"/>
-        </android.support.v7.widget.Toolbar>
-
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -252,4 +252,6 @@
                     />
             </TableRow>
         </TableLayout>
-    </LinearLayout></ScrollView>
+    </ScrollView>
+
+</LinearLayout>
