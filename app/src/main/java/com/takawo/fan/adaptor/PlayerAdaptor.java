@@ -63,7 +63,7 @@ public class PlayerAdaptor extends RecyclerView.Adapter<PlayerAdaptor.ViewHolder
         viewHolder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //Click時、試合一覧に遷移する
                 Intent intent = new Intent(context, GameActivity.class);
                 FandbPlayer data = dataList.get(recyclerView.getChildPosition(v));
                 Log.d("PlayerList","id:"+data.getId());

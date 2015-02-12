@@ -1,5 +1,7 @@
 package com.takawo.fan.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -53,6 +55,37 @@ public class GameActivity extends ActionBarActivity {
         intent.putExtra(FanConst.INTENT_PLAYER_IMAGE, playerImage);
         intent.putExtra(FanConst.INTENT_RESULT_TYPE, resultType);
         startActivity(intent);
+    }
+
+    @OnClick(R.id.button_player_update)
+    void onClickUpdate(){
+        //Player更新画面を開く
+        Intent intent = new Intent(GameActivity.this, PlayerUpdateActivity.class);
+        intent.putExtra(FanConst.INTENT_PLAYER_ID, id);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.button_player_delete)
+    void onClickDelete(){
+        //Player削除する
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Player削除")
+                .setMessage("Playerデータを削除しますか？\n紐づく試合情報も全て削除されます。")
+                .setPositiveButton("はい",
+                        new DialogInterface.OnClickListener(){
+                            public void onClick(DialogInterface dialog, int which){
+                                deletePlayer();
+                                Intent intent = new Intent(GameActivity.this, MainActivity.class);
+                                startActivity(intent);
+                            }
+                        }
+                )
+                .setNegativeButton("いいえ",
+                        new DialogInterface.OnClickListener(){
+                            public void onClick(DialogInterface dialog, int which){}
+                        }
+                )
+                .show();
     }
 
     @Override
@@ -115,4 +148,11 @@ public class GameActivity extends ActionBarActivity {
         recyclerViewGame.setAdapter(new GameAdaptor(this, list));
     }
 
+    /**
+     * Playerデータ削除
+     */
+    private void deletePlayer(){
+        MyApplication app = (MyApplication)getApplication();
+        app.getDaoSession().getFandbPlayerDao().deleteByKey(id);
+    }
 }
