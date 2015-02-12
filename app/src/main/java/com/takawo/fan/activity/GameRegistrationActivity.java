@@ -106,7 +106,7 @@ public class GameRegistrationActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.game_regist);
+        setContentView(R.layout.activity_game_regist);
         ButterKnife.inject(this);
         getValueFromIntent();
 

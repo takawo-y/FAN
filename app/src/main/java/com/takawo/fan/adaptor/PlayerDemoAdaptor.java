@@ -29,7 +29,7 @@ public class PlayerDemoAdaptor extends RecyclerView.Adapter<PlayerDemoAdaptor.Vi
 
     @Override
     public PlayerDemoAdaptor.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View view = inf.inflate(R.layout.player_list, null);
+        View view = inf.inflate(R.layout.list_player, null);
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
     }

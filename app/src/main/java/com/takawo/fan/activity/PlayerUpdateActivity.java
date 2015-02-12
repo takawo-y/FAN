@@ -17,7 +17,6 @@ import com.takawo.fan.db.FandbPlayer;
 import com.takawo.fan.util.FanConst;
 
 import java.io.File;
-import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -52,7 +51,7 @@ public class PlayerUpdateActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.player_regist);
+        setContentView(R.layout.activity_player_regist);
         ButterKnife.inject(this);
 
         setToolbar();  //ToolBar設定
