@@ -28,9 +28,10 @@ public class PlayerUpdateActivity extends ActionBarActivity {
 
     public PlayerUpdateActivity() {super();}
 
-    private int RESULT_PICK_FILENAME = 1;
-    private SharedPreferences sharePre;
-    private final String SHARE_IMAGE_PATH_KEY = "imagePath";
+    private Long id;
+    private String playerName;
+    private String playerImage;
+    private long resultType;
 
     @InjectView(R.id.tool_bar)
     Toolbar toolbar;
@@ -51,20 +52,23 @@ public class PlayerUpdateActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_player_regist);
+        setContentView(R.layout.activity_player_update);
         ButterKnife.inject(this);
 
-        setToolbar();  //ToolBar設定
+        id = getIntent().getLongExtra(FanConst.INTENT_PLAYER_ID, 0);
         setData();  //初期表示
+        setToolbar();  //ToolBar設定
     }
 
     private void setToolbar(){
+        toolbar.setTitle("Player 更新");
         toolbar.setNavigationIcon(R.drawable.ic_done_grey600_36dp);
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                                                  @Override
                                                  public void onClick(View v) {
-                                                     Intent intent = new Intent(PlayerUpdateActivity.this, MainActivity.class);
+                                                     Intent intent = new Intent(PlayerUpdateActivity.this, GameActivity.class);
+                                                     intent.putExtra(FanConst.INTENT_PLAYER_ID, id);
                                                      startActivity(intent);
                                                  }
                                              }
@@ -92,10 +96,12 @@ public class PlayerUpdateActivity extends ActionBarActivity {
         inputPlayerComment.setText(data.getPlayerComment());
     }
 
+    /**
+     * Player検索
+     *
+     * @return
+     */
     private FandbPlayer getPlayerData(){
-        Intent intent = getIntent();
-        Long id = intent.getLongExtra(FanConst.INTENT_PLAYER_ID, 0);
-
         MyApplication app = (MyApplication)getApplication();
         return app.getDaoSession().getFandbPlayerDao().load(id);
 

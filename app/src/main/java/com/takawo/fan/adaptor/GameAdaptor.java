@@ -98,7 +98,6 @@ public class GameAdaptor extends RecyclerView.Adapter<GameAdaptor.ViewHolder>{
             id = data.getId();
             SimpleDateFormat formatA = new SimpleDateFormat("yyyy/MM/dd");
             String formatDate = formatA.format(data.getGameDay());
-            Log.d("GameAdapter", "試合日："+gameDay.getGravity());
             gameDay.setText(formatDate);
             gameCategory.setText(data.getGameCategory());
             gameInfo.setText(data.getGameInfo());

@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 
+import com.takawo.fan.db.FandbPlayer;
 import com.takawo.fan.util.FanConst;
 import com.takawo.fan.MyApplication;
 import com.takawo.fan.util.FanUtil;
@@ -34,9 +35,7 @@ import butterknife.OnClick;
 public class GameActivity extends ActionBarActivity {
 
     private Long id;
-    private String playerName;
-    private String playerImage;
-    private long resultType;
+    private FandbPlayer playerDate;
 
     private RecyclerView.LayoutManager layoutManagerGame;
 
@@ -51,9 +50,6 @@ public class GameActivity extends ActionBarActivity {
         //Game新規登録画面を開く
         Intent intent = new Intent(GameActivity.this, GameRegistrationActivity.class);
         intent.putExtra(FanConst.INTENT_PLAYER_ID, id);
-        intent.putExtra(FanConst.INTENT_PLAYER_NAME, playerName);
-        intent.putExtra(FanConst.INTENT_PLAYER_IMAGE, playerImage);
-        intent.putExtra(FanConst.INTENT_RESULT_TYPE, resultType);
         startActivity(intent);
     }
 
@@ -76,6 +72,7 @@ public class GameActivity extends ActionBarActivity {
                             public void onClick(DialogInterface dialog, int which){
                                 deletePlayer();
                                 Intent intent = new Intent(GameActivity.this, MainActivity.class);
+                                intent.putExtra(FanConst.INTENT_PLAYER_ID, id);
                                 startActivity(intent);
                             }
                         }
@@ -93,7 +90,9 @@ public class GameActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         ButterKnife.inject(this);
-        getValueFromIntent();
+        Intent intent = getIntent();
+        id = intent.getLongExtra(FanConst.INTENT_PLAYER_ID, 0);
+        playerDate = getPlayerData();
 
         setToolbar();  //ToolBar設定
         setList();  //一覧取得
@@ -101,26 +100,15 @@ public class GameActivity extends ActionBarActivity {
     }
 
     /**
-     * Intentから値の取得
-     */
-    private void getValueFromIntent(){
-        Intent intent = getIntent();
-        id = intent.getLongExtra(FanConst.INTENT_PLAYER_ID, 0);
-        playerName = intent.getStringExtra(FanConst.INTENT_PLAYER_NAME);
-        playerImage = intent.getStringExtra(FanConst.INTENT_PLAYER_IMAGE);
-        resultType = intent.getLongExtra(FanConst.INTENT_RESULT_TYPE, 0);
-    }
-
-    /**
      * Toolbar設定
      */
     private void setToolbar(){
-        if(playerImage == null || playerImage.isEmpty()){
+        if(playerDate.getPlayerImagePath() == null || playerDate.getPlayerImagePath().isEmpty()){
             toolbar.setLogo(R.drawable.no_image);
         }else{
-            toolbar.setLogo(new BitmapDrawable(getResources(), FanUtil.resizeImage(playerImage, 100)));
+            toolbar.setLogo(new BitmapDrawable(getResources(), FanUtil.resizeImage(playerDate.getPlayerImagePath(), 100)));
         }
-        toolbar.setTitle(playerName);
+        toolbar.setTitle(playerDate.getPlayerName());
         toolbar.setSubtitle(R.string.game_list_view_name);
         toolbar.setNavigationIcon(R.drawable.ic_done_grey600_36dp);
         setSupportActionBar(toolbar);
@@ -133,6 +121,17 @@ public class GameActivity extends ActionBarActivity {
                                              }
 
         );
+    }
+
+    /**
+     * Player検索
+     *
+     * @return
+     */
+    private FandbPlayer getPlayerData(){
+        MyApplication app = (MyApplication)getApplication();
+        return app.getDaoSession().getFandbPlayerDao().load(id);
+
     }
 
     private void setList(){

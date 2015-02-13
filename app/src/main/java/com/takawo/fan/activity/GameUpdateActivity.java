@@ -1,8 +1,6 @@
 package com.takawo.fan.activity;
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
@@ -15,21 +13,20 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TableRow;
-import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.takawo.fan.MyApplication;
+import com.takawo.fan.R;
+import com.takawo.fan.adaptor.KeyValuePairArrayAdapter;
+import com.takawo.fan.db.FandbGame;
+import com.takawo.fan.db.FandbGameDao;
 import com.takawo.fan.db.FandbPlayer;
 import com.takawo.fan.util.FanConst;
 import com.takawo.fan.util.FanMaster;
 import com.takawo.fan.util.FanUtil;
 import com.takawo.fan.util.KeyValuePair;
-import com.takawo.fan.MyApplication;
-import com.takawo.fan.R;
-import com.takawo.fan.adaptor.KeyValuePairArrayAdapter;
-import com.takawo.fan.db.FandbGame;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.text.SimpleDateFormat;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -38,11 +35,12 @@ import butterknife.OnClick;
 /**
  * Created by Takawo on 2015/01/20.
  */
-public class GameRegistrationActivity extends ActionBarActivity {
+public class GameUpdateActivity extends ActionBarActivity {
     private Long playerId;
+    private Long gameId;
     private FandbPlayer playerData;
 
-    public GameRegistrationActivity() {
+    public GameUpdateActivity() {
         super();
     }
 
@@ -62,11 +60,11 @@ public class GameRegistrationActivity extends ActionBarActivity {
     @InjectView(R.id.inputGameTemperature)
     EditText inputGameTemperature;
     @InjectView(R.id.inputGameDate)
-    TextView inputGameDate;
+    DatePicker inputGameDate;
     @InjectView(R.id.inputGameStartTime)
-    TextView inputGameStartTime;
+    TimePicker inputGameStartTime;
     @InjectView(R.id.inputGameEndTime)
-    TextView inputGameEndTime;
+    TimePicker inputGameEndTime;
     @InjectView(R.id.inputGameOpposition)
     EditText inputGameOpposition;
     @InjectView(R.id.inputGameResult)
@@ -82,70 +80,16 @@ public class GameRegistrationActivity extends ActionBarActivity {
     @InjectView(R.id.inputGameComment)
     EditText inputGameComment;
 
-    @OnClick(R.id.inputGameDate)
-    void onClickGameDate(){
-        final Calendar calendar = Calendar.getInstance();
-        final int year = calendar.get(Calendar.YEAR);
-        final int month = calendar.get(Calendar.MONTH);
-        final int day = calendar.get(Calendar.DAY_OF_MONTH);
-
-        final DatePickerDialog datePickerDialog = new DatePickerDialog(
-                this,
-                new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        inputGameDate.setText(year + "/" + (monthOfYear + 1) + "/" + dayOfMonth);
-                    }
-                },
-                year, month, day);
-        datePickerDialog.show();
-    }
-
-    @OnClick(R.id.inputGameStartTime)
-    void onClickStartTime(){
-        final Calendar calendar = Calendar.getInstance();
-        final int nowHour = calendar.get(Calendar.HOUR_OF_DAY);
-        final int nowMinute = calendar.get(Calendar.MINUTE);
-
-        final TimePickerDialog timePickerDialog = new TimePickerDialog(
-                this,
-                new TimePickerDialog.OnTimeSetListener(){
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        inputGameStartTime.setText(hourOfDay+":"+minute);
-                    }
-                },
-                nowHour, nowMinute, true);
-        timePickerDialog.show();
-    }
-
-    @OnClick(R.id.inputGameEndTime)
-    void onClickEndTime(){
-        final Calendar calendar = Calendar.getInstance();
-        final int nowHour = calendar.get(Calendar.HOUR_OF_DAY);
-        final int nowMinute = calendar.get(Calendar.MINUTE);
-
-        final TimePickerDialog timePickerDialog = new TimePickerDialog(
-                this,
-                new TimePickerDialog.OnTimeSetListener(){
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        inputGameEndTime.setText(hourOfDay+":"+minute);
-                    }
-                },
-                nowHour, nowMinute, true);
-        timePickerDialog.show();
-    }
-    @OnClick(R.id.button_game_registration)
+    @OnClick(R.id.button_game_update)
     void onClickRegist(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("試合情報登録")
-        .setMessage("登録しますか？")
+        builder.setTitle("試合情報更新")
+        .setMessage("更新しますか？")
         .setPositiveButton("はい",
             new DialogInterface.OnClickListener(){
                 public void onClick(DialogInterface dialog, int which){
-                    registGame();
-                    Intent intent = new Intent(GameRegistrationActivity.this, GameActivity.class);
+                    updateGame();
+                    Intent intent = new Intent(GameUpdateActivity.this, GameActivity.class);
                     intent.putExtra(FanConst.INTENT_PLAYER_ID, playerId);
                     startActivity(intent);
                 }
@@ -162,14 +106,17 @@ public class GameRegistrationActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game_regist);
+        setContentView(R.layout.activity_game_update);
         ButterKnife.inject(this);
         playerId = getIntent().getLongExtra(FanConst.INTENT_PLAYER_ID, 0);
         playerData = ((MyApplication)getApplication()).getDaoSession().getFandbPlayerDao().load(playerId);
+        gameId = getIntent().getLongExtra(FanConst.INTENT_GAME_ID, 0);
 
         setToolbar();  //ToolBar設定
-        setSpinnerGameType();
-        if(playerData.getResultType()== 0){
+        setData();
+
+        setTimePicker();
+        if(playerData.getResultType() == 0){
             //スコア
             tableResultTime.setVisibility(View.GONE);
         }else if(playerData.getResultType() == 1){
@@ -194,7 +141,7 @@ public class GameRegistrationActivity extends ActionBarActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                                                  @Override
                                                  public void onClick(View v) {
-                                                     Intent intent = new Intent(GameRegistrationActivity.this, GameActivity.class);
+                                                     Intent intent = new Intent(GameUpdateActivity.this, GameActivity.class);
                                                      intent.putExtra(FanConst.INTENT_PLAYER_ID, playerId);
                                                      startActivity(intent);
                                                  }
@@ -203,12 +150,33 @@ public class GameRegistrationActivity extends ActionBarActivity {
         );
     }
 
-    private void setSpinnerGameType(){
+    private FandbGame getGameData(){
+        MyApplication app = (MyApplication)getApplication();
+        return app.getDaoSession().getFandbGameDao().queryBuilder()
+                .where(FandbGameDao.Properties.PlayerId.eq(playerId), FandbGameDao.Properties.Id.eq(gameId)).unique();
+    }
+
+    private void setData(){
+        FandbGame gameData = getGameData();
+        setSpinnerGameType(gameData.getGameType());  //Gameタイプ
+        inputGameCategory.setText(gameData.getGameCategory());  //Gameカテゴリ
+        inputGameInfo.setText(gameData.getGameInfo());  //Gameインフォメーション
+
+
+
+    }
+
+    /**
+     * GameTypeセット
+     *
+     * @param type
+     */
+    private void setSpinnerGameType(Long type){
         inputGameType.setOnItemSelectedListener(onItemSelectedListener);
         KeyValuePairArrayAdapter adapter = new KeyValuePairArrayAdapter(this, android.R.layout.simple_spinner_item, FanMaster.getGameType());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         inputGameType.setAdapter(adapter);
-        inputGameType.setSelection(adapter.getPosition(0));
+        inputGameType.setSelection(adapter.getPosition(type.intValue()));
 
     }
 
@@ -223,22 +191,27 @@ public class GameRegistrationActivity extends ActionBarActivity {
         }
     };
 
+    private void setTimePicker(){
+        inputGameStartTime.setIs24HourView(true);
+        inputGameEndTime.setIs24HourView(true);
+    }
+
     /**
      * Game登録
      */
-    private void registGame(){
+    private void updateGame(){
         FandbGame game = new FandbGame(
                 playerId,
-                null,
+                gameId,
                 new Long(((KeyValuePair)inputGameType.getSelectedItem()).getKey()),
                 inputGameCategory.getText().toString(),
                 inputGameInfo.getText().toString(),
                 inputGamePlace.getText().toString(),
                 inputGameWeather.getText().toString(),
                 inputGameTemperature.getText().toString(),
-                new Date(inputGameDate.getText().toString()),
-                inputGameStartTime.getText().toString(),
-                inputGameEndTime.getText().toString(),
+                FanUtil.getDate(inputGameDate),
+                FanUtil.getTimeString(inputGameStartTime),
+                FanUtil.getTimeString(inputGameEndTime),
                 inputGameOpposition.getText().toString(),
                 inputGameResult.getText().toString(),
                 inputGameResultScore.getText().toString(),
@@ -246,7 +219,7 @@ public class GameRegistrationActivity extends ActionBarActivity {
                 inputGameComment.getText().toString()
         );
         MyApplication app = (MyApplication)getApplication();
-        app.getDaoSession().getFandbGameDao().insert(game);
+        app.getDaoSession().getFandbGameDao().update(game);
     }
 
 }

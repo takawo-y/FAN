@@ -16,7 +16,7 @@
         android:elevation="4dp"
         android:navigationIcon="@drawable/ic_done_grey600_24dp">
         <ImageView
-            android:id="@+id/button_game_registration"
+            android:id="@+id/button_game_update"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
@@ -82,10 +82,7 @@
                     android:hint="@string/game_registration_info_hint"
                     />
             </TableRow>
-            <TableRow
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp"
-                >
+            <TableRow>
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -99,13 +96,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.6"
                     android:textSize="18sp"
-                    android:hint="クリックして設定"
+                    android:hint="クリックして日付を設定してください"
                     />
             </TableRow>
-            <TableRow
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp"
-                >
+            <TableRow>
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -119,13 +113,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.6"
                     android:textSize="18sp"
-                    android:hint="クリックして設定"
+                    android:hint="クリックして時間を設定してください"
                     />
             </TableRow>
-            <TableRow
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp"
-                >
+            <TableRow>
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -139,7 +130,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.6"
                     android:textSize="18sp"
-                    android:hint="クリックして設定"
+                    android:hint="クリックして時間を設定してください"
                     />
             </TableRow>
             <TableRow>
