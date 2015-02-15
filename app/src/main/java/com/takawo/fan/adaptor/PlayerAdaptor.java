@@ -66,11 +66,7 @@ public class PlayerAdaptor extends RecyclerView.Adapter<PlayerAdaptor.ViewHolder
                 //Click時、試合一覧に遷移する
                 Intent intent = new Intent(context, GameActivity.class);
                 FandbPlayer data = dataList.get(recyclerView.getChildPosition(v));
-                Log.d("PlayerList","id:"+data.getId());
                 intent.putExtra(FanConst.INTENT_PLAYER_ID, data.getId());
-                intent.putExtra(FanConst.INTENT_PLAYER_NAME, data.getPlayerName());
-                intent.putExtra(FanConst.INTENT_PLAYER_IMAGE, data.getPlayerImagePath());
-                intent.putExtra(FanConst.INTENT_RESULT_TYPE, data.getResultType());
                 context.startActivity(intent);
             }
         });

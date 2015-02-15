@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.takawo.fan.activity.GameUpdateActivity;
 import com.takawo.fan.util.FanConst;
 import com.takawo.fan.activity.GameActivity;
 import com.takawo.fan.R;
@@ -51,7 +52,8 @@ public class GameAdaptor extends RecyclerView.Adapter<GameAdaptor.ViewHolder>{
         viewHolder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, GameActivity.class);
+                Intent intent = new Intent(context, GameUpdateActivity.class);
+                Log.d("GameListOnClick", "data:"+data.getPlayerId()+","+data.getId());
                 intent.putExtra(FanConst.INTENT_PLAYER_ID, data.getPlayerId());
                 intent.putExtra(FanConst.INTENT_GAME_ID, data.getId());
                 context.startActivity(intent);
