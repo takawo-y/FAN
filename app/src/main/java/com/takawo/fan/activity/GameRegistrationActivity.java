@@ -112,7 +112,7 @@ public class GameRegistrationActivity extends ActionBarActivity {
                 new TimePickerDialog.OnTimeSetListener(){
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        inputGameStartTime.setText(hourOfDay+":"+minute);
+                        inputGameStartTime.setText(String.format("%02d", hourOfDay)+":"+String.format("%02d", minute));
                     }
                 },
                 nowHour, nowMinute, true);
@@ -130,7 +130,7 @@ public class GameRegistrationActivity extends ActionBarActivity {
                 new TimePickerDialog.OnTimeSetListener(){
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        inputGameEndTime.setText(hourOfDay+":"+minute);
+                        inputGameEndTime.setText(String.format("%02d", hourOfDay)+":"+String.format("%02d", minute));
                     }
                 },
                 nowHour, nowMinute, true);

@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -21,6 +22,8 @@ import com.squareup.picasso.Picasso;
 import com.takawo.fan.MyApplication;
 import com.takawo.fan.R;
 import com.takawo.fan.db.FandbPlayer;
+import com.takawo.fan.util.BitmapTransformation;
+import com.takawo.fan.util.FanUtil;
 
 import java.io.File;
 
@@ -70,18 +73,19 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
         builder.setTitle("Player登録")
         .setMessage("登録しますか？")
         .setPositiveButton("はい",
-            new DialogInterface.OnClickListener(){
-                public void onClick(DialogInterface dialog, int which){
-                    registPlayer();
-                    Intent intent = new Intent(PlayerRegistrationActivity.this, MainActivity.class);
-                    startActivity(intent);
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        registPlayer();
+                        Intent intent = new Intent(PlayerRegistrationActivity.this, MainActivity.class);
+                        startActivity(intent);
+                    }
                 }
-            }
         )
         .setNegativeButton("いいえ",
-            new DialogInterface.OnClickListener(){
-                public void onClick(DialogInterface dialog, int which){}
-            }
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }
         )
         .show();
     }
@@ -121,29 +125,13 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
                 null,
                 inputPlayerName.getText().toString(),
                 inputGameEvent.getText().toString(),
-                getResultType(),
+                FanUtil.getResultType(inputPlayerResultType.getCheckedRadioButtonId()),
                 inputPlayerCategory.getText().toString(),
                 null,
                 path,
                 inputPlayerComment.getText().toString());
         MyApplication app = (MyApplication)getApplication();
         app.getDaoSession().getFandbPlayerDao().insert(player);
-    }
-
-    /**
-     * ResultType取得
-     * 0:スコア、1:タイム
-     * @return
-     */
-    private long getResultType(){
-        int resultTypeId = inputPlayerResultType.getCheckedRadioButtonId();
-        long resultType = 0;
-        if (resultTypeId == R.id.playerResultTypeRB0){
-            resultType = 0;
-        }else if (resultTypeId == R.id.playerResultTypeRB1){
-            resultType = 1;
-        }
-        return resultType;
     }
 
     /**
@@ -173,7 +161,8 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
 
             Toast.makeText(this, picturePath, Toast.LENGTH_LONG).show();
             //inputPlayerImage.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-            Picasso.with(this).load(new File(picturePath)).into(inputPlayerImage);
+            //Picasso.with(this).load(new File(picturePath)).transform(new BitmapTransformation()).into(inputPlayerImage);
+            Picasso.with(this).load(new File(picturePath)).resize(200, 200).centerInside().into(inputPlayerImage);
             sharePre = PreferenceManager.getDefaultSharedPreferences(this);
             sharePre.edit().putString(SHARE_IMAGE_PATH_KEY, picturePath).commit();
         }

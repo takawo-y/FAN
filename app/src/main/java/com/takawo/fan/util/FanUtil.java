@@ -8,6 +8,8 @@ import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 
+import com.takawo.fan.R;
+
 import java.util.Calendar;
 import java.util.Date;
 
@@ -32,4 +34,21 @@ public class FanUtil {
         Bitmap imgBitmap = ((BitmapDrawable)img).getBitmap();
         return Bitmap.createScaledBitmap(imgBitmap, size, size, false);
     }
+
+    /**
+     * ResultType取得
+     * 0:スコア、1:タイム
+     * @return
+     */
+    static public long getResultType(int resultTypeId){
+        long resultType = 0;
+        if (resultTypeId == R.id.playerResultTypeRB0){
+            resultType = 0;
+        }else if (resultTypeId == R.id.playerResultTypeRB1){
+            resultType = 1;
+        }
+        return resultType;
+    }
+
+
 }

@@ -2,6 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -23,7 +24,17 @@
             android:layout_marginRight="16dp"
             android:src="@drawable/ic_done_white_36dp"/>
     </android.support.v7.widget.Toolbar>
-
+    <com.astuetz.PagerSlidingTabStrip
+        android:id="@+id/tabs_game"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"/>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        tools:context=".MainActivity"/>
 
     <ScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
