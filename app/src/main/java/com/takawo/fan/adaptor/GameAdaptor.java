@@ -16,9 +16,12 @@ import com.takawo.fan.util.FanConst;
 import com.takawo.fan.activity.GameActivity;
 import com.takawo.fan.R;
 import com.takawo.fan.db.FandbGame;
+import com.takawo.fan.util.FanUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+
+import butterknife.ButterKnife;
 
 /**
  * Created by Takawo on 2014/12/31.
@@ -53,7 +56,6 @@ public class GameAdaptor extends RecyclerView.Adapter<GameAdaptor.ViewHolder>{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, GameUpdateActivity.class);
-                Log.d("GameListOnClick", "data:"+data.getPlayerId()+","+data.getId());
                 intent.putExtra(FanConst.INTENT_PLAYER_ID, data.getPlayerId());
                 intent.putExtra(FanConst.INTENT_GAME_ID, data.getId());
                 context.startActivity(intent);
@@ -77,6 +79,7 @@ public class GameAdaptor extends RecyclerView.Adapter<GameAdaptor.ViewHolder>{
         TextView gameDay;
         TextView gameCategory;
         TextView gameInfo;
+        TextView gameType;
         TextView opposition;
         TextView result;
         TextView resultScoreTime;
@@ -87,12 +90,13 @@ public class GameAdaptor extends RecyclerView.Adapter<GameAdaptor.ViewHolder>{
             linearLayout = (LinearLayout)v.findViewById(R.id.lily_game);
 
             v.setOnClickListener(this);
-            gameDay = (TextView)v.findViewById(R.id.gameDay);
-            gameCategory = (TextView)v.findViewById(R.id.gameCategory);
-            gameInfo = (TextView)v.findViewById(R.id.gameInfo);
-            opposition = (TextView)v.findViewById(R.id.gameOpposition);
-            result = (TextView)v.findViewById(R.id.gameResult);
-            resultScoreTime = (TextView)v.findViewById(R.id.gameScoreTime);
+            gameDay = ButterKnife.findById(v, R.id.gameDay);
+            gameCategory = ButterKnife.findById(v, R.id.gameCategory);
+            gameInfo = ButterKnife.findById(v, R.id.gameInfo);
+            gameType = ButterKnife.findById(v, R.id.gameType);
+            opposition = ButterKnife.findById(v, R.id.gameOpposition);
+            result = ButterKnife.findById(v, R.id.gameResult);
+            resultScoreTime = ButterKnife.findById(v, R.id.gameScoreTime);
         }
 
         public void setItem(FandbGame data){
@@ -103,6 +107,7 @@ public class GameAdaptor extends RecyclerView.Adapter<GameAdaptor.ViewHolder>{
             gameDay.setText(formatDate);
             gameCategory.setText(data.getGameCategory());
             gameInfo.setText(data.getGameInfo());
+            gameType.setText(FanUtil.getGameTypeLabel(data.getGameType()));
             opposition.setText(data.getOpposition());
             result.setText(data.getResult());
             if(data.getResultScore() != null || TextUtils.isEmpty(data.getResultScore()) == false){

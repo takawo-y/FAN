@@ -29,6 +29,7 @@ import com.takawo.fan.util.FanConst;
 import com.takawo.fan.util.FanMaster;
 import com.takawo.fan.util.KeyValuePair;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -178,15 +179,13 @@ public class GameUpdateFragment extends Fragment {
     }
 
     private void setData(){
-        Log.d("UpdateFragment", "PlayerId:"+playerId);
-        Log.d("UpdateFragment", "GameId:"+gameId);
         FandbGame data = ((MyApplication)getActivity().getApplication()).getDaoSession().getFandbGameDao().queryBuilder()
                 .where(FandbGameDao.Properties.PlayerId.eq(playerId), FandbGameDao.Properties.Id.eq(gameId)).unique();
 
         setSpinnerGameType(data.getGameType());  //Gameタイプ
         inputGameCategory.setText(data.getGameCategory());  //Gameカテゴリ
         inputGameInfo.setText(data.getGameInfo());  //Gameインフォメーション
-//        inputGameDate.setText(data.getGameDay());  //試合日
+        inputGameDate.setText(new SimpleDateFormat("yyyy-MM-dd").format(data.getGameDay()));  //試合日
         inputGameStartTime.setText(data.getStartTime());  //開始時間
         inputGameEndTime.setText(data.getEndTime());  //終了時間
         inputGameOpposition.setText(data.getOpposition());  //対戦相手
@@ -214,7 +213,7 @@ public class GameUpdateFragment extends Fragment {
         KeyValuePairArrayAdapter adapter = new KeyValuePairArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, FanMaster.getGameType());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         inputGameType.setAdapter(adapter);
-
+        inputGameType.setSelection(adapter.getPosition(type.intValue()));
     }
 
     /**

@@ -12,6 +12,8 @@ import com.takawo.fan.R;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created by Takawo on 2015/02/08.
@@ -50,5 +52,19 @@ public class FanUtil {
         return resultType;
     }
 
-
+    /**
+     * ゲームタイプのラベル取得
+     * @param type
+     * @return
+     */
+    static public String getGameTypeLabel(Long type){
+        List<KeyValuePair> masterList = FanMaster.getGameType();
+        for(Iterator ite = masterList.iterator(); ite.hasNext();){
+            KeyValuePair data = (KeyValuePair)ite.next();
+            if(data.getKey() == type.intValue()){
+                return data.getValue();
+            }
+        }
+        return "";
+    }
 }
