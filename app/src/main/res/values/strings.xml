@@ -38,4 +38,6 @@
     <string name="game_registration_category_hint">J1リーグ</string>
     <string name="game_registration_info_hint">第1節</string>
 
+    <string name="game_update_view_name">試合情報 更新</string>
+
 </resources>

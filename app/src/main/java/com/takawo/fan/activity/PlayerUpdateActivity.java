@@ -121,8 +121,11 @@ public class PlayerUpdateActivity extends ActionBarActivity {
         );
     }
 
+    /**
+     * 初期表示
+     */
     private void setData(){
-        FandbPlayer data = getPlayerData();
+        FandbPlayer data = ((MyApplication)getApplication()).getDaoSession().getFandbPlayerDao().load(playerId);
         if(data.getPlayerImagePath() == null || data.getPlayerImagePath().isEmpty()){
             Picasso.with(this).load(R.drawable.no_image).into(inputPlayerImage);
         }else{
@@ -140,17 +143,6 @@ public class PlayerUpdateActivity extends ActionBarActivity {
                 inputPlayerResultType.check(R.id.playerResultTypeRB1);
         }
         inputPlayerComment.setText(data.getPlayerComment());
-    }
-
-    /**
-     * Player検索
-     *
-     * @return
-     */
-    private FandbPlayer getPlayerData(){
-        MyApplication app = (MyApplication)getApplication();
-        return app.getDaoSession().getFandbPlayerDao().load(playerId);
-
     }
 
     /**

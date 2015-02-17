@@ -36,8 +36,7 @@
         android:layout_weight="1"
         tools:context=".MainActivity"/>
 
-    <fragment
-        class="com.takawo.fan.fragment.GameUpdateFragment"
+    <ScrollView
         android:id="@+id/game_update_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

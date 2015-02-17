@@ -1,11 +1,13 @@
 package com.takawo.fan.fragment;
 
 import android.app.AlertDialog;
-import android.app.Fragment;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,20 +16,23 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.takawo.fan.MyApplication;
 import com.takawo.fan.R;
-import com.takawo.fan.activity.GameActivity;
 import com.takawo.fan.adaptor.KeyValuePairArrayAdapter;
 import com.takawo.fan.db.FandbGame;
 import com.takawo.fan.db.FandbGameDao;
 import com.takawo.fan.db.FandbPlayer;
 import com.takawo.fan.util.FanConst;
 import com.takawo.fan.util.FanMaster;
-import com.takawo.fan.util.FanUtil;
 import com.takawo.fan.util.KeyValuePair;
 
+import java.util.Calendar;
+import java.util.Date;
+
+import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
@@ -53,11 +58,11 @@ public class GameUpdateFragment extends Fragment {
     @InjectView(R.id.inputGameTemperature)
     EditText inputGameTemperature;
     @InjectView(R.id.inputGameDate)
-    DatePicker inputGameDate;
+    TextView inputGameDate;
     @InjectView(R.id.inputGameStartTime)
-    TimePicker inputGameStartTime;
+    TextView inputGameStartTime;
     @InjectView(R.id.inputGameEndTime)
-    TimePicker inputGameEndTime;
+    TextView inputGameEndTime;
     @InjectView(R.id.inputGameOpposition)
     EditText inputGameOpposition;
     @InjectView(R.id.inputGameResult)
@@ -73,40 +78,95 @@ public class GameUpdateFragment extends Fragment {
     @InjectView(R.id.inputGameComment)
     EditText inputGameComment;
 
-    @OnClick(R.id.button_game_update)
-    void onClickRegist(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("試合情報更新")
-                .setMessage("更新しますか？")
-                .setPositiveButton("はい",
-                        new DialogInterface.OnClickListener(){
-                            public void onClick(DialogInterface dialog, int which){
-                                updateGame();
-//                                Intent intent = new Intent(GameUpdateActivity.this, GameActivity.class);
-//                                intent.putExtra(FanConst.INTENT_PLAYER_ID, playerId);
-//                                startActivity(intent);
-                            }
-                        }
-                )
-                .setNegativeButton("いいえ",
-                        new DialogInterface.OnClickListener(){
-                            public void onClick(DialogInterface dialog, int which){}
-                        }
-                )
-                .show();
+    @OnClick(R.id.inputGameDate)
+    void onClickGameDate(){
+        final Calendar calendar = Calendar.getInstance();
+        final int year = calendar.get(Calendar.YEAR);
+        final int month = calendar.get(Calendar.MONTH);
+        final int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        final DatePickerDialog datePickerDialog = new DatePickerDialog(
+                getActivity(),
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        inputGameDate.setText(year + "/" + (monthOfYear + 1) + "/" + dayOfMonth);
+                    }
+                },
+                year, month, day);
+        datePickerDialog.show();
     }
 
+    @OnClick(R.id.inputGameStartTime)
+    void onClickStartTime(){
+        final Calendar calendar = Calendar.getInstance();
+        final int nowHour = calendar.get(Calendar.HOUR_OF_DAY);
+        final int nowMinute = calendar.get(Calendar.MINUTE);
+
+        final TimePickerDialog timePickerDialog = new TimePickerDialog(
+                getActivity(),
+                new TimePickerDialog.OnTimeSetListener(){
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        inputGameStartTime.setText(String.format("%02d", hourOfDay)+":"+String.format("%02d", minute));
+                    }
+                },
+                nowHour, nowMinute, true);
+        timePickerDialog.show();
+    }
+
+    @OnClick(R.id.inputGameEndTime)
+    void onClickEndTime(){
+        final Calendar calendar = Calendar.getInstance();
+        final int nowHour = calendar.get(Calendar.HOUR_OF_DAY);
+        final int nowMinute = calendar.get(Calendar.MINUTE);
+
+        final TimePickerDialog timePickerDialog = new TimePickerDialog(
+                getActivity(),
+                new TimePickerDialog.OnTimeSetListener(){
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        inputGameEndTime.setText(String.format("%02d", hourOfDay)+":"+String.format("%02d", minute));
+                    }
+                },
+                nowHour, nowMinute, true);
+        timePickerDialog.show();
+    }
+
+//    @OnClick(R.id.button_game_update)
+//    void onClickRegist(){
+//        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//        builder.setTitle("試合情報更新")
+//                .setMessage("更新しますか？")
+//                .setPositiveButton("はい",
+//                        new DialogInterface.OnClickListener(){
+//                            public void onClick(DialogInterface dialog, int which){
+//                                updateGame();
+////                                Intent intent = new Intent(GameUpdateActivity.this, GameActivity.class);
+////                                intent.putExtra(FanConst.INTENT_PLAYER_ID, playerId);
+////                                startActivity(intent);
+//                            }
+//                        }
+//                )
+//                .setNegativeButton("いいえ",
+//                        new DialogInterface.OnClickListener(){
+//                            public void onClick(DialogInterface dialog, int which){}
+//                        }
+//                )
+//                .show();
+//    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_game_update, container, false);
         playerId = getArguments().getLong(FanConst.INTENT_PLAYER_ID);
         gameId = getArguments().getLong(FanConst.INTENT_GAME_ID);
         playerData = ((MyApplication)getActivity().getApplication()).getDaoSession().getFandbPlayerDao().load(playerId);
 
-        setData();
+        ButterKnife.inject(this, view);
 
-        setTimePicker();
+        setData();
         if(playerData.getResultType() == 0){
             //スコア
             tableResultTime.setVisibility(View.GONE);
@@ -114,19 +174,34 @@ public class GameUpdateFragment extends Fragment {
             //タイム
             tableResultScore.setVisibility(View.GONE);
         }
-        return inflater.inflate(R.layout.fragment_game_update, null);
-    }
-
-    private FandbGame getGameData(){
-        return ((MyApplication)getActivity().getApplication()).getDaoSession().getFandbGameDao().queryBuilder()
-                .where(FandbGameDao.Properties.PlayerId.eq(playerId), FandbGameDao.Properties.Id.eq(gameId)).unique();
+        return view;
     }
 
     private void setData(){
-        FandbGame gameData = getGameData();
-        setSpinnerGameType(gameData.getGameType());  //Gameタイプ
-        inputGameCategory.setText(gameData.getGameCategory());  //Gameカテゴリ
-        inputGameInfo.setText(gameData.getGameInfo());  //Gameインフォメーション
+        Log.d("UpdateFragment", "PlayerId:"+playerId);
+        Log.d("UpdateFragment", "GameId:"+gameId);
+        FandbGame data = ((MyApplication)getActivity().getApplication()).getDaoSession().getFandbGameDao().queryBuilder()
+                .where(FandbGameDao.Properties.PlayerId.eq(playerId), FandbGameDao.Properties.Id.eq(gameId)).unique();
+
+        setSpinnerGameType(data.getGameType());  //Gameタイプ
+        inputGameCategory.setText(data.getGameCategory());  //Gameカテゴリ
+        inputGameInfo.setText(data.getGameInfo());  //Gameインフォメーション
+//        inputGameDate.setText(data.getGameDay());  //試合日
+        inputGameStartTime.setText(data.getStartTime());  //開始時間
+        inputGameEndTime.setText(data.getEndTime());  //終了時間
+        inputGameOpposition.setText(data.getOpposition());  //対戦相手
+        inputGameResult.setText(data.getResult());  //試合結果
+        if(data.getResultScore() != null && data.getResultScore().isEmpty() == false){
+            inputGameResultScore.setText(data.getResultScore());
+        }
+        if(data.getResultTime() != null && data.getResultTime().isEmpty() == false){
+            inputGameResultTime.setText(data.getResultTime());
+        }
+        inputGamePlace.setText(data.getPlace());  //会場
+        inputGameWeather.setText(data.getWeather());  //天気
+        inputGameTemperature.setText(data.getTemperature());  //気温
+        inputGameComment.setText(data.getComment());  //備考
+
     }
 
     /**
@@ -139,7 +214,6 @@ public class GameUpdateFragment extends Fragment {
         KeyValuePairArrayAdapter adapter = new KeyValuePairArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, FanMaster.getGameType());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         inputGameType.setAdapter(adapter);
-        inputGameType.setSelection(adapter.getPosition(type.intValue()));
 
     }
 
@@ -154,11 +228,6 @@ public class GameUpdateFragment extends Fragment {
         }
     };
 
-    private void setTimePicker(){
-        inputGameStartTime.setIs24HourView(true);
-        inputGameEndTime.setIs24HourView(true);
-    }
-
     /**
      * Game登録
      */
@@ -172,9 +241,9 @@ public class GameUpdateFragment extends Fragment {
                 inputGamePlace.getText().toString(),
                 inputGameWeather.getText().toString(),
                 inputGameTemperature.getText().toString(),
-                FanUtil.getDate(inputGameDate),
-                FanUtil.getTimeString(inputGameStartTime),
-                FanUtil.getTimeString(inputGameEndTime),
+                new Date(inputGameDate.getText().toString()),
+                inputGameStartTime.getText().toString(),
+                inputGameEndTime.getText().toString(),
                 inputGameOpposition.getText().toString(),
                 inputGameResult.getText().toString(),
                 inputGameResultScore.getText().toString(),

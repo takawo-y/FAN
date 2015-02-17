@@ -136,6 +136,7 @@ public class GameRegistrationActivity extends ActionBarActivity {
                 nowHour, nowMinute, true);
         timePickerDialog.show();
     }
+
     @OnClick(R.id.button_game_registration)
     void onClickRegist(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
