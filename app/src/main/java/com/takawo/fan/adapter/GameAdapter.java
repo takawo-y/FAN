@@ -1,4 +1,4 @@
-package com.takawo.fan.adaptor;
+package com.takawo.fan.adapter;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -13,11 +13,10 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.takawo.fan.MyApplication;
 import com.takawo.fan.activity.GameUpdateActivity;
-import com.takawo.fan.activity.MainActivity;
+import com.takawo.fan.db.DaoSession;
+import com.takawo.fan.db.data.DBHelper;
 import com.takawo.fan.util.FanConst;
-import com.takawo.fan.activity.GameActivity;
 import com.takawo.fan.R;
 import com.takawo.fan.db.FandbGame;
 import com.takawo.fan.util.FanUtil;
@@ -30,14 +29,14 @@ import butterknife.ButterKnife;
 /**
  * Created by Takawo on 2014/12/31.
  */
-public class GameAdaptor extends RecyclerView.Adapter<GameAdaptor.ViewHolder>{
+public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder>{
 
     private RecyclerView recyclerView;
     private LayoutInflater inf;
     private List<FandbGame> dataList;
     private Context context;
 
-    public GameAdaptor(Context context, List<FandbGame> dataList){
+    public GameAdapter(Context context, List<FandbGame> dataList){
         super();
         this.context = context;
         inf = LayoutInflater.from(context);
@@ -45,7 +44,7 @@ public class GameAdaptor extends RecyclerView.Adapter<GameAdaptor.ViewHolder>{
     }
 
     @Override
-    public GameAdaptor.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public GameAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view = inf.inflate(R.layout.list_game, null);
         ViewHolder viewHolder = new ViewHolder(context, view);
         return viewHolder;
@@ -73,15 +72,18 @@ public class GameAdaptor extends RecyclerView.Adapter<GameAdaptor.ViewHolder>{
         viewHolder.linearLayout.setOnLongClickListener(new View.OnLongClickListener(){
             @Override
             public boolean onLongClick(View v) {
+                final FandbGame data = dataList.get(recyclerView.getChildPosition(v));
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setTitle("試合情報削除")
                         .setMessage("試合情報を削除しますか？")
                         .setPositiveButton("はい",
                                 new DialogInterface.OnClickListener(){
                                     public void onClick(DialogInterface dialog, int which){
-//                                        ((MyApplication)getApplication()).getDaoSession().getFandbPlayerDao().deleteByKey(id);
+                                        Log.d("Delete Game", "ID:"+data.getId());
+                                        (new DBHelper(context, null)).getDaoSession().getFandbGameDao().deleteByKey(data.getId());
                                         Intent intent = new Intent(context, context.getClass());
-//                                        intent.putExtra(FanConst.INTENT_PLAYER_ID, id);
+                                        intent.putExtra(FanConst.INTENT_PLAYER_ID, data.getPlayerId());
+                                        intent.putExtra(FanConst.INTENT_GAME_ID, data.getId());
                                         context.startActivity(intent);
                                     }
                                 }
@@ -92,7 +94,6 @@ public class GameAdaptor extends RecyclerView.Adapter<GameAdaptor.ViewHolder>{
                                 }
                         )
                         .show();
-
                 return false;
             }
         });

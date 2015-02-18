@@ -1,9 +1,8 @@
-package com.takawo.fan.adaptor;
+package com.takawo.fan.adapter;
 
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,14 +23,14 @@ import java.util.List;
 /**
  * Created by Takawo on 2014/12/31.
  */
-public class PlayerAdaptor extends RecyclerView.Adapter<PlayerAdaptor.ViewHolder>{
+public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.ViewHolder>{
 
     private RecyclerView recyclerView;
     private LayoutInflater inf;
     private List<FandbPlayer> dataList;
     private Context context;
 
-    public PlayerAdaptor(Context context, List<FandbPlayer> dataList){
+    public PlayerAdapter(Context context, List<FandbPlayer> dataList){
         super();
         this.context = context;
         inf = LayoutInflater.from(context);
@@ -51,7 +50,7 @@ public class PlayerAdaptor extends RecyclerView.Adapter<PlayerAdaptor.ViewHolder
     }
 
     @Override
-    public PlayerAdaptor.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public PlayerAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view = inf.inflate(R.layout.list_player, null);
         ViewHolder viewHolder = new ViewHolder(context, view);
         return viewHolder;

@@ -1,4 +1,4 @@
-package com.takawo.fan.adaptor;
+package com.takawo.fan.adapter;
 
 import android.content.Context;
 import android.view.View;

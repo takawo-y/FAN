@@ -4,22 +4,20 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 
+import com.takawo.fan.adapter.GameAdapter;
 import com.takawo.fan.db.FandbPlayer;
 import com.takawo.fan.util.FanConst;
 import com.takawo.fan.MyApplication;
 import com.takawo.fan.util.FanUtil;
 import com.takawo.fan.util.MyItemDecoration;
 import com.takawo.fan.R;
-import com.takawo.fan.adaptor.GameAdaptor;
 import com.takawo.fan.db.FandbGame;
 import com.takawo.fan.db.FandbGameDao;
 
@@ -92,7 +90,7 @@ public class GameActivity extends ActionBarActivity {
         ButterKnife.inject(this);
         Intent intent = getIntent();
         id = intent.getLongExtra(FanConst.INTENT_PLAYER_ID, 0);
-        playerDate = getPlayerData();
+        playerDate = ((MyApplication)getApplication()).getDaoSession().getFandbPlayerDao().load(id);
 
         setToolbar();  //ToolBar設定
         setList();  //一覧取得
@@ -123,20 +121,8 @@ public class GameActivity extends ActionBarActivity {
         );
     }
 
-    /**
-     * Player検索
-     *
-     * @return
-     */
-    private FandbPlayer getPlayerData(){
-        MyApplication app = (MyApplication)getApplication();
-        return app.getDaoSession().getFandbPlayerDao().load(id);
-
-    }
-
     private void setList(){
-        MyApplication app = (MyApplication)getApplication();
-        List<FandbGame> list = app.getDaoSession().getFandbGameDao().queryBuilder()
+        List<FandbGame> list = ((MyApplication)getApplication()).getDaoSession().getFandbGameDao().queryBuilder()
                 .where(FandbGameDao.Properties.PlayerId.eq(id)).orderDesc(FandbGameDao.Properties.GameDay).list();
 
         recyclerViewGame.setHasFixedSize(true);
@@ -144,7 +130,7 @@ public class GameActivity extends ActionBarActivity {
 
         layoutManagerGame = new LinearLayoutManager(this);
         recyclerViewGame.setLayoutManager(layoutManagerGame);
-        recyclerViewGame.setAdapter(new GameAdaptor(this, list));
+        recyclerViewGame.setAdapter(new GameAdapter(this, list));
     }
 
 }

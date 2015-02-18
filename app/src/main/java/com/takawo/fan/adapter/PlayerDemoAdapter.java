@@ -1,4 +1,4 @@
-package com.takawo.fan.adaptor;
+package com.takawo.fan.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -16,19 +16,19 @@ import java.util.ArrayList;
 /**
  * Created by Takawo on 2014/12/31.
  */
-public class PlayerDemoAdaptor extends RecyclerView.Adapter<PlayerDemoAdaptor.ViewHolder>{
+public class PlayerDemoAdapter extends RecyclerView.Adapter<PlayerDemoAdapter.ViewHolder>{
 
     private LayoutInflater inf;
     private ArrayList<PlayerDemoData> dataList;
 
-    public PlayerDemoAdaptor(Context context, ArrayList<PlayerDemoData> dataList){
+    public PlayerDemoAdapter(Context context, ArrayList<PlayerDemoData> dataList){
         super();
         inf = LayoutInflater.from(context);
         this.dataList = dataList;
     }
 
     @Override
-    public PlayerDemoAdaptor.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public PlayerDemoAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view = inf.inflate(R.layout.list_player, null);
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;

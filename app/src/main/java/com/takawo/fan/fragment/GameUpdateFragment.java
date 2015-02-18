@@ -1,13 +1,10 @@
 package com.takawo.fan.fragment;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +18,7 @@ import android.widget.TimePicker;
 
 import com.takawo.fan.MyApplication;
 import com.takawo.fan.R;
-import com.takawo.fan.adaptor.KeyValuePairArrayAdapter;
+import com.takawo.fan.adapter.KeyValuePairArrayAdapter;
 import com.takawo.fan.db.FandbGame;
 import com.takawo.fan.db.FandbGameDao;
 import com.takawo.fan.db.FandbPlayer;

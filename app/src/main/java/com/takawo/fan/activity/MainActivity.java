@@ -10,9 +10,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.takawo.fan.MyApplication;
+import com.takawo.fan.adapter.PlayerAdapter;
 import com.takawo.fan.util.MyItemDecoration;
 import com.takawo.fan.R;
-import com.takawo.fan.adaptor.PlayerAdaptor;
 import com.takawo.fan.db.FandbPlayer;
 
 import java.util.List;
@@ -64,7 +64,7 @@ public class MainActivity extends ActionBarActivity {
 
         layoutManagerPlayer = new LinearLayoutManager(this);
         recyclerViewPlayer.setLayoutManager(layoutManagerPlayer);
-        recyclerViewPlayer.setAdapter(new PlayerAdaptor(this, playerList));
+        recyclerViewPlayer.setAdapter(new PlayerAdapter(this, playerList));
 
     }
 

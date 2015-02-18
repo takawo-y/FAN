@@ -25,7 +25,7 @@ import com.takawo.fan.util.FanUtil;
 import com.takawo.fan.util.KeyValuePair;
 import com.takawo.fan.MyApplication;
 import com.takawo.fan.R;
-import com.takawo.fan.adaptor.KeyValuePairArrayAdapter;
+import com.takawo.fan.adapter.KeyValuePairArrayAdapter;
 import com.takawo.fan.db.FandbGame;
 
 import java.util.Calendar;
