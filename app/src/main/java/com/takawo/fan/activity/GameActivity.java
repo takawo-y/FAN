@@ -70,7 +70,7 @@ public class GameActivity extends ActionBarActivity {
                 .setPositiveButton("はい",
                         new DialogInterface.OnClickListener(){
                             public void onClick(DialogInterface dialog, int which){
-                                deletePlayer();
+                                ((MyApplication)getApplication()).getDaoSession().getFandbPlayerDao().deleteByKey(id);
                                 Intent intent = new Intent(GameActivity.this, MainActivity.class);
                                 intent.putExtra(FanConst.INTENT_PLAYER_ID, id);
                                 startActivity(intent);
@@ -147,11 +147,4 @@ public class GameActivity extends ActionBarActivity {
         recyclerViewGame.setAdapter(new GameAdaptor(this, list));
     }
 
-    /**
-     * Playerデータ削除
-     */
-    private void deletePlayer(){
-        MyApplication app = (MyApplication)getApplication();
-        app.getDaoSession().getFandbPlayerDao().deleteByKey(id);
-    }
 }

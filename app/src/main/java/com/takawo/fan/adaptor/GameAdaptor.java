@@ -1,6 +1,8 @@
 package com.takawo.fan.adaptor;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -11,7 +13,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.takawo.fan.MyApplication;
 import com.takawo.fan.activity.GameUpdateActivity;
+import com.takawo.fan.activity.MainActivity;
 import com.takawo.fan.util.FanConst;
 import com.takawo.fan.activity.GameActivity;
 import com.takawo.fan.R;
@@ -66,6 +70,32 @@ public class GameAdaptor extends RecyclerView.Adapter<GameAdaptor.ViewHolder>{
                 context.startActivity(intent);
             }
         });
+        viewHolder.linearLayout.setOnLongClickListener(new View.OnLongClickListener(){
+            @Override
+            public boolean onLongClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("試合情報削除")
+                        .setMessage("試合情報を削除しますか？")
+                        .setPositiveButton("はい",
+                                new DialogInterface.OnClickListener(){
+                                    public void onClick(DialogInterface dialog, int which){
+//                                        ((MyApplication)getApplication()).getDaoSession().getFandbPlayerDao().deleteByKey(id);
+                                        Intent intent = new Intent(context, context.getClass());
+//                                        intent.putExtra(FanConst.INTENT_PLAYER_ID, id);
+                                        context.startActivity(intent);
+                                    }
+                                }
+                        )
+                        .setNegativeButton("いいえ",
+                                new DialogInterface.OnClickListener(){
+                                    public void onClick(DialogInterface dialog, int which){}
+                                }
+                        )
+                        .show();
+
+                return false;
+            }
+        });
     }
 
     @Override
@@ -75,7 +105,7 @@ public class GameAdaptor extends RecyclerView.Adapter<GameAdaptor.ViewHolder>{
 
 
     static class ViewHolder extends RecyclerView.ViewHolder
-    implements View.OnClickListener{
+    implements View.OnClickListener, View.OnLongClickListener{
         Context context;
         LinearLayout linearLayout;
 
@@ -95,6 +125,7 @@ public class GameAdaptor extends RecyclerView.Adapter<GameAdaptor.ViewHolder>{
             linearLayout = (LinearLayout)v.findViewById(R.id.lily_game);
 
             v.setOnClickListener(this);
+            v.setOnLongClickListener(this);
             gameDay = ButterKnife.findById(v, R.id.gameDay);
             gameCategory = ButterKnife.findById(v, R.id.gameCategory);
             gameInfo = ButterKnife.findById(v, R.id.gameInfo);
@@ -126,6 +157,11 @@ public class GameAdaptor extends RecyclerView.Adapter<GameAdaptor.ViewHolder>{
         @Override
         public void onClick(View view){
             //リストonClick処理
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            return false;
         }
     }
 
