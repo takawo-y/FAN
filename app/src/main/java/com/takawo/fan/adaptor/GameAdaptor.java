@@ -28,6 +28,7 @@ import butterknife.ButterKnife;
  */
 public class GameAdaptor extends RecyclerView.Adapter<GameAdaptor.ViewHolder>{
 
+    private RecyclerView recyclerView;
     private LayoutInflater inf;
     private List<FandbGame> dataList;
     private Context context;
@@ -37,7 +38,6 @@ public class GameAdaptor extends RecyclerView.Adapter<GameAdaptor.ViewHolder>{
         this.context = context;
         inf = LayoutInflater.from(context);
         this.dataList = dataList;
-        data = null;
     }
 
     @Override
@@ -47,14 +47,19 @@ public class GameAdaptor extends RecyclerView.Adapter<GameAdaptor.ViewHolder>{
         return viewHolder;
     }
 
-    FandbGame data;
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        this.recyclerView= recyclerView;
+    }
+
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
-        data = dataList.get(i);
-        viewHolder.setItem(data);
+        viewHolder.setItem(dataList.get(i));
         viewHolder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FandbGame data = dataList.get(recyclerView.getChildPosition(v));
                 Intent intent = new Intent(context, GameUpdateActivity.class);
                 intent.putExtra(FanConst.INTENT_PLAYER_ID, data.getPlayerId());
                 intent.putExtra(FanConst.INTENT_GAME_ID, data.getId());
@@ -108,7 +113,7 @@ public class GameAdaptor extends RecyclerView.Adapter<GameAdaptor.ViewHolder>{
             gameCategory.setText(data.getGameCategory());
             gameInfo.setText(data.getGameInfo());
             gameType.setText(FanUtil.getGameTypeLabel(data.getGameType()));
-            opposition.setText(data.getOpposition());
+            opposition.setText("vs "+data.getOpposition());
             result.setText(data.getResult());
             if(data.getResultScore() != null || TextUtils.isEmpty(data.getResultScore()) == false){
                 resultScoreTime.setText(data.getResultScore());

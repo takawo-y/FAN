@@ -1,25 +1,33 @@
 package com.takawo.fan.activity;
 
+import android.app.AlertDialog;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.takawo.fan.MyApplication;
 import com.takawo.fan.R;
+import com.takawo.fan.db.FandbGame;
 import com.takawo.fan.db.FandbPlayer;
 import com.takawo.fan.fragment.GameUpdateFragment;
 import com.takawo.fan.util.FanConst;
 import com.takawo.fan.util.FanUtil;
+import com.takawo.fan.util.KeyValuePair;
+
+import java.util.Date;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
 /**
  * Created by Takawo on 2015/01/20.
@@ -39,10 +47,19 @@ public class GameUpdateActivity extends ActionBarActivity {
 
     @InjectView(R.id.tool_bar)
     Toolbar toolbar;
-    @InjectView(R.id.tabs_game)
-    PagerSlidingTabStrip tab;
-    @InjectView(R.id.pager)
-    ViewPager pager;
+//    @InjectView(R.id.tabs_game)
+//    PagerSlidingTabStrip tab;
+//    @InjectView(R.id.pager)
+//    ViewPager pager;
+
+    @OnClick(R.id.button_game_update)
+    void onClickRegist(){
+        Log.d("OnClick Upate", "Fragment数："+getSupportFragmentManager().getFragments().size());
+        GameUpdateFragment gameUpdateFragment = (GameUpdateFragment)getSupportFragmentManager().getFragments().get(0);
+        if(gameUpdateFragment != null){
+            updateGameData();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +75,7 @@ public class GameUpdateActivity extends ActionBarActivity {
 
         setToolbar();  //ToolBar設定
 //        tab.setViewPager(pager.setAdapter(new Test));
+
     }
 
     /**
@@ -99,6 +117,30 @@ public class GameUpdateActivity extends ActionBarActivity {
                                              }
 
         );
+    }
+
+    private void updateGameData(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("試合情報更新")
+                .setMessage("更新しますか？")
+                .setPositiveButton("はい",
+                        new DialogInterface.OnClickListener(){
+                            public void onClick(DialogInterface dialog, int which){
+                                GameUpdateFragment fragment = (GameUpdateFragment)getSupportFragmentManager().getFragments().get(0);
+                                fragment.updateGame();
+                                Intent intent = new Intent(GameUpdateActivity.this, GameUpdateActivity.class);
+                                intent.putExtra(FanConst.INTENT_PLAYER_ID, playerId);
+                                intent.putExtra(FanConst.INTENT_GAME_ID, gameId);
+                                startActivity(intent);
+                            }
+                        }
+                )
+                .setNegativeButton("いいえ",
+                        new DialogInterface.OnClickListener(){
+                            public void onClick(DialogInterface dialog, int which){}
+                        }
+                )
+                .show();
     }
 
 //    public class MyPagerAdapter extends FragmentPagerAdapter {

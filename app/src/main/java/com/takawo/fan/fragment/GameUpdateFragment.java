@@ -134,29 +134,6 @@ public class GameUpdateFragment extends Fragment {
         timePickerDialog.show();
     }
 
-//    @OnClick(R.id.button_game_update)
-//    void onClickRegist(){
-//        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//        builder.setTitle("試合情報更新")
-//                .setMessage("更新しますか？")
-//                .setPositiveButton("はい",
-//                        new DialogInterface.OnClickListener(){
-//                            public void onClick(DialogInterface dialog, int which){
-//                                updateGame();
-////                                Intent intent = new Intent(GameUpdateActivity.this, GameActivity.class);
-////                                intent.putExtra(FanConst.INTENT_PLAYER_ID, playerId);
-////                                startActivity(intent);
-//                            }
-//                        }
-//                )
-//                .setNegativeButton("いいえ",
-//                        new DialogInterface.OnClickListener(){
-//                            public void onClick(DialogInterface dialog, int which){}
-//                        }
-//                )
-//                .show();
-//    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -185,7 +162,7 @@ public class GameUpdateFragment extends Fragment {
         setSpinnerGameType(data.getGameType());  //Gameタイプ
         inputGameCategory.setText(data.getGameCategory());  //Gameカテゴリ
         inputGameInfo.setText(data.getGameInfo());  //Gameインフォメーション
-        inputGameDate.setText(new SimpleDateFormat("yyyy-MM-dd").format(data.getGameDay()));  //試合日
+        inputGameDate.setText(new SimpleDateFormat("yyyy/MM/dd").format(data.getGameDay()));  //試合日
         inputGameStartTime.setText(data.getStartTime());  //開始時間
         inputGameEndTime.setText(data.getEndTime());  //終了時間
         inputGameOpposition.setText(data.getOpposition());  //対戦相手
@@ -228,9 +205,9 @@ public class GameUpdateFragment extends Fragment {
     };
 
     /**
-     * Game登録
+     * Game更新
      */
-    private void updateGame(){
+    public void updateGame(){
         FandbGame game = new FandbGame(
                 playerId,
                 gameId,
@@ -251,6 +228,5 @@ public class GameUpdateFragment extends Fragment {
         );
         ((MyApplication)getActivity().getApplication()).getDaoSession().getFandbGameDao().update(game);
     }
-
 
 }
