@@ -55,13 +55,12 @@ task daoGenerator {
         ToMany playerToGame = player.addToMany(game, playerId);
         playerToGame.setName("games");
 
-        /*
-        Entity content = schema.addEntity("FandbContent");
-        content.addLongProperty("gameId").notNull();
-        content.addLongProperty("contentId").notNull();
-        content.addStringProperty("path");
-        content.addStringProperty("comment");
-*/
+        Entity image = schema.addEntity("FandbImage");
+        image.addLongProperty("gameId").notNull();
+        image.addIdProperty().autoincrement().unique();
+        image.addStringProperty("path");
+        image.addStringProperty("title");
+        image.addStringProperty("comment");
 
         // ------------- この辺でテーブル定義 END -------------------
 
