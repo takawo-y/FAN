@@ -15,6 +15,7 @@ import com.takawo.fan.adapter.GameAdapter;
 import com.takawo.fan.adapter.ImageAdapter;
 import com.takawo.fan.db.FandbImage;
 import com.takawo.fan.db.FandbImageDao;
+import com.takawo.fan.util.FanConst;
 import com.takawo.fan.util.MyItemDecoration;
 
 import java.util.List;
@@ -39,6 +40,8 @@ public class GameImageFragment extends Fragment{
         View view = inflater.inflate(R.layout.fragment_game_image, container, false);
         ButterKnife.inject(this, view);
 
+        playerId = getArguments().getLong(FanConst.INTENT_PLAYER_ID);
+        gameId = getArguments().getLong(FanConst.INTENT_GAME_ID);
         setData();
         return view;
     }

@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import com.astuetz.PagerSlidingTabStrip;
 import com.takawo.fan.MyApplication;
 import com.takawo.fan.R;
+import com.takawo.fan.adapter.GameInfoTabAdapter;
 import com.takawo.fan.db.FandbGame;
 import com.takawo.fan.db.FandbPlayer;
 import com.takawo.fan.fragment.GameUpdateFragment;
@@ -47,10 +48,8 @@ public class GameUpdateActivity extends ActionBarActivity {
 
     @InjectView(R.id.tool_bar)
     Toolbar toolbar;
-//    @InjectView(R.id.tabs_game)
-//    PagerSlidingTabStrip tab;
-//    @InjectView(R.id.pager)
-//    ViewPager pager;
+    @InjectView(R.id.game_pager)
+    ViewPager viewPager;
 
     @OnClick(R.id.button_game_update)
     void onClickRegist(){
@@ -68,13 +67,13 @@ public class GameUpdateActivity extends ActionBarActivity {
         playerId = getIntent().getLongExtra(FanConst.INTENT_PLAYER_ID, 0);
         playerData = ((MyApplication)getApplication()).getDaoSession().getFandbPlayerDao().load(playerId);
         gameId = getIntent().getLongExtra(FanConst.INTENT_GAME_ID, 0);
-        setFragment(savedInstanceState);
+//        setFragment(savedInstanceState);
         setContentView(R.layout.activity_game_update);
 
         ButterKnife.inject(this);
 
         setToolbar();  //ToolBar設定
-//        tab.setViewPager(pager.setAdapter(new Test));
+        viewPager.setAdapter(new GameInfoTabAdapter(getSupportFragmentManager(), playerId, gameId));
 
     }
 
@@ -143,27 +142,4 @@ public class GameUpdateActivity extends ActionBarActivity {
                 .show();
     }
 
-//    public class MyPagerAdapter extends FragmentPagerAdapter {
-//
-//        private final String[] TITLES = {"詳細", "写真"};
-//
-//        public MyPagerAdapter(FragmentManager fm) {
-//            super(fm);
-//        }
-//
-//        @Override
-//        public CharSequence getPageTitle(int position) {
-//            return TITLES[position];
-//        }
-//
-//        @Override
-//        public int getCount() {
-//            return TITLES.length;
-//        }
-//
-//        @Override
-//        public Fragment getItem(int position) {
-//            return SuperAwesomeCardFragment.newInstance(position);
-//        }
-//    }
 }

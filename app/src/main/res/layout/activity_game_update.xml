@@ -24,6 +24,21 @@
             android:src="@drawable/ic_done_white_36dp"/>
     </android.support.v7.widget.Toolbar>
 
+    <android.support.v4.view.ViewPager
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/game_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <android.support.v4.view.PagerTabStrip
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:background="@color/blue_400"
+            android:textColor="@color/grey_1000w"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"/>
+    </android.support.v4.view.ViewPager>
+
     <FrameLayout
         android:id="@+id/game_update_fragment"
         android:layout_width="match_parent"
