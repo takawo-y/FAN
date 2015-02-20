@@ -10,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -48,6 +49,8 @@ public class GameUpdateActivity extends ActionBarActivity {
 
     @InjectView(R.id.tool_bar)
     Toolbar toolbar;
+    @InjectView(R.id.game_tab)
+    PagerSlidingTabStrip tab;
     @InjectView(R.id.game_pager)
     ViewPager viewPager;
 
@@ -74,7 +77,10 @@ public class GameUpdateActivity extends ActionBarActivity {
 
         setToolbar();  //ToolBar設定
         viewPager.setAdapter(new GameInfoTabAdapter(getSupportFragmentManager(), playerId, gameId));
-
+        final int pageMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources()
+                .getDisplayMetrics());
+        viewPager.setPageMargin(pageMargin);
+        tab.setViewPager(viewPager);
     }
 
     /**
