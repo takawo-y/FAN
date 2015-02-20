@@ -35,13 +35,11 @@ import butterknife.OnClick;
  * Created by Takawo on 2015/01/20.
  */
 public class GameUpdateActivity extends ActionBarActivity {
+
     private Long playerId;
     private Long gameId;
+    private int fragmentPosition;
     private FandbPlayer playerData;
-
-    private static final String FRAGMENT_TAG_UPDATE = "update_fragment_tag";
-    private GameUpdateFragment fragmentUpdate;
-
 
     public GameUpdateActivity() {
         super();
@@ -54,15 +52,6 @@ public class GameUpdateActivity extends ActionBarActivity {
     @InjectView(R.id.game_pager)
     ViewPager viewPager;
 
-    @OnClick(R.id.button_game_update)
-    void onClickRegist(){
-        Log.d("OnClick Upate", "Fragment数："+getSupportFragmentManager().getFragments().size());
-        GameUpdateFragment gameUpdateFragment = (GameUpdateFragment)getSupportFragmentManager().getFragments().get(0);
-        if(gameUpdateFragment != null){
-            updateGameData();
-        }
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +59,7 @@ public class GameUpdateActivity extends ActionBarActivity {
         playerId = getIntent().getLongExtra(FanConst.INTENT_PLAYER_ID, 0);
         playerData = ((MyApplication)getApplication()).getDaoSession().getFandbPlayerDao().load(playerId);
         gameId = getIntent().getLongExtra(FanConst.INTENT_GAME_ID, 0);
+        fragmentPosition = getIntent().getIntExtra(FanConst.INTENT_FRAGMENT_POSITION, 99);
         setContentView(R.layout.activity_game_update);
 
         ButterKnife.inject(this);
@@ -79,6 +69,9 @@ public class GameUpdateActivity extends ActionBarActivity {
         final int pageMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources()
                 .getDisplayMetrics());
         viewPager.setPageMargin(pageMargin);
+        if(fragmentPosition != 99){
+            viewPager.setCurrentItem(fragmentPosition);
+        }
         tab.setViewPager(viewPager);
     }
 
@@ -105,30 +98,6 @@ public class GameUpdateActivity extends ActionBarActivity {
                                              }
 
         );
-    }
-
-    private void updateGameData(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("試合情報更新")
-                .setMessage("更新しますか？")
-                .setPositiveButton("はい",
-                        new DialogInterface.OnClickListener(){
-                            public void onClick(DialogInterface dialog, int which){
-                                GameUpdateFragment fragment = (GameUpdateFragment)getSupportFragmentManager().getFragments().get(0);
-                                fragment.updateGame();
-                                Intent intent = new Intent(GameUpdateActivity.this, GameUpdateActivity.class);
-                                intent.putExtra(FanConst.INTENT_PLAYER_ID, playerId);
-                                intent.putExtra(FanConst.INTENT_GAME_ID, gameId);
-                                startActivity(intent);
-                            }
-                        }
-                )
-                .setNegativeButton("いいえ",
-                        new DialogInterface.OnClickListener(){
-                            public void onClick(DialogInterface dialog, int which){}
-                        }
-                )
-                .show();
     }
 
 }

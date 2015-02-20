@@ -15,13 +15,6 @@
         android:background="?attr/colorPrimary"
         android:elevation="4dp"
         android:navigationIcon="@drawable/ic_done_grey600_24dp">
-        <ImageView
-            android:id="@+id/button_game_update"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginRight="16dp"
-            android:src="@drawable/ic_done_white_36dp"/>
     </android.support.v7.widget.Toolbar>
 
     <com.takawo.fan.view.ShadowablePagerSlidingTabStrip

@@ -1,7 +1,10 @@
 package com.takawo.fan.fragment;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,6 +21,7 @@ import android.widget.TimePicker;
 
 import com.takawo.fan.MyApplication;
 import com.takawo.fan.R;
+import com.takawo.fan.activity.GameImageRegistrationActivity;
 import com.takawo.fan.adapter.KeyValuePairArrayAdapter;
 import com.takawo.fan.db.FandbGame;
 import com.takawo.fan.db.FandbGameDao;
@@ -42,6 +46,7 @@ public class GameUpdateFragment extends Fragment {
     private Long playerId;
     private Long gameId;
     private FandbPlayer playerData;
+    private GameUpdateFragment myFragment;
 
     @InjectView(R.id.inputGameType)
     Spinner inputGameType;
@@ -131,10 +136,32 @@ public class GameUpdateFragment extends Fragment {
         timePickerDialog.show();
     }
 
+    @OnClick(R.id.fab_game_update)
+    void onClickRegist(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("試合情報更新")
+                .setMessage("更新しますか？")
+                .setPositiveButton("はい",
+                        new DialogInterface.OnClickListener(){
+                            public void onClick(DialogInterface dialog, int which){
+                                updateGame();
+                                setData();
+                            }
+                        }
+                )
+                .setNegativeButton("いいえ",
+                        new DialogInterface.OnClickListener(){
+                            public void onClick(DialogInterface dialog, int which){}
+                        }
+                )
+                .show();
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_game_update, container, false);
+        myFragment = this;
         playerId = getArguments().getLong(FanConst.INTENT_PLAYER_ID);
         gameId = getArguments().getLong(FanConst.INTENT_GAME_ID);
         playerData = ((MyApplication)getActivity().getApplication()).getDaoSession().getFandbPlayerDao().load(playerId);
@@ -225,5 +252,6 @@ public class GameUpdateFragment extends Fragment {
         );
         ((MyApplication)getActivity().getApplication()).getDaoSession().getFandbGameDao().update(game);
     }
+
 
 }

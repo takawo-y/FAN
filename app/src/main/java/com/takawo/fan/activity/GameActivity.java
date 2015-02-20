@@ -33,7 +33,7 @@ import butterknife.OnClick;
 public class GameActivity extends ActionBarActivity {
 
     private Long id;
-    private FandbPlayer playerDate;
+    private FandbPlayer playerData;
 
     private RecyclerView.LayoutManager layoutManagerGame;
 
@@ -90,7 +90,7 @@ public class GameActivity extends ActionBarActivity {
         ButterKnife.inject(this);
         Intent intent = getIntent();
         id = intent.getLongExtra(FanConst.INTENT_PLAYER_ID, 0);
-        playerDate = ((MyApplication)getApplication()).getDaoSession().getFandbPlayerDao().load(id);
+        playerData = ((MyApplication)getApplication()).getDaoSession().getFandbPlayerDao().load(id);
 
         setToolbar();  //ToolBar設定
         setList();  //一覧取得
@@ -101,12 +101,12 @@ public class GameActivity extends ActionBarActivity {
      * Toolbar設定
      */
     private void setToolbar(){
-        if(playerDate.getPlayerImagePath() == null || playerDate.getPlayerImagePath().isEmpty()){
+        if(playerData.getPlayerImagePath() == null || playerData.getPlayerImagePath().isEmpty()){
             toolbar.setLogo(R.drawable.no_image);
         }else{
-            toolbar.setLogo(new BitmapDrawable(getResources(), FanUtil.resizeImage(playerDate.getPlayerImagePath(), 100)));
+            toolbar.setLogo(new BitmapDrawable(getResources(), FanUtil.resizeImage(playerData.getPlayerImagePath(), 100)));
         }
-        toolbar.setTitle(playerDate.getPlayerName());
+        toolbar.setTitle(playerData.getPlayerName());
         toolbar.setSubtitle(R.string.game_list_view_name);
         toolbar.setNavigationIcon(R.drawable.ic_done_grey600_36dp);
         setSupportActionBar(toolbar);

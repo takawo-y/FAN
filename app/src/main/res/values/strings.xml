@@ -40,4 +40,9 @@
 
     <string name="game_update_view_name">試合情報 更新</string>
 
+    <string name="game_image_regist_view_name">試合情報 画像登録</string>
+    <string name="game_image">画像:</string>
+    <string name="game_image_title">タイトル:</string>
+    <string name="game_image_comment">備考:</string>
+
 </resources>

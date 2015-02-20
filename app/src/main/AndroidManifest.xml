@@ -18,22 +18,17 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.PlayerRegistrationActivity"
-            android:icon="@drawable/ic_launcher"
-            android:label="@string/player_registration_view_name"/>
+            android:name=".activity.PlayerRegistrationActivity"/>
         <activity
-            android:name=".activity.PlayerUpdateActivity"
-            android:icon="@drawable/ic_launcher"/>
+            android:name=".activity.PlayerUpdateActivity"/>
         <activity
-            android:name=".activity.GameActivity"
-            android:icon="@drawable/ic_launcher"/>
+            android:name=".activity.GameActivity"/>
         <activity
-            android:name=".activity.GameRegistrationActivity"
-            android:icon="@drawable/ic_launcher"
-            android:label="@string/game_registration_view_name"/>
+            android:name=".activity.GameRegistrationActivity"/>
         <activity
-            android:name=".activity.GameUpdateActivity"
-            android:icon="@drawable/ic_launcher"/>
+            android:name=".activity.GameUpdateActivity"/>
+        <activity
+            android:name=".activity.GameImageRegistrationActivity"/>
     </application>
 
 </manifest>

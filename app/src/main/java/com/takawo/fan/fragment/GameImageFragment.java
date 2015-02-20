@@ -1,5 +1,6 @@
 package com.takawo.fan.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,8 @@ import android.view.ViewGroup;
 
 import com.takawo.fan.MyApplication;
 import com.takawo.fan.R;
+import com.takawo.fan.activity.GameImageRegistrationActivity;
+import com.takawo.fan.activity.GameUpdateActivity;
 import com.takawo.fan.adapter.GameAdapter;
 import com.takawo.fan.adapter.ImageAdapter;
 import com.takawo.fan.db.FandbImage;
@@ -22,6 +25,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
 /**
  * Created by 9004027600 on 2015/02/19.
@@ -34,6 +38,14 @@ public class GameImageFragment extends Fragment{
 
     @InjectView(R.id.list_image)
     RecyclerView recyclerViewImage;
+
+    @OnClick(R.id.fab_image)
+    void onClickAddImage(){
+        Intent intent = new Intent(getActivity(), GameImageRegistrationActivity.class);
+        intent.putExtra(FanConst.INTENT_PLAYER_ID, playerId);
+        intent.putExtra(FanConst.INTENT_GAME_ID, gameId);
+        startActivity(intent);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
