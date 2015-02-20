@@ -70,7 +70,6 @@ public class GameUpdateActivity extends ActionBarActivity {
         playerId = getIntent().getLongExtra(FanConst.INTENT_PLAYER_ID, 0);
         playerData = ((MyApplication)getApplication()).getDaoSession().getFandbPlayerDao().load(playerId);
         gameId = getIntent().getLongExtra(FanConst.INTENT_GAME_ID, 0);
-//        setFragment(savedInstanceState);
         setContentView(R.layout.activity_game_update);
 
         ButterKnife.inject(this);
@@ -81,22 +80,6 @@ public class GameUpdateActivity extends ActionBarActivity {
                 .getDisplayMetrics());
         viewPager.setPageMargin(pageMargin);
         tab.setViewPager(viewPager);
-    }
-
-    /**
-     * Fragmentセット
-     */
-    private void setFragment(Bundle savedInstanceState ){
-        Bundle bundle = new Bundle();
-        bundle.putLong(FanConst.INTENT_PLAYER_ID, playerId);
-        bundle.putLong(FanConst.INTENT_GAME_ID, gameId);
-        if(savedInstanceState != null){
-            fragmentUpdate = (GameUpdateFragment)getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG_UPDATE);
-        }else{
-            fragmentUpdate = new GameUpdateFragment();
-        }
-        fragmentUpdate.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().add(R.id.game_update_fragment, fragmentUpdate, "Update Fragment").commit();
     }
 
     /**

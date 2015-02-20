@@ -24,7 +24,7 @@
             android:src="@drawable/ic_done_white_36dp"/>
     </android.support.v7.widget.Toolbar>
 
-    <com.astuetz.PagerSlidingTabStrip
+    <com.takawo.fan.view.ShadowablePagerSlidingTabStrip
         android:id="@+id/game_tab"
         android:layout_width="match_parent"
         android:layout_height="48dp"
