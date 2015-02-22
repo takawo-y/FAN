@@ -11,11 +11,15 @@
         android:layout_height="match_parent"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp">
-        <android.support.v7.widget.RecyclerView
+        <GridView
             android:id="@+id/list_image"
-            android:scrollbars="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:numColumns="auto_fit"
+            android:verticalSpacing="8dp"
+            android:horizontalSpacing="8dp"
+            android:stretchMode="columnWidth"
+            android:gravity="center"/>
 
         <com.melnykov.fab.FloatingActionButton
             android:id="@+id/fab_image"

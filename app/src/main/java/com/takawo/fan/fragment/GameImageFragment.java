@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 
 import com.takawo.fan.MyApplication;
 import com.takawo.fan.R;
@@ -37,7 +38,7 @@ public class GameImageFragment extends Fragment{
     private RecyclerView.LayoutManager layoutManagerImage;
 
     @InjectView(R.id.list_image)
-    RecyclerView recyclerViewImage;
+    GridView gridImage;
 
     @OnClick(R.id.fab_image)
     void onClickAddImage(){
@@ -61,11 +62,6 @@ public class GameImageFragment extends Fragment{
     private void setData(){
         List<FandbImage> list = ((MyApplication)getActivity().getApplication()).getDaoSession().getFandbImageDao()
                 .queryBuilder().where(FandbImageDao.Properties.GameId.eq(gameId)).orderAsc(FandbImageDao.Properties.Id).list();
-        recyclerViewImage.setHasFixedSize(true);
-        recyclerViewImage.addItemDecoration(new MyItemDecoration(getActivity()));
-
-        layoutManagerImage= new LinearLayoutManager(getActivity());
-        recyclerViewImage.setLayoutManager(layoutManagerImage);
-        recyclerViewImage.setAdapter(new ImageAdapter(getActivity(), list));
+        gridImage.setAdapter(new ImageAdapter(getActivity(), list));
     }
 }
