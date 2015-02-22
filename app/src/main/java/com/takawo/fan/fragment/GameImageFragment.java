@@ -21,6 +21,7 @@ import com.takawo.fan.db.FandbImage;
 import com.takawo.fan.db.FandbImageDao;
 import com.takawo.fan.util.FanConst;
 import com.takawo.fan.util.MyItemDecoration;
+import com.takawo.fan.view.GridViewScrollable;
 
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class GameImageFragment extends Fragment{
     private RecyclerView.LayoutManager layoutManagerImage;
 
     @InjectView(R.id.list_image)
-    GridView gridImage;
+    GridViewScrollable gridImage;
 
     @OnClick(R.id.fab_image)
     void onClickAddImage(){
