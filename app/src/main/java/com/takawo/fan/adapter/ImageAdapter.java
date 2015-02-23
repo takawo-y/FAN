@@ -28,7 +28,6 @@ public class ImageAdapter extends BaseAdapter{
 
     private static class ViewHolder{
         public TextView imageTitle;
-        public TextView imageComment;
         public ImageView image;
     }
 
@@ -61,7 +60,6 @@ public class ImageAdapter extends BaseAdapter{
             convertView = inflater.inflate(R.layout.list_image, null);
             holder = new ViewHolder();
             holder.imageTitle = (TextView)convertView.findViewById(R.id.image_title);
-//            holder.imageComment = (TextView)convertView.findViewById(R.id.image_comment);
             holder.image = (ImageView)convertView.findViewById(R.id.image);
             convertView.setTag(holder);
         }else{
@@ -69,7 +67,6 @@ public class ImageAdapter extends BaseAdapter{
         }
         FandbImage data = dataList.get(position);
         holder.imageTitle.setText(data.getTitle());
-//        holder.imageComment.setText(data.getComment());
         Picasso.with(context).load(new File(data.getPath()))
                 .transform(new BitmapTransformation())
                 .into(holder.image);

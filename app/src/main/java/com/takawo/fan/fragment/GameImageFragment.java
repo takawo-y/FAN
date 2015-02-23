@@ -1,26 +1,27 @@
 package com.takawo.fan.fragment;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
+import android.widget.AdapterView;
 
 import com.takawo.fan.MyApplication;
 import com.takawo.fan.R;
 import com.takawo.fan.activity.GameImageRegistrationActivity;
 import com.takawo.fan.activity.GameUpdateActivity;
-import com.takawo.fan.adapter.GameAdapter;
 import com.takawo.fan.adapter.ImageAdapter;
 import com.takawo.fan.db.FandbImage;
 import com.takawo.fan.db.FandbImageDao;
+import com.takawo.fan.db.data.DBHelper;
 import com.takawo.fan.util.FanConst;
-import com.takawo.fan.util.MyItemDecoration;
 import com.takawo.fan.view.GridViewScrollable;
 
 import java.util.List;
@@ -61,8 +62,46 @@ public class GameImageFragment extends Fragment{
     }
 
     private void setData(){
-        List<FandbImage> list = ((MyApplication)getActivity().getApplication()).getDaoSession().getFandbImageDao()
+        final List<FandbImage> list = ((MyApplication)getActivity().getApplication()).getDaoSession().getFandbImageDao()
                 .queryBuilder().where(FandbImageDao.Properties.GameId.eq(gameId)).orderAsc(FandbImageDao.Properties.Id).list();
         gridImage.setAdapter(new ImageAdapter(getActivity(), list));
+        gridImage.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                FandbImage data = list.get(position);
+                new AlertDialog.Builder(getActivity())
+                        .setTitle("画像:備考")
+                        .setMessage(data.getComment())
+                        .setPositiveButton("OK", null)
+                        .show();
+            }
+        });
+        gridImage.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                final int index = position;
+                new AlertDialog.Builder(getActivity())
+                        .setTitle("画像削除")
+                        .setMessage("画像を削除しますか？")
+                        .setPositiveButton("はい",
+                                new DialogInterface.OnClickListener(){
+                                    FandbImage data = list.get(index);
+                                    public void onClick(DialogInterface dialog, int which){
+                                        Log.d("Delete Image", "ID:"+data.getId());
+                                        (new DBHelper(getActivity(), null)).getDaoSession().getFandbImageDao().deleteByKey(data.getId());
+                                        ((GameUpdateActivity)getActivity()).updateFragment(1);
+                                    }
+                                }
+                        )
+                        .setNegativeButton("いいえ",
+                                new DialogInterface.OnClickListener(){
+                                    public void onClick(DialogInterface dialog, int which){}
+                                }
+                        )
+                        .show();
+
+                return false;
+            }
+        });
     }
 }

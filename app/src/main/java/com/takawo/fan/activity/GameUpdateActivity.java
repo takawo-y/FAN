@@ -1,8 +1,5 @@
 package com.takawo.fan.activity;
 
-import android.app.AlertDialog;
-import android.app.FragmentTransaction;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -12,24 +9,17 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.takawo.fan.MyApplication;
 import com.takawo.fan.R;
 import com.takawo.fan.adapter.GameInfoTabAdapter;
-import com.takawo.fan.db.FandbGame;
 import com.takawo.fan.db.FandbPlayer;
-import com.takawo.fan.fragment.GameUpdateFragment;
 import com.takawo.fan.util.FanConst;
 import com.takawo.fan.util.FanUtil;
-import com.takawo.fan.util.KeyValuePair;
-
-import java.util.Date;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
 
 /**
  * Created by Takawo on 2015/01/20.
@@ -40,6 +30,7 @@ public class GameUpdateActivity extends ActionBarActivity {
     private Long gameId;
     private int fragmentPosition;
     private FandbPlayer playerData;
+    private GameInfoTabAdapter adapter;
 
     public GameUpdateActivity() {
         super();
@@ -60,18 +51,18 @@ public class GameUpdateActivity extends ActionBarActivity {
         playerData = ((MyApplication)getApplication()).getDaoSession().getFandbPlayerDao().load(playerId);
         gameId = getIntent().getLongExtra(FanConst.INTENT_GAME_ID, 0);
         fragmentPosition = getIntent().getIntExtra(FanConst.INTENT_FRAGMENT_POSITION, 99);
+        Log.d("GameUpdateActivity", "FragmentPosition:"+fragmentPosition);
         setContentView(R.layout.activity_game_update);
 
         ButterKnife.inject(this);
 
         setToolbar();  //ToolBar設定
-        viewPager.setAdapter(new GameInfoTabAdapter(getSupportFragmentManager(), playerId, gameId));
+
+        adapter = new GameInfoTabAdapter(getSupportFragmentManager(), playerId, gameId);
+        viewPager.setAdapter(adapter);
         final int pageMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources()
                 .getDisplayMetrics());
         viewPager.setPageMargin(pageMargin);
-        if(fragmentPosition != 99){
-            viewPager.setCurrentItem(fragmentPosition);
-        }
         tab.setViewPager(viewPager);
     }
 
@@ -98,6 +89,18 @@ public class GameUpdateActivity extends ActionBarActivity {
                                              }
 
         );
+    }
+
+    public void updateFragment(int posision){
+        //Fragmentから呼ばれる
+        //ページのフラグメントを全て削除し再セット
+        adapter.destroyAllItem(tab);
+        adapter.notifyDataSetChanged();
+        viewPager.setAdapter(adapter);
+        final int pageMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources()
+                .getDisplayMetrics());
+        viewPager.setPageMargin(pageMargin);
+        viewPager.setCurrentItem(posision);
     }
 
 }
