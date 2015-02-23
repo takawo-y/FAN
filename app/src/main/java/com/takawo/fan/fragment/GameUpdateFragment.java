@@ -22,6 +22,7 @@ import android.widget.TimePicker;
 import com.takawo.fan.MyApplication;
 import com.takawo.fan.R;
 import com.takawo.fan.activity.GameImageRegistrationActivity;
+import com.takawo.fan.activity.GameUpdateActivity;
 import com.takawo.fan.adapter.KeyValuePairArrayAdapter;
 import com.takawo.fan.db.FandbGame;
 import com.takawo.fan.db.FandbGameDao;
@@ -145,7 +146,7 @@ public class GameUpdateFragment extends Fragment {
                         new DialogInterface.OnClickListener(){
                             public void onClick(DialogInterface dialog, int which){
                                 updateGame();
-                                setData();
+                                ((GameUpdateActivity)getActivity()).updateFragment(0);
                             }
                         }
                 )

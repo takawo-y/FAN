@@ -2,6 +2,7 @@ package com.takawo.fan.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -80,22 +81,24 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.ViewHolder
     static class ViewHolder extends RecyclerView.ViewHolder
     implements View.OnClickListener{
         Context context;
-        LinearLayout linearLayout;
+        CardView linearLayout;
 
         Long playerId;
         ImageView playerImage;
         TextView playerName;
         TextView gameEvent;
+        TextView category;
 
         public ViewHolder(Context context, View v) {
             super(v);
             this.context = context;
-            linearLayout = (LinearLayout)v.findViewById(R.id.lily_player);
+            linearLayout = (CardView)v.findViewById(R.id.lily_player);
 
             v.setOnClickListener(this);
             playerImage = (ImageView)v.findViewById(R.id.playerImg);
             playerName = (TextView)v.findViewById(R.id.playerName);
             gameEvent = (TextView)v.findViewById(R.id.gameEvent);
+            category = (TextView)v.findViewById(R.id.category);
         }
 
         public void setItem(FandbPlayer data){
@@ -115,7 +118,7 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.ViewHolder
             }
             playerName.setText(data.getPlayerName());
             gameEvent.setText(data.getGameEvent());
-
+            category.setText(data.getCategory());
         }
 
         @Override

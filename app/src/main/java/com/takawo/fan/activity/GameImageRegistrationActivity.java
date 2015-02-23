@@ -119,7 +119,10 @@ public class GameImageRegistrationActivity extends ActionBarActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                                                  @Override
                                                  public void onClick(View v) {
-                                                     Intent intent = new Intent(GameImageRegistrationActivity.this, MainActivity.class);
+                                                     Intent intent = new Intent(GameImageRegistrationActivity.this, GameUpdateActivity.class);
+                                                     intent.putExtra(FanConst.INTENT_PLAYER_ID, playerId);
+                                                     intent.putExtra(FanConst.INTENT_GAME_ID, gameId);
+                                                     intent.putExtra(FanConst.INTENT_FRAGMENT_POSITION, 1);
                                                      startActivity(intent);
                                                  }
                                              }

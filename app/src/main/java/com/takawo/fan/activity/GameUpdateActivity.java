@@ -63,6 +63,9 @@ public class GameUpdateActivity extends ActionBarActivity {
         final int pageMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources()
                 .getDisplayMetrics());
         viewPager.setPageMargin(pageMargin);
+        if(fragmentPosition != 99){
+            viewPager.setCurrentItem(fragmentPosition, true);
+        }
         tab.setViewPager(viewPager);
     }
 
