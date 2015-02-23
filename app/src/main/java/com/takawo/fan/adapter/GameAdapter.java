@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -108,7 +109,7 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder>{
     static class ViewHolder extends RecyclerView.ViewHolder
     implements View.OnClickListener, View.OnLongClickListener{
         Context context;
-        LinearLayout linearLayout;
+        CardView linearLayout;
 
         Long playerId;
         Long id;
@@ -123,7 +124,7 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder>{
         public ViewHolder(Context context, View v) {
             super(v);
             this.context = context;
-            linearLayout = (LinearLayout)v.findViewById(R.id.lily_game);
+            linearLayout = (CardView)v.findViewById(R.id.lily_game);
 
             v.setOnClickListener(this);
             v.setOnLongClickListener(this);
