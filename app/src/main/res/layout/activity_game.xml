@@ -33,12 +33,23 @@
             android:src="@drawable/ic_info_outline_white_24dp"
             android:contentDescription="Playerデータ更新"/>
     </android.support.v7.widget.Toolbar>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/list_game"
-        android:scrollbars="vertical"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="60dp"
+        android:orientation="horizontal">
+        <Spinner
+            android:id="@+id/searchKeyDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <Spinner
+            android:id="@+id/searchKeyCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <Spinner
+            android:id="@+id/searchKeyType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:fab="http://schemas.android.com/apk/res-auto"
@@ -47,6 +58,11 @@
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp">
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list_game"
+            android:scrollbars="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
         <com.melnykov.fab.FloatingActionButton
             android:id="@+id/fab_game"
             android:layout_width="wrap_content"

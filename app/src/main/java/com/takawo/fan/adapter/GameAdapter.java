@@ -113,10 +113,7 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder>{
 
         Long playerId;
         Long id;
-        TextView gameDay;
-        TextView gameCategory;
-        TextView gameInfo;
-        TextView gameType;
+        TextView cardGameTitle;
         TextView opposition;
         TextView result;
         TextView resultScoreTime;
@@ -128,10 +125,7 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder>{
 
             v.setOnClickListener(this);
             v.setOnLongClickListener(this);
-            gameDay = ButterKnife.findById(v, R.id.gameDay);
-            gameCategory = ButterKnife.findById(v, R.id.gameCategory);
-            gameInfo = ButterKnife.findById(v, R.id.gameInfo);
-            gameType = ButterKnife.findById(v, R.id.gameType);
+            cardGameTitle = ButterKnife.findById(v, R.id.cardGameTitle);
             opposition = ButterKnife.findById(v, R.id.gameOpposition);
             result = ButterKnife.findById(v, R.id.gameResult);
             resultScoreTime = ButterKnife.findById(v, R.id.gameScoreTime);
@@ -142,10 +136,8 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder>{
             id = data.getId();
             SimpleDateFormat formatA = new SimpleDateFormat("yyyy/MM/dd");
             String formatDate = formatA.format(data.getGameDay());
-            gameDay.setText(formatDate);
-            gameCategory.setText(data.getGameCategory());
-            gameInfo.setText(data.getGameInfo());
-            gameType.setText(FanUtil.getGameTypeLabel(data.getGameType()));
+            cardGameTitle.setText(formatDate+" "+data.getGameCategory()+" "+data.getGameInfo()
+                    +" ("+FanUtil.getGameTypeLabel(data.getGameType())+")");
             opposition.setText("vs "+data.getOpposition());
             result.setText(data.getResult());
             if(data.getResultScore() != null || TextUtils.isEmpty(data.getResultScore()) == false){

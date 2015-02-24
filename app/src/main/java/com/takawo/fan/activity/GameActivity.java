@@ -3,6 +3,7 @@ package com.takawo.fan.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -10,22 +11,37 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.takawo.fan.adapter.GameAdapter;
+import com.takawo.fan.adapter.KeyValuePairArrayAdapter;
 import com.takawo.fan.db.FandbPlayer;
 import com.takawo.fan.util.FanConst;
 import com.takawo.fan.MyApplication;
+import com.takawo.fan.util.FanMaster;
 import com.takawo.fan.util.FanUtil;
+import com.takawo.fan.util.KeyValuePair;
 import com.takawo.fan.util.MyItemDecoration;
 import com.takawo.fan.R;
 import com.takawo.fan.db.FandbGame;
 import com.takawo.fan.db.FandbGameDao;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import de.greenrobot.dao.query.QueryBuilder;
+import de.greenrobot.dao.query.WhereCondition;
 
 /**
  * Created by 9004027600 on 2015/02/04.
@@ -34,7 +50,7 @@ public class GameActivity extends ActionBarActivity {
 
     private Long id;
     private FandbPlayer playerData;
-
+    private List<FandbGame> gameList;
     private RecyclerView.LayoutManager layoutManagerGame;
 
     @InjectView(R.id.tool_bar_game_list)
@@ -42,6 +58,13 @@ public class GameActivity extends ActionBarActivity {
 
     @InjectView(R.id.list_game)
     RecyclerView recyclerViewGame;
+
+    @InjectView(R.id.searchKeyDate)
+    Spinner searchKeyDate;
+    @InjectView(R.id.searchKeyCategory)
+    Spinner searchKeyCategory;
+    @InjectView(R.id.searchKeyType)
+    Spinner searchKeyType;
 
     @OnClick(R.id.fab_game)
     void onClickAdd(){
@@ -94,6 +117,7 @@ public class GameActivity extends ActionBarActivity {
 
         setToolbar();  //ToolBar設定
         setList();  //一覧取得
+        setSerachKey();  //検索キー設定
 
     }
 
@@ -121,10 +145,38 @@ public class GameActivity extends ActionBarActivity {
         );
     }
 
+    /**
+     * Listセット
+     */
     private void setList(){
-        List<FandbGame> list = ((MyApplication)getApplication()).getDaoSession().getFandbGameDao().queryBuilder()
+        gameList = ((MyApplication)getApplication()).getDaoSession().getFandbGameDao().queryBuilder()
                 .where(FandbGameDao.Properties.PlayerId.eq(id)).orderDesc(FandbGameDao.Properties.GameDay).list();
 
+        recyclerViewGame.setHasFixedSize(true);
+        recyclerViewGame.addItemDecoration(new MyItemDecoration(this));
+
+        layoutManagerGame = new LinearLayoutManager(this);
+        recyclerViewGame.setLayoutManager(layoutManagerGame);
+        recyclerViewGame.setAdapter(new GameAdapter(this, gameList));
+    }
+    private void setQueryList(){
+        String gameDay = searchKeyDate.getSelectedItem().toString();
+        String category = searchKeyCategory.getSelectedItem().toString();
+        int type = ((KeyValuePair)searchKeyType.getSelectedItem()).getKey();
+
+        QueryBuilder qb = ((MyApplication)getApplication()).getDaoSession().getFandbGameDao().queryBuilder()
+                .where(FandbGameDao.Properties.PlayerId.eq(id));
+
+        if(gameDay != null || gameDay.isEmpty() == false){
+            qb.where(FandbGameDao.Properties.GameCategory.eq(category));
+        }
+        if(category != null || category.isEmpty() == false){
+            qb.where(FandbGameDao.Properties.GameCategory.eq(category));
+        }
+        if(type != 99){
+            qb.where(FandbGameDao.Properties.GameType.eq(type));
+        }
+        List<FandbGame> list = qb.orderDesc(FandbGameDao.Properties.GameDay).list();
         recyclerViewGame.setHasFixedSize(true);
         recyclerViewGame.addItemDecoration(new MyItemDecoration(this));
 
@@ -133,4 +185,108 @@ public class GameActivity extends ActionBarActivity {
         recyclerViewGame.setAdapter(new GameAdapter(this, list));
     }
 
+    /**
+     * 検索キーセット
+     */
+    private void setSerachKey(){
+        ArrayAdapter<String> dateAdapter =
+                new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, getGameDateGroup(gameList));
+        searchKeyDate.setAdapter(dateAdapter);
+        dateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        searchKeyDate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                setQueryList();
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        ArrayAdapter<String> categoryAdapter =
+                new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, getGameCategoryGroup(gameList));
+        searchKeyCategory.setAdapter(categoryAdapter);
+        categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        searchKeyCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                setQueryList();
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        searchKeyType.setOnItemSelectedListener(onItemSelectedListenerOfType);
+        KeyValuePairArrayAdapter typeAdapter = new KeyValuePairArrayAdapter(this, android.R.layout.simple_spinner_item, FanMaster.getGameTypeForSearch());
+        typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        searchKeyType.setAdapter(typeAdapter);
+        searchKeyType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                setQueryList();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    private AdapterView.OnItemSelectedListener onItemSelectedListenerOfType = new AdapterView.OnItemSelectedListener() {
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            KeyValuePair item = (KeyValuePair)searchKeyType.getSelectedItem();
+
+        }
+        public void onNothingSelected(AdapterView<?> arg0) {
+        }
+    };
+
+    /**
+     * 試合日の集約(yyyy/mm)
+     *
+     * @param result
+     * @return
+     */
+    private List<String> getGameDateGroup(List<FandbGame> result){
+        HashSet<String> dateList = new HashSet<>();
+        for(FandbGame data: result){
+            SimpleDateFormat formatA = new SimpleDateFormat("yyyy/MM/dd");
+            String formatDate = formatA.format(data.getGameDay());
+            dateList.add(formatDate.substring(0,7));
+        }
+
+        List<String> list = new ArrayList<>();
+        list.add("");
+        for(String value: dateList){
+            list.add(value);
+        }
+        Collections.sort(list);
+
+        return list;
+    }
+
+    /**
+     * カテゴリの集約
+     *
+     * @param result
+     * @return
+     */
+    private List<String> getGameCategoryGroup(List<FandbGame> result){
+        HashSet<String> dateList = new HashSet<>();
+        for(FandbGame data: result){
+            dateList.add(data.getGameCategory());
+        }
+
+        List<String> list = new ArrayList<>();
+        list.add("");
+        for(String value: dateList){
+            list.add(value);
+        }
+        Collections.sort(list);
+
+        return list;
+    }
 }

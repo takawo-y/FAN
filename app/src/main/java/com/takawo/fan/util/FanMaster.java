@@ -22,4 +22,21 @@ public class FanMaster {
         list.add(new KeyValuePair(4, "その他"));
         return list;
     }
+
+    /**
+     * 試合タイプ(検索キー用)
+     *
+     * @return
+     */
+    static public List<KeyValuePair> getGameTypeForSearch(){
+        LinkedList<KeyValuePair> list = new LinkedList<>();
+        list.add(new KeyValuePair(99, ""));
+        list.add(new KeyValuePair(0, "生観戦"));
+        list.add(new KeyValuePair(1, "TV生観戦"));
+        list.add(new KeyValuePair(2, "TV録画観戦"));
+        list.add(new KeyValuePair(3, "出場"));
+        list.add(new KeyValuePair(4, "その他"));
+        return list;
+    }
+
 }
