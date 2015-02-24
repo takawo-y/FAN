@@ -103,6 +103,7 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
 
     private void setToolbar(){
         toolbar.setNavigationIcon(R.drawable.ic_done_grey600_36dp);
+        toolbar.setTitle(R.string.game_registration_view_name);
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                                                  @Override
