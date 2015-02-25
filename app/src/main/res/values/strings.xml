@@ -18,6 +18,10 @@
     <string name="player_registration_player_comment">メモ：</string>
 
     <string name="game_list_view_name">試合一覧</string>
+    <string name="game_list_view_filter">フィルター</string>
+    <string name="game_list_view_filter_gameday">試合日</string>
+    <string name="game_list_view_filter_category">カテゴリー</string>
+    <string name="game_list_view_filter_type">タイプ</string>
 
     <string name="game_registration_view_name">試合情報 登録</string>
     <string name="game_registration_type">タイプ：</string>

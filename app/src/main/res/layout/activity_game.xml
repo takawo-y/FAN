@@ -35,20 +35,63 @@
     </android.support.v7.widget.Toolbar>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <Spinner
-            android:id="@+id/searchKeyDate"
+        <TextView
+            android:id="@+id/game_filter"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <Spinner
-            android:id="@+id/searchKeyCategory"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/game_list_view_filter"/>
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <Spinner
-            android:id="@+id/searchKeyType"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/searchKeyDate_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="試合日"/>
+            <Spinner
+                android:id="@+id/searchKeyDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@android:style/Widget.Holo.Light.Spinner"/>
+        </LinearLayout>
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/searchKeyCategory_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="カテゴリー"/>
+            <Spinner
+                android:id="@+id/searchKeyCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@android:style/Widget.Holo.Light.Spinner"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/searchKeyType_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="タイプ"
+                android:layout_toRightOf="@+id/searchKeyCategory_title"
+                android:layout_alignTop="@+id/game_filter"/>
+            <Spinner
+                android:id="@+id/searchKeyType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@android:style/Widget.Holo.Light.Spinner"
+                android:layout_toRightOf="@+id/searchKeyCategory_title"
+                android:layout_below="@+id/searchKeyType_title"/>
+        </LinearLayout>
     </LinearLayout>
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"

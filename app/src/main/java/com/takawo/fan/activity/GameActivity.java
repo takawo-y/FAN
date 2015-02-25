@@ -3,7 +3,6 @@ package com.takawo.fan.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -29,16 +28,12 @@ import com.takawo.fan.R;
 import com.takawo.fan.db.FandbGame;
 import com.takawo.fan.db.FandbGameDao;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -203,9 +198,9 @@ public class GameActivity extends ActionBarActivity {
      */
     private void setSerachKeyDate(){
         ArrayAdapter<String> dateAdapter =
-                new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, getGameDateGroup(gameList));
-        searchKeyDate.setAdapter(dateAdapter);
+                (new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, getGameDateGroup(gameList)));
         dateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        searchKeyDate.setAdapter(dateAdapter);
         searchKeyDate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -238,12 +233,14 @@ public class GameActivity extends ActionBarActivity {
                 }
                 setQueryList();
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
         });
         searchKeyCategory.setFocusable(false);
+        searchKeyCategory.setPromptId(R.string.game_list_view_filter_category);
     }
     private void setSerachKeyType(){
         searchKeyType.setOnItemSelectedListener(onItemSelectedListenerOfType);
@@ -267,6 +264,7 @@ public class GameActivity extends ActionBarActivity {
             }
         });
         searchKeyType.setFocusable(false);
+        searchKeyType.setPromptId(R.string.game_list_view_filter_type);
     }
 
     private AdapterView.OnItemSelectedListener onItemSelectedListenerOfType = new AdapterView.OnItemSelectedListener() {
