@@ -1,28 +1,35 @@
 package com.takawo.fan.activity;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.takawo.fan.MyApplication;
 import com.takawo.fan.R;
 import com.takawo.fan.db.FandbPlayer;
-import com.takawo.fan.util.BitmapTransformation;
+import com.takawo.fan.util.FanConst;
 import com.takawo.fan.util.FanUtil;
 
 import java.io.File;
@@ -35,6 +42,7 @@ import butterknife.OnClick;
  * Created by Takawo on 2015/01/20.
  */
 public class PlayerRegistrationActivity extends ActionBarActivity {
+
     public PlayerRegistrationActivity() {
         super();
     }
@@ -43,6 +51,16 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
     private SharedPreferences sharePre;
     private final String SHARE_IMAGE_PATH_KEY = "imagePath";
 
+    int mColor = 0xffffffff;
+    int mTextColor = 0xffc0c0c0;
+    int mBackgroundColor = 0xff000000;
+
+    LayoutInflater inflater;
+    View dialogView;
+
+    final int CHANGE_TEXT = 0;
+    final int CHANGE_BACKGROUND = 1;
+
     @InjectView(R.id.tool_bar)
     Toolbar toolbar;
 
@@ -50,6 +68,8 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
     ImageView inputPlayerImage;
     @InjectView(R.id.inputPlayerName)
     EditText inputPlayerName;
+    @InjectView(R.id.inputPlayerColor)
+    TextView inputPlayerColor;
     @InjectView(R.id.inputGameEvent)
     EditText inputGameEvent;
     @InjectView(R.id.inputPlayerCategory)
@@ -65,6 +85,11 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
                 Intent.ACTION_PICK,
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(i, RESULT_PICK_FILENAME);
+    }
+
+    @OnClick(R.id.inputPlayerColor)
+    void onClickColor(){
+        colorDialog();
     }
 
     @OnClick(R.id.button_player_registration)
@@ -169,4 +194,178 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
         }
     }
 
+    private void colorDialog() {
+        final String rString = getResources().getString(R.string.color_picker_red);
+        final String gString = getResources().getString(R.string.color_picker_green);
+        final String bString = getResources().getString(R.string.color_picker_blue);
+
+        inflater = LayoutInflater.from(this);
+        dialogView = inflater.inflate(R.layout.dialog_picker, null);
+
+        final TextView textR = ButterKnife.findById(dialogView, R.id.colorPickerTextR);
+        textR.setText(String.format("%s(%02X)", rString, (mColor & 0x00ff0000) >> 16));
+        final TextView textG = ButterKnife.findById(dialogView, R.id.colorPickerTextG);
+        textG.setText(String.format("%s(%02X)", gString, (mColor & 0x0000ff00) >> 8));
+        final TextView textB = ButterKnife.findById(dialogView, R.id.colorPickerTextB);
+        textB.setText(String.format("%s(%02X)", bString, (mColor & 0x000000ff)));
+        final TextView viewer = ButterKnife.findById(dialogView, R.id.colorPickerViewer);
+        viewer.setBackgroundColor(mColor);
+        viewer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialog(0);
+            }
+        });
+
+        final SeekBar seekBarR = (SeekBar)dialogView.findViewById(R.id.colorPickerSeekBarR);
+        seekBarR.setProgress((mColor & 0x00ff0000) >>16);
+        seekBarR.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                int value = seekBar.getProgress();
+                textR.setText(String.format("%s(%02X)", rString, value));
+                mColor = (mColor & 0xff00ffff) | value << 16;
+                viewer.setBackgroundColor(mColor);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                int value = seekBar.getProgress();
+                textR.setText(String.format("%s(%02X)", rString, value));
+                mColor = (mColor & 0xff00ffff) | value << 16;
+                viewer.setBackgroundColor(mColor);
+            }
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress,
+                                          boolean fromUser) {
+                int value = seekBar.getProgress();
+                textR.setText(String.format("%s(%02X)", rString, value));
+                mColor = (mColor & 0xff00ffff) | value << 16;
+                viewer.setBackgroundColor(mColor);
+            }
+        });
+        final SeekBar seekBarG = (SeekBar)dialogView.findViewById(R.id.colorPickerSeekBarG);
+        seekBarG.setProgress((mColor & 0x0000ff00) >> 8);
+        seekBarG.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                int value = seekBar.getProgress();
+                textG.setText(String.format("%s(%02X)", gString, value));
+                mColor = (mColor & 0xffff00ff) | value << 8;
+                viewer.setBackgroundColor(mColor);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                int value = seekBar.getProgress();
+                textG.setText(String.format("%s(%02X)", gString, value));
+                mColor = (mColor & 0xffff00ff) | value << 8;
+                viewer.setBackgroundColor(mColor);
+            }
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress,
+                                          boolean fromUser) {
+                int value = seekBar.getProgress();
+                textG.setText(String.format("%s(%02X)", gString, value));
+                mColor = (mColor & 0xffff00ff) | value << 8;
+                viewer.setBackgroundColor(mColor);
+            }
+        });
+        final SeekBar seekBarB = (SeekBar)dialogView.findViewById(R.id.colorPickerSeekBarB);
+        seekBarB.setProgress((mColor & 0x000000ff));
+        seekBarB.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                int value = seekBar.getProgress();
+                textB.setText(String.format("%s(%02X)", bString, value));
+                mColor = (mColor & 0xffffff00) | value;
+                viewer.setBackgroundColor(mColor);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                int value = seekBar.getProgress();
+                textB.setText(String.format("%s(%02X)", bString, value));
+                mColor = (mColor & 0xffffff00) | value;
+                viewer.setBackgroundColor(mColor);
+            }
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress,
+                                          boolean fromUser) {
+                int value = seekBar.getProgress();
+                textB.setText(String.format("%s(%02X)", bString, value));
+                mColor = (mColor & 0xffffff00) | value;
+                viewer.setBackgroundColor(mColor);
+            }
+        });
+        final AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setView(dialogView);
+        alert.setPositiveButton("OK", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialog, int idx) {
+                mTextColor = mColor;
+                final View textView0 = inputPlayerColor;
+                textView0.setBackgroundColor(mTextColor);
+            }
+        });
+        alert.show();
+    }
+
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        if(id == 0) {
+            final String rString = getResources().getString(R.string.color_picker_red);
+            final String gString = getResources().getString(R.string.color_picker_green);
+            final String bString = getResources().getString(R.string.color_picker_blue);
+
+            LayoutInflater inflater1 = LayoutInflater.from(this);
+            final View dialogView1 = inflater1.inflate(R.layout.dialog_selecter, null);
+
+            final GridView gridView = (GridView)dialogView1.findViewById(R.id.colorSelectGridView);
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,   android.R.layout.simple_list_item_1) {
+                @Override
+                public View getView(int position, View convertView, ViewGroup parent) {
+                    View view = super.getView(position, convertView, parent);
+                    view.setBackgroundColor(FanConst.COLOR_TABLE[position]);
+                    return view;
+                }
+            };
+            for(int i = 0; i<FanConst.COLOR_TABLE.length; i++) {
+                adapter.add("");
+            }
+            gridView.setAdapter(adapter);
+            gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+                                        long arg3) {
+                    mColor = FanConst.COLOR_TABLE[arg2];
+                    final TextView textR = (TextView)dialogView.findViewById(R.id.colorPickerTextR);
+                    textR.setText(String.format("%s(%02X)", rString, (mColor & 0x00ff0000) >> 16));
+                    final TextView textG = (TextView)dialogView.findViewById(R.id.colorPickerTextG);
+                    textG.setText(String.format("%s(%02X)", gString, (mColor & 0x0000ff00) >> 8));
+                    final TextView textB = (TextView)dialogView.findViewById(R.id.colorPickerTextB);
+                    textB.setText(String.format("%s(%02X)", bString, (mColor & 0x000000ff)));
+                    final TextView viewer = (TextView)dialogView.findViewById(R.id.colorPickerViewer);
+                    viewer.setBackgroundColor(mColor);
+                    final SeekBar seekBarR = (SeekBar)dialogView.findViewById(R.id.colorPickerSeekBarR);
+                    seekBarR.setProgress((mColor & 0x00ff0000) >>16);
+                    final SeekBar seekBarG = (SeekBar)dialogView.findViewById(R.id.colorPickerSeekBarG);
+                    seekBarG.setProgress((mColor & 0x0000ff00) >> 8);
+                    final SeekBar seekBarB = (SeekBar)dialogView.findViewById(R.id.colorPickerSeekBarB);
+                    seekBarB.setProgress((mColor & 0x000000ff));
+                    dismissDialog(0);
+                }
+            });
+
+            return new AlertDialog.Builder(this)
+                    .setView(dialogView1)
+                    .setNegativeButton("Cancel", null)
+                    .create();
+        }
+        return super.onCreateDialog(id);
+    }
 }

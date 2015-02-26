@@ -18,7 +18,7 @@
     <string name="player_registration_player_comment">メモ：</string>
 
     <string name="game_list_view_name">試合一覧</string>
-    <string name="game_list_view_filter">フィルター</string>
+    <string name="game_list_view_filter">Filter</string>
     <string name="game_list_view_filter_gameday">試合日</string>
     <string name="game_list_view_filter_category">カテゴリー</string>
     <string name="game_list_view_filter_type">タイプ</string>
@@ -49,4 +49,9 @@
     <string name="game_image_title">タイトル:</string>
     <string name="game_image_comment">備考:</string>
 
+    <string name="hello">Hello World, ColorSelectDialog!</string>
+    <string name="color_picker_viewer">Color Viewer(Click to select 16Color)</string>
+    <string name="color_picker_red">RED</string>
+    <string name="color_picker_green">GREEN</string>
+    <string name="color_picker_blue">BLUE</string>
 </resources>

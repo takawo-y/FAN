@@ -40,7 +40,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import de.greenrobot.dao.query.QueryBuilder;
-import de.greenrobot.dao.query.WhereCondition;
 
 /**
  * Created by 9004027600 on 2015/02/04.
@@ -51,6 +50,8 @@ public class GameActivity extends ActionBarActivity {
     private FandbPlayer playerData;
     private List<FandbGame> gameList;
     private RecyclerView.LayoutManager layoutManagerGame;
+
+    private final String FILTER_NOTHING = "すべて";
 
     @InjectView(R.id.tool_bar_game_list)
     Toolbar toolbar;
@@ -168,7 +169,7 @@ public class GameActivity extends ActionBarActivity {
         QueryBuilder qb = ((MyApplication)getApplication()).getDaoSession().getFandbGameDao().queryBuilder()
                 .where(FandbGameDao.Properties.PlayerId.eq(id));
 
-        if(gameDay != null && gameDay.isEmpty() == false){
+        if(FILTER_NOTHING.equals(gameDay) == false){
             Log.d("ReSearchGame", "試合日：「"+gameDay+"」");
             Date from = new Date(gameDay+"/01");
             Calendar cal = Calendar.getInstance();
@@ -178,7 +179,7 @@ public class GameActivity extends ActionBarActivity {
             qb.where(FandbGameDao.Properties.GameDay.ge(from));
             qb.where(FandbGameDao.Properties.GameDay.lt(to));
         }
-        if(category != null && category.isEmpty() == false){
+        if(FILTER_NOTHING.equals(category) == false){
             qb.where(FandbGameDao.Properties.GameCategory.eq(category));
         }
         if(type != 99){
@@ -292,11 +293,14 @@ public class GameActivity extends ActionBarActivity {
         }
 
         List<String> rtnList = new ArrayList<>();
-        rtnList.add("");
+        rtnList.add(FILTER_NOTHING);
+
+        List<String> tmpList = new ArrayList<>();
         for(String value: dateList){
-            rtnList.add(value);
+            tmpList.add(value);
         }
-        Collections.sort(rtnList);
+        Collections.sort(tmpList);
+        rtnList.addAll(tmpList);
 
         return rtnList;
     }
@@ -314,13 +318,16 @@ public class GameActivity extends ActionBarActivity {
             categoryList.add(data.getGameCategory());
         }
 
-        List<String> rtnLlist = new ArrayList<>();
-        rtnLlist.add("");
-        for(String value: categoryList){
-            rtnLlist.add(value);
-        }
-        Collections.sort(rtnLlist);
+        List<String> rtnList = new ArrayList<>();
+        rtnList.add(FILTER_NOTHING);
 
-        return rtnLlist;
+        List<String> tmpList = new ArrayList<>();
+        for(String value: categoryList){
+            tmpList.add(value);
+        }
+        Collections.sort(tmpList);
+        rtnList.addAll(tmpList);
+
+        return rtnList;
     }
 }

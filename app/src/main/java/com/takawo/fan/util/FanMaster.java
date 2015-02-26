@@ -30,7 +30,7 @@ public class FanMaster {
      */
     static public List<KeyValuePair> getGameTypeForSearch(){
         LinkedList<KeyValuePair> list = new LinkedList<>();
-        list.add(new KeyValuePair(99, ""));
+        list.add(new KeyValuePair(99, "すべて"));
         list.add(new KeyValuePair(0, "生観戦"));
         list.add(new KeyValuePair(1, "TV生観戦"));
         list.add(new KeyValuePair(2, "TV録画観戦"));
