@@ -6,6 +6,7 @@ package com.takawo.fan.db;
  */
 public class FandbImage {
 
+    private long playerId;
     private long gameId;
     private Long id;
     private String path;
@@ -19,12 +20,21 @@ public class FandbImage {
         this.id = id;
     }
 
-    public FandbImage(long gameId, Long id, String path, String title, String comment) {
+    public FandbImage(long playerId, long gameId, Long id, String path, String title, String comment) {
+        this.playerId = playerId;
         this.gameId = gameId;
         this.id = id;
         this.path = path;
         this.title = title;
         this.comment = comment;
+    }
+
+    public long getPlayerId() {
+        return playerId;
+    }
+
+    public void setPlayerId(long playerId) {
+        this.playerId = playerId;
     }
 
     public long getGameId() {

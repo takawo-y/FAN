@@ -23,11 +23,12 @@ public class FandbImageDao extends AbstractDao<FandbImage, Long> {
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {
-        public final static Property GameId = new Property(0, long.class, "gameId", false, "GAME_ID");
-        public final static Property Id = new Property(1, Long.class, "id", true, "_id");
-        public final static Property Path = new Property(2, String.class, "path", false, "PATH");
-        public final static Property Title = new Property(3, String.class, "title", false, "TITLE");
-        public final static Property Comment = new Property(4, String.class, "comment", false, "COMMENT");
+        public final static Property PlayerId = new Property(0, long.class, "playerId", false, "PLAYER_ID");
+        public final static Property GameId = new Property(1, long.class, "gameId", false, "GAME_ID");
+        public final static Property Id = new Property(2, Long.class, "id", true, "_id");
+        public final static Property Path = new Property(3, String.class, "path", false, "PATH");
+        public final static Property Title = new Property(4, String.class, "title", false, "TITLE");
+        public final static Property Comment = new Property(5, String.class, "comment", false, "COMMENT");
     };
 
 
@@ -43,11 +44,12 @@ public class FandbImageDao extends AbstractDao<FandbImage, Long> {
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "'FANDB_IMAGE' (" + //
-                "'GAME_ID' INTEGER NOT NULL ," + // 0: gameId
-                "'_id' INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE ," + // 1: id
-                "'PATH' TEXT," + // 2: path
-                "'TITLE' TEXT," + // 3: title
-                "'COMMENT' TEXT);"); // 4: comment
+                "'PLAYER_ID' INTEGER NOT NULL ," + // 0: playerId
+                "'GAME_ID' INTEGER NOT NULL ," + // 1: gameId
+                "'_id' INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE ," + // 2: id
+                "'PATH' TEXT," + // 3: path
+                "'TITLE' TEXT," + // 4: title
+                "'COMMENT' TEXT);"); // 5: comment
     }
 
     /** Drops the underlying database table. */
@@ -60,44 +62,46 @@ public class FandbImageDao extends AbstractDao<FandbImage, Long> {
     @Override
     protected void bindValues(SQLiteStatement stmt, FandbImage entity) {
         stmt.clearBindings();
-        stmt.bindLong(1, entity.getGameId());
+        stmt.bindLong(1, entity.getPlayerId());
+        stmt.bindLong(2, entity.getGameId());
  
         Long id = entity.getId();
         if (id != null) {
-            stmt.bindLong(2, id);
+            stmt.bindLong(3, id);
         }
  
         String path = entity.getPath();
         if (path != null) {
-            stmt.bindString(3, path);
+            stmt.bindString(4, path);
         }
  
         String title = entity.getTitle();
         if (title != null) {
-            stmt.bindString(4, title);
+            stmt.bindString(5, title);
         }
  
         String comment = entity.getComment();
         if (comment != null) {
-            stmt.bindString(5, comment);
+            stmt.bindString(6, comment);
         }
     }
 
     /** @inheritdoc */
     @Override
     public Long readKey(Cursor cursor, int offset) {
-        return cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1);
+        return cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2);
     }    
 
     /** @inheritdoc */
     @Override
     public FandbImage readEntity(Cursor cursor, int offset) {
         FandbImage entity = new FandbImage( //
-            cursor.getLong(offset + 0), // gameId
-            cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // id
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // path
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // title
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4) // comment
+            cursor.getLong(offset + 0), // playerId
+            cursor.getLong(offset + 1), // gameId
+            cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2), // id
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // path
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // title
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5) // comment
         );
         return entity;
     }
@@ -105,11 +109,12 @@ public class FandbImageDao extends AbstractDao<FandbImage, Long> {
     /** @inheritdoc */
     @Override
     public void readEntity(Cursor cursor, FandbImage entity, int offset) {
-        entity.setGameId(cursor.getLong(offset + 0));
-        entity.setId(cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1));
-        entity.setPath(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setTitle(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setComment(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setPlayerId(cursor.getLong(offset + 0));
+        entity.setGameId(cursor.getLong(offset + 1));
+        entity.setId(cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2));
+        entity.setPath(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setTitle(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setComment(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
      }
     
     /** @inheritdoc */

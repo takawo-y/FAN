@@ -13,7 +13,7 @@
     <string name="player_registration_result_type">結果タイプ：</string>
     <string name="player_registration_result_type_score">スコア</string>
     <string name="player_registration_result_type_time">タイム</string>
-    <string name="player_registration_player_color">イメージカラー：</string>
+    <string name="player_registration_player_color">カラー：</string>
     <string name="player_registration_player_image">画像：</string>
     <string name="player_registration_player_comment">メモ：</string>
 

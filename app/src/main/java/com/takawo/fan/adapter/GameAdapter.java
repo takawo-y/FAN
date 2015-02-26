@@ -35,13 +35,15 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder>{
     private RecyclerView recyclerView;
     private LayoutInflater inf;
     private List<FandbGame> dataList;
+    private int playerColor;
     private Context context;
 
-    public GameAdapter(Context context, List<FandbGame> dataList){
+    public GameAdapter(Context context, List<FandbGame> dataList, int playerColor){
         super();
         this.context = context;
         inf = LayoutInflater.from(context);
         this.dataList = dataList;
+        this.playerColor = playerColor;
     }
 
     @Override
@@ -59,7 +61,7 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
-        viewHolder.setItem(dataList.get(i));
+        viewHolder.setItem(dataList.get(i), playerColor);
         viewHolder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -131,13 +133,14 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder>{
             resultScoreTime = ButterKnife.findById(v, R.id.gameScoreTime);
         }
 
-        public void setItem(FandbGame data){
+        public void setItem(FandbGame data, int playeColor){
             playerId = data.getPlayerId();
             id = data.getId();
             SimpleDateFormat formatA = new SimpleDateFormat("yyyy/MM/dd");
             String formatDate = formatA.format(data.getGameDay());
             cardGameTitle.setText(formatDate+" "+data.getGameCategory()+" "+data.getGameInfo()
                     +" ("+FanUtil.getGameTypeLabel(data.getGameType())+")");
+//            cardGameTitle.setBackgroundColor(playeColor);
             opposition.setText("vs "+data.getOpposition());
             result.setText(data.getResult());
             if(data.getResultScore() != null || TextUtils.isEmpty(data.getResultScore()) == false){

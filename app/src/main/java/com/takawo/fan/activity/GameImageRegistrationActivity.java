@@ -137,6 +137,7 @@ public class GameImageRegistrationActivity extends ActionBarActivity {
         sharePre = PreferenceManager.getDefaultSharedPreferences(this);
         String path = sharePre.getString(SHARE_IMAGE_PATH_KEY, "");
         FandbImage image = new FandbImage(
+                playerId,
                 gameId,
                 null,
                 path,

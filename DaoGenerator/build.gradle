@@ -56,6 +56,7 @@ task daoGenerator {
         playerToGame.setName("games");
 
         Entity image = schema.addEntity("FandbImage");
+        image.addLongProperty("playerId").notNull();
         image.addLongProperty("gameId").notNull();
         image.addIdProperty().autoincrement().unique();
         image.addStringProperty("path");

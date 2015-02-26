@@ -53,13 +53,9 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
 
     int mColor = 0xffffffff;
     int mTextColor = 0xffc0c0c0;
-    int mBackgroundColor = 0xff000000;
 
     LayoutInflater inflater;
     View dialogView;
-
-    final int CHANGE_TEXT = 0;
-    final int CHANGE_BACKGROUND = 1;
 
     @InjectView(R.id.tool_bar)
     Toolbar toolbar;
@@ -89,7 +85,7 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
 
     @OnClick(R.id.inputPlayerColor)
     void onClickColor(){
-        colorDialog();
+      colorDialog();
     }
 
     @OnClick(R.id.button_player_registration)
@@ -153,7 +149,7 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
                 inputGameEvent.getText().toString(),
                 FanUtil.getResultType(inputPlayerResultType.getCheckedRadioButtonId()),
                 inputPlayerCategory.getText().toString(),
-                null,
+                inputPlayerColor.getText().toString(),
                 path,
                 inputPlayerComment.getText().toString());
         MyApplication app = (MyApplication)getApplication();
@@ -310,6 +306,7 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
                 mTextColor = mColor;
                 final View textView0 = inputPlayerColor;
                 textView0.setBackgroundColor(mTextColor);
+                ((TextView)textView0).setText(Integer.toString(mColor));
             }
         });
         alert.show();

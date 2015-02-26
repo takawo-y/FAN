@@ -17,6 +17,7 @@ import android.widget.Spinner;
 
 import com.takawo.fan.adapter.GameAdapter;
 import com.takawo.fan.adapter.KeyValuePairArrayAdapter;
+import com.takawo.fan.db.FandbImage;
 import com.takawo.fan.db.FandbPlayer;
 import com.takawo.fan.util.FanConst;
 import com.takawo.fan.MyApplication;
@@ -92,6 +93,12 @@ public class GameActivity extends ActionBarActivity {
                         new DialogInterface.OnClickListener(){
                             public void onClick(DialogInterface dialog, int which){
                                 ((MyApplication)getApplication()).getDaoSession().getFandbPlayerDao().deleteByKey(id);
+                                FandbGame gameEntity = new FandbGame();
+                                gameEntity.setPlayerId(id);
+                                ((MyApplication)getApplication()).getDaoSession().getFandbGameDao().delete(gameEntity);
+                                FandbImage imageEntity = new FandbImage();
+                                imageEntity.setPlayerId(id);
+                                ((MyApplication)getApplication()).getDaoSession().delete(imageEntity);
                                 Intent intent = new Intent(GameActivity.this, MainActivity.class);
                                 intent.putExtra(FanConst.INTENT_PLAYER_ID, id);
                                 startActivity(intent);
@@ -159,7 +166,7 @@ public class GameActivity extends ActionBarActivity {
 
         layoutManagerGame = new LinearLayoutManager(this);
         recyclerViewGame.setLayoutManager(layoutManagerGame);
-        recyclerViewGame.setAdapter(new GameAdapter(this, gameList));
+        recyclerViewGame.setAdapter(new GameAdapter(this, gameList, new Integer(playerData.getPlayerColor())));
     }
     private void setQueryList(){
         String gameDay = searchKeyDate.getSelectedItem().toString();
@@ -191,7 +198,7 @@ public class GameActivity extends ActionBarActivity {
 
         layoutManagerGame = new LinearLayoutManager(this);
         recyclerViewGame.setLayoutManager(layoutManagerGame);
-        recyclerViewGame.setAdapter(new GameAdapter(this, list));
+        recyclerViewGame.setAdapter(new GameAdapter(this, list, new Integer(playerData.getPlayerColor())));
     }
 
     /**
