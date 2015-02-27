@@ -95,6 +95,9 @@ public class GameUpdateActivity extends ActionBarActivity {
             }
         }
         toolbar.setNavigationIcon(R.drawable.ic_done_grey600_36dp);
+        toolbar.setBackgroundColor(new Integer(playerData.getPlayerColor()));
+        toolbar.setTitleTextColor(new Integer(playerData.getPlayerFontColor()));
+        toolbar.setSubtitleTextColor(new Integer(playerData.getPlayerFontColor()));
         toolbar.setTitle(playerData.getPlayerName());
         toolbar.setSubtitle(R.string.game_update_view_name);
         setSupportActionBar(toolbar);

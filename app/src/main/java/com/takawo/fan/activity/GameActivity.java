@@ -154,6 +154,9 @@ public class GameActivity extends ActionBarActivity {
                     }
             }
         }
+        toolbar.setBackgroundColor(new Integer(playerData.getPlayerColor()));
+        toolbar.setTitleTextColor(new Integer(playerData.getPlayerFontColor()));
+        toolbar.setSubtitleTextColor(new Integer(playerData.getPlayerFontColor()));
         toolbar.setTitle(playerData.getPlayerName());
         toolbar.setSubtitle(R.string.game_list_view_name);
         toolbar.setNavigationIcon(R.drawable.ic_done_grey600_36dp);
@@ -182,7 +185,7 @@ public class GameActivity extends ActionBarActivity {
 
         layoutManagerGame = new LinearLayoutManager(this);
         recyclerViewGame.setLayoutManager(layoutManagerGame);
-        recyclerViewGame.setAdapter(new GameAdapter(this, gameList, new Integer(playerData.getPlayerColor())));
+        recyclerViewGame.setAdapter(new GameAdapter(this, gameList, new Integer(playerData.getPlayerColor()), new Integer(playerData.getPlayerFontColor())));
     }
     private void setQueryList(){
         String gameDay = searchKeyDate.getSelectedItem().toString();
@@ -214,7 +217,7 @@ public class GameActivity extends ActionBarActivity {
 
         layoutManagerGame = new LinearLayoutManager(this);
         recyclerViewGame.setLayoutManager(layoutManagerGame);
-        recyclerViewGame.setAdapter(new GameAdapter(this, list, new Integer(playerData.getPlayerColor())));
+        recyclerViewGame.setAdapter(new GameAdapter(this, list, new Integer(playerData.getPlayerColor()), new Integer(playerData.getPlayerFontColor())));
     }
 
     /**

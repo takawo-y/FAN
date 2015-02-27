@@ -88,6 +88,30 @@
                         android:background="@color/grey_1000w"/>
                 </FrameLayout>
             </TableRow>
+            <TableRow
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.4"
+                    android:layout_gravity="right"
+                    android:textSize="18sp"
+                    android:text="@string/player_registration_player_font_color"/>
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.6">
+                    <TextView
+                        android:id="@+id/inputPlayerFontColor"
+                        android:layout_width="120dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="クリックして選択"
+                        android:background="@color/grey_1000w"/>
+                </FrameLayout>
+            </TableRow>
             <TableRow>
                 <TextView
                     android:layout_width="0dp"

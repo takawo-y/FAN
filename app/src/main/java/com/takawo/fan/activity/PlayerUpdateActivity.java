@@ -68,6 +68,8 @@ public class PlayerUpdateActivity extends ActionBarActivity {
     EditText inputPlayerName;
     @InjectView(R.id.inputPlayerColor)
     TextView inputPlayerColor;
+    @InjectView(R.id.inputPlayerFontColor)
+    TextView inputPlayerFontColor;
     @InjectView(R.id.inputGameEvent)
     EditText inputGameEvent;
     @InjectView(R.id.inputPlayerCategory)
@@ -87,7 +89,12 @@ public class PlayerUpdateActivity extends ActionBarActivity {
 
     @OnClick(R.id.inputPlayerColor)
     void onClickColor(){
-        colorDialog();
+        colorDialog(inputPlayerColor);
+    }
+
+    @OnClick(R.id.inputPlayerFontColor)
+    void onClickFontColor(){
+        colorDialog(inputPlayerFontColor);
     }
 
     @OnClick(R.id.button_player_update)
@@ -157,6 +164,10 @@ public class PlayerUpdateActivity extends ActionBarActivity {
             inputPlayerColor.setBackgroundColor(new Integer(data.getPlayerColor()));
             inputPlayerColor.setText(data.getPlayerColor());
         }
+        if(data.getPlayerFontColor() != null && "".equals(data.getPlayerFontColor()) == false){
+            inputPlayerFontColor.setBackgroundColor(new Integer(data.getPlayerFontColor()));
+            inputPlayerFontColor.setText(data.getPlayerFontColor());
+        }
         inputGameEvent.setText(data.getGameEvent());
         inputPlayerCategory.setText(data.getCategory());
         Long resultType = data.getResultType();
@@ -216,13 +227,14 @@ public class PlayerUpdateActivity extends ActionBarActivity {
                 FanUtil.getResultType(inputPlayerResultType.getCheckedRadioButtonId()),
                 inputPlayerCategory.getText().toString(),
                 inputPlayerColor.getText().toString(),
+                inputPlayerFontColor.getText().toString(),
                 path,
                 inputPlayerComment.getText().toString());
         MyApplication app = (MyApplication)getApplication();
         app.getDaoSession().getFandbPlayerDao().update(player);
     }
 
-    private void colorDialog() {
+    private void colorDialog(View targetView) {
         final String rString = getResources().getString(R.string.color_picker_red);
         final String gString = getResources().getString(R.string.color_picker_green);
         final String bString = getResources().getString(R.string.color_picker_blue);
@@ -332,11 +344,12 @@ public class PlayerUpdateActivity extends ActionBarActivity {
         });
         final AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setView(dialogView);
+        final View targetV = targetView;
         alert.setPositiveButton("OK", new DialogInterface.OnClickListener(){
             @Override
             public void onClick(DialogInterface dialog, int idx) {
                 mTextColor = mColor;
-                final View textView0 = inputPlayerColor;
+                final View textView0 = targetV;
                 textView0.setBackgroundColor(mTextColor);
                 ((TextView)textView0).setText(Integer.toString(mColor));
             }

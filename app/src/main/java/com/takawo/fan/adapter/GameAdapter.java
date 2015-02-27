@@ -36,14 +36,16 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder>{
     private LayoutInflater inf;
     private List<FandbGame> dataList;
     private int playerColor;
+    private int playerFontColor;
     private Context context;
 
-    public GameAdapter(Context context, List<FandbGame> dataList, int playerColor){
+    public GameAdapter(Context context, List<FandbGame> dataList, int playerColor, int playerFontColor){
         super();
         this.context = context;
         inf = LayoutInflater.from(context);
         this.dataList = dataList;
         this.playerColor = playerColor;
+        this.playerFontColor = playerFontColor;
     }
 
     @Override
@@ -61,7 +63,7 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
-        viewHolder.setItem(dataList.get(i), playerColor);
+        viewHolder.setItem(dataList.get(i), playerColor, playerFontColor);
         viewHolder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,14 +135,15 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder>{
             resultScoreTime = ButterKnife.findById(v, R.id.gameScoreTime);
         }
 
-        public void setItem(FandbGame data, int playeColor){
+        public void setItem(FandbGame data, int playeColor, int fontColor){
             playerId = data.getPlayerId();
             id = data.getId();
             SimpleDateFormat formatA = new SimpleDateFormat("yyyy/MM/dd");
             String formatDate = formatA.format(data.getGameDay());
             cardGameTitle.setText(formatDate+" "+data.getGameCategory()+" "+data.getGameInfo()
                     +" ("+FanUtil.getGameTypeLabel(data.getGameType())+")");
-//            cardGameTitle.setBackgroundColor(playeColor);
+            cardGameTitle.setBackgroundColor(playeColor);
+            cardGameTitle.setTextColor(fontColor);
             opposition.setText("vs "+data.getOpposition());
             result.setText(data.getResult());
             if(data.getResultScore() != null || TextUtils.isEmpty(data.getResultScore()) == false){

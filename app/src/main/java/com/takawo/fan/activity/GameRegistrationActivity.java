@@ -203,6 +203,9 @@ public class GameRegistrationActivity extends ActionBarActivity {
                     }
             }
         }
+        toolbar.setBackgroundColor(new Integer(playerData.getPlayerColor()));
+        toolbar.setTitleTextColor(new Integer(playerData.getPlayerFontColor()));
+        toolbar.setSubtitleTextColor(new Integer(playerData.getPlayerFontColor()));
         toolbar.setNavigationIcon(R.drawable.ic_done_grey600_36dp);
         toolbar.setTitle(playerData.getPlayerName());
         toolbar.setSubtitle(R.string.game_registration_view_name);

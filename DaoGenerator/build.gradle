@@ -31,6 +31,8 @@ task daoGenerator {
         player.addLongProperty("resultType").notNull();  //0:score, 1:time
         player.addStringProperty("category");
         player.addStringProperty("playerColor");
+        player.addStringProperty("playerFontColor");
+        player.addLongProperty("playerIconColor");  //0:白, 1:グレイ
         player.addStringProperty("playerImagePath");
         player.addStringProperty("playerComment");
 
