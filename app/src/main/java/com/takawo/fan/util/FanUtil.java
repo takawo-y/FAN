@@ -31,12 +31,6 @@ public class FanUtil {
         return time.getCurrentHour()+":"+time.getCurrentMinute();
     }
 
-    static public Bitmap resizeImage(String path, int size){
-        Drawable img = Drawable.createFromPath(path);
-        Bitmap imgBitmap = ((BitmapDrawable)img).getBitmap();
-        return Bitmap.createScaledBitmap(imgBitmap, size, size, false);
-    }
-
     /**
      * ResultType取得
      * 0:スコア、1:タイム

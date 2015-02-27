@@ -155,6 +155,7 @@ public class PlayerUpdateActivity extends ActionBarActivity {
         inputPlayerName.setText(data.getPlayerName());
         if(data.getPlayerColor() != null && "".equals(data.getPlayerColor()) == false){
             inputPlayerColor.setBackgroundColor(new Integer(data.getPlayerColor()));
+            inputPlayerColor.setText(data.getPlayerColor());
         }
         inputGameEvent.setText(data.getGameEvent());
         inputPlayerCategory.setText(data.getCategory());

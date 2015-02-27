@@ -3,7 +3,6 @@ package com.takawo.fan.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,22 +12,25 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.Spinner;
 
+import com.squareup.picasso.Picasso;
 import com.takawo.fan.adapter.GameAdapter;
 import com.takawo.fan.adapter.KeyValuePairArrayAdapter;
 import com.takawo.fan.db.FandbImage;
 import com.takawo.fan.db.FandbPlayer;
+import com.takawo.fan.util.BitmapTransformation;
 import com.takawo.fan.util.FanConst;
 import com.takawo.fan.MyApplication;
 import com.takawo.fan.util.FanMaster;
-import com.takawo.fan.util.FanUtil;
 import com.takawo.fan.util.KeyValuePair;
 import com.takawo.fan.util.MyItemDecoration;
 import com.takawo.fan.R;
 import com.takawo.fan.db.FandbGame;
 import com.takawo.fan.db.FandbGameDao;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -134,10 +136,23 @@ public class GameActivity extends ActionBarActivity {
      * Toolbar設定
      */
     private void setToolbar(){
-        if(playerData.getPlayerImagePath() == null || playerData.getPlayerImagePath().isEmpty()){
-            toolbar.setLogo(R.drawable.no_image);
-        }else{
-            toolbar.setLogo(new BitmapDrawable(getResources(), FanUtil.resizeImage(playerData.getPlayerImagePath(), 100)));
+        toolbar.setLogo(R.drawable.no_image);
+        if(playerData.getPlayerImagePath() != null && playerData.getPlayerImagePath().isEmpty() == false){
+            for (int i = 0; i < toolbar.getChildCount(); i++) {
+                View child = toolbar.getChildAt(i);
+                if (child != null)
+                    if (child.getClass() == ImageView.class) {
+                        ImageView logoView = (ImageView) child;
+                        if(logoView.getId() == -1){
+                            Picasso.with(this)
+                                    .load(new File(playerData.getPlayerImagePath()))
+                                    .transform(new BitmapTransformation())
+                                    .resize(100, 100)
+                                    .centerInside()
+                                    .into(logoView);
+                        }
+                    }
+            }
         }
         toolbar.setTitle(playerData.getPlayerName());
         toolbar.setSubtitle(R.string.game_list_view_name);
@@ -152,6 +167,7 @@ public class GameActivity extends ActionBarActivity {
                                              }
 
         );
+
     }
 
     /**

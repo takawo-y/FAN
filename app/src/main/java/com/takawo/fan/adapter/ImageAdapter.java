@@ -69,6 +69,8 @@ public class ImageAdapter extends BaseAdapter{
         holder.imageTitle.setText(data.getTitle());
         Picasso.with(context).load(new File(data.getPath()))
                 .transform(new BitmapTransformation())
+                .resize(300, 300)
+                .centerInside()
                 .into(holder.image);
         return convertView;
     }

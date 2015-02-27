@@ -1,7 +1,6 @@
 package com.takawo.fan.activity;
 
 import android.content.Intent;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
@@ -9,14 +8,18 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.squareup.picasso.Picasso;
 import com.takawo.fan.MyApplication;
 import com.takawo.fan.R;
 import com.takawo.fan.adapter.GameInfoTabAdapter;
 import com.takawo.fan.db.FandbPlayer;
+import com.takawo.fan.util.BitmapTransformation;
 import com.takawo.fan.util.FanConst;
-import com.takawo.fan.util.FanUtil;
+
+import java.io.File;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -73,12 +76,25 @@ public class GameUpdateActivity extends ActionBarActivity {
      * Toolbar設定
      */
     private void setToolbar(){
-        toolbar.setNavigationIcon(R.drawable.ic_done_grey600_36dp);
-        if(playerData.getPlayerImagePath() == null || playerData.getPlayerImagePath().isEmpty()){
-            toolbar.setLogo(R.drawable.no_image);
-        }else{
-            toolbar.setLogo(new BitmapDrawable(getResources(), FanUtil.resizeImage(playerData.getPlayerImagePath(), 100)));
+        toolbar.setLogo(R.drawable.no_image);
+        if(playerData.getPlayerImagePath() != null && playerData.getPlayerImagePath().isEmpty() == false){
+            for (int i = 0; i < toolbar.getChildCount(); i++) {
+                View child = toolbar.getChildAt(i);
+                if (child != null)
+                    if (child.getClass() == ImageView.class) {
+                        ImageView logoView = (ImageView) child;
+                        if(logoView.getId() == -1){
+                            Picasso.with(this)
+                                    .load(new File(playerData.getPlayerImagePath()))
+                                    .transform(new BitmapTransformation())
+                                    .resize(100, 100)
+                                    .centerInside()
+                                    .into(logoView);
+                        }
+                    }
+            }
         }
+        toolbar.setNavigationIcon(R.drawable.ic_done_grey600_36dp);
         toolbar.setTitle(playerData.getPlayerName());
         toolbar.setSubtitle(R.string.game_update_view_name);
         setSupportActionBar(toolbar);

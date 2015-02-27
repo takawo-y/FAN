@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -15,7 +14,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
@@ -23,8 +21,8 @@ import com.takawo.fan.MyApplication;
 import com.takawo.fan.R;
 import com.takawo.fan.db.FandbImage;
 import com.takawo.fan.db.FandbPlayer;
+import com.takawo.fan.util.BitmapTransformation;
 import com.takawo.fan.util.FanConst;
-import com.takawo.fan.util.FanUtil;
 
 import java.io.File;
 
@@ -107,10 +105,23 @@ public class GameImageRegistrationActivity extends ActionBarActivity {
     }
 
     private void setToolbar(){
-        if(playerData.getPlayerImagePath() == null || playerData.getPlayerImagePath().isEmpty()){
-            toolbar.setLogo(R.drawable.no_image);
-        }else{
-            toolbar.setLogo(new BitmapDrawable(getResources(), FanUtil.resizeImage(playerData.getPlayerImagePath(), 100)));
+        toolbar.setLogo(R.drawable.no_image);
+        if(playerData.getPlayerImagePath() != null && playerData.getPlayerImagePath().isEmpty() == false){
+            for (int i = 0; i < toolbar.getChildCount(); i++) {
+                View child = toolbar.getChildAt(i);
+                if (child != null)
+                    if (child.getClass() == ImageView.class) {
+                        ImageView logoView = (ImageView) child;
+                        if(logoView.getId() == -1){
+                            Picasso.with(this)
+                                    .load(new File(playerData.getPlayerImagePath()))
+                                    .transform(new BitmapTransformation())
+                                    .resize(100, 100)
+                                    .centerInside()
+                                    .into(logoView);
+                        }
+                    }
+            }
         }
         toolbar.setTitle(playerData.getPlayerName());
         toolbar.setSubtitle(R.string.game_image_regist_view_name);
