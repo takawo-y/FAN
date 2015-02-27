@@ -131,6 +131,7 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
         ButterKnife.inject(this);
 
         setToolbar();  //ToolBar設定
+        setSpinnerIcon();
         sharePre = PreferenceManager.getDefaultSharedPreferences(this);
         sharePre.edit().clear().commit();
     }
@@ -150,7 +151,7 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
         );
     }
 
-    private void setSpinnerGameType(){
+    private void setSpinnerIcon(){
         inputPlayerIcon.setOnItemSelectedListener(onItemSelectedListener);
         KeyValuePairArrayAdapter adapter = new KeyValuePairArrayAdapter(this, android.R.layout.simple_spinner_item, FanMaster.getPlayerIcon());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

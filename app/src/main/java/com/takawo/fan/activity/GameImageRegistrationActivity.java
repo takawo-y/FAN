@@ -23,6 +23,7 @@ import com.takawo.fan.db.FandbImage;
 import com.takawo.fan.db.FandbPlayer;
 import com.takawo.fan.util.BitmapTransformation;
 import com.takawo.fan.util.FanConst;
+import com.takawo.fan.util.FanUtil;
 
 import java.io.File;
 
@@ -47,6 +48,8 @@ public class GameImageRegistrationActivity extends ActionBarActivity {
 
     @InjectView(R.id.tool_bar)
     Toolbar toolbar;
+    @InjectView(R.id.button_game_image_registration)
+    ImageView button_game_image_registration;
 
     @InjectView(R.id.inputGameImage)
     ImageView inputGameImage;
@@ -128,8 +131,9 @@ public class GameImageRegistrationActivity extends ActionBarActivity {
         toolbar.setSubtitleTextColor(new Integer(playerData.getPlayerFontColor()));
         toolbar.setTitle(playerData.getPlayerName());
         toolbar.setSubtitle(R.string.game_image_regist_view_name);
-        toolbar.setNavigationIcon(R.drawable.ic_done_grey600_36dp);
+        button_game_image_registration.setImageResource(FanUtil.getPlayerIconDone(playerData.getPlayerIconColor().intValue()));
         setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(FanUtil.getPlayerIconBack(playerData.getPlayerIconColor().intValue()));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                                                  @Override
                                                  public void onClick(View v) {

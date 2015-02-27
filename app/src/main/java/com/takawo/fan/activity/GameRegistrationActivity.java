@@ -23,6 +23,7 @@ import com.takawo.fan.db.FandbPlayer;
 import com.takawo.fan.util.BitmapTransformation;
 import com.takawo.fan.util.FanConst;
 import com.takawo.fan.util.FanMaster;
+import com.takawo.fan.util.FanUtil;
 import com.takawo.fan.util.KeyValuePair;
 import com.takawo.fan.MyApplication;
 import com.takawo.fan.R;
@@ -50,6 +51,8 @@ public class GameRegistrationActivity extends ActionBarActivity {
 
     @InjectView(R.id.tool_bar)
     Toolbar toolbar;
+    @InjectView(R.id.button_game_registration)
+    ImageView button_game_registration;
 
     @InjectView(R.id.inputGameType)
     Spinner inputGameType;
@@ -206,10 +209,11 @@ public class GameRegistrationActivity extends ActionBarActivity {
         toolbar.setBackgroundColor(new Integer(playerData.getPlayerColor()));
         toolbar.setTitleTextColor(new Integer(playerData.getPlayerFontColor()));
         toolbar.setSubtitleTextColor(new Integer(playerData.getPlayerFontColor()));
-        toolbar.setNavigationIcon(R.drawable.ic_done_grey600_36dp);
         toolbar.setTitle(playerData.getPlayerName());
         toolbar.setSubtitle(R.string.game_registration_view_name);
+        button_game_registration.setImageResource(FanUtil.getPlayerIconDone(playerData.getPlayerIconColor().intValue()));
         setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(FanUtil.getPlayerIconBack(playerData.getPlayerIconColor().intValue()));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                                                  @Override
                                                  public void onClick(View v) {

@@ -62,4 +62,18 @@ public class FanMaster {
         return list;
     }
 
+    static public List<KeyValuePair> getPlayerIconDone(){
+        LinkedList<KeyValuePair> list = new LinkedList<>();
+        list.add(new KeyValuePair(0, Integer.toString(R.drawable.ic_done_white_24dp)));  //白
+        list.add(new KeyValuePair(1, Integer.toString(R.drawable.ic_done_grey600_24dp)));  //グレイ
+        return list;
+    }
+
+    static public List<KeyValuePair> getPlayerIconBack(){
+        LinkedList<KeyValuePair> list = new LinkedList<>();
+        list.add(new KeyValuePair(0, Integer.toString(R.drawable.ic_arrow_back_white_24dp)));  //白
+        list.add(new KeyValuePair(1, Integer.toString(R.drawable.ic_arrow_back_grey600_24dp)));  //グレイ
+        return list;
+    }
+
 }

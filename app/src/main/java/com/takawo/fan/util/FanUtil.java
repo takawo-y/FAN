@@ -61,4 +61,67 @@ public class FanUtil {
         }
         return "";
     }
+
+    /**
+     * 削除アイコン取得
+     *
+     * @param colorType
+     * @return
+     */
+    static public int getPlayerIconDelete(int colorType){
+        List<KeyValuePair> list = FanMaster.getPlayerIconDelete();
+        for(KeyValuePair data: list){
+            if(colorType == data.getKey()){
+                return new Integer(data.getValue());
+            }
+        }
+        return new Integer(R.drawable.ic_delete_white_24dp);
+    }
+
+    /**
+     * 更新アイコン取得
+     *
+     * @param colorType
+     * @return
+     */
+    static public int getPlayerIconUpdate(int colorType){
+        List<KeyValuePair> list = FanMaster.getPlayerIconUpdate();
+        for(KeyValuePair data: list){
+            if(colorType == data.getKey()){
+                return new Integer(data.getValue());
+            }
+        }
+        return new Integer(R.drawable.ic_info_outline_white_24dp);
+    }
+
+    /**
+     * 実行アイコン取得
+     * @param colorType
+     * @return
+     */
+    static public int getPlayerIconDone(int colorType){
+        List<KeyValuePair> list = FanMaster.getPlayerIconDone();
+        for(KeyValuePair data: list){
+            if(colorType == data.getKey()){
+                return new Integer(data.getValue());
+            }
+        }
+        return new Integer(R.drawable.ic_done_white_24dp);
+    }
+
+    /**
+     * 戻るアイコン取得
+     * @param colorType
+     * @return
+     */
+    static public int getPlayerIconBack(int colorType){
+        List<KeyValuePair> list = FanMaster.getPlayerIconBack();
+        for(KeyValuePair data: list){
+            if(colorType == data.getKey()){
+                return new Integer(data.getValue());
+            }
+        }
+        return new Integer(R.drawable.ic_arrow_back_white_24dp);
+    }
+
 }

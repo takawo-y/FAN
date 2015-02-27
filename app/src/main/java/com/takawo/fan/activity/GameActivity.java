@@ -24,6 +24,7 @@ import com.takawo.fan.util.BitmapTransformation;
 import com.takawo.fan.util.FanConst;
 import com.takawo.fan.MyApplication;
 import com.takawo.fan.util.FanMaster;
+import com.takawo.fan.util.FanUtil;
 import com.takawo.fan.util.KeyValuePair;
 import com.takawo.fan.util.MyItemDecoration;
 import com.takawo.fan.R;
@@ -58,6 +59,10 @@ public class GameActivity extends ActionBarActivity {
 
     @InjectView(R.id.tool_bar_game_list)
     Toolbar toolbar;
+    @InjectView(R.id.button_player_update)
+    ImageView button_player_update;
+    @InjectView(R.id.button_player_delete)
+    ImageView button_player_delete;
 
     @InjectView(R.id.list_game)
     RecyclerView recyclerViewGame;
@@ -159,8 +164,10 @@ public class GameActivity extends ActionBarActivity {
         toolbar.setSubtitleTextColor(new Integer(playerData.getPlayerFontColor()));
         toolbar.setTitle(playerData.getPlayerName());
         toolbar.setSubtitle(R.string.game_list_view_name);
-        toolbar.setNavigationIcon(R.drawable.ic_done_grey600_36dp);
+        button_player_update.setImageResource(FanUtil.getPlayerIconUpdate(playerData.getPlayerIconColor().intValue()));
+        button_player_delete.setImageResource(FanUtil.getPlayerIconDelete(playerData.getPlayerIconColor().intValue()));
         setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(FanUtil.getPlayerIconBack(playerData.getPlayerIconColor().intValue()));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                                                  @Override
                                                  public void onClick(View v) {

@@ -13,8 +13,7 @@
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         android:minHeight="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        android:elevation="4dp"
-        android:navigationIcon="@drawable/ic_done_grey600_24dp">
+        android:elevation="4dp">
     </android.support.v7.widget.Toolbar>
 
     <com.takawo.fan.view.ShadowablePagerSlidingTabStrip

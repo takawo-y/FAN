@@ -12,7 +12,6 @@ import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,15 +22,19 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.takawo.fan.MyApplication;
 import com.takawo.fan.R;
+import com.takawo.fan.adapter.KeyValuePairArrayAdapter;
 import com.takawo.fan.db.FandbPlayer;
 import com.takawo.fan.util.FanConst;
+import com.takawo.fan.util.FanMaster;
 import com.takawo.fan.util.FanUtil;
+import com.takawo.fan.util.KeyValuePair;
 
 import java.io.File;
 
@@ -52,6 +55,7 @@ public class PlayerUpdateActivity extends ActionBarActivity {
 
     private Long playerId;
     private Long gameId;
+    private FandbPlayer data;
 
     int mColor = 0xffffffff;
     int mTextColor = 0xffc0c0c0;
@@ -61,6 +65,8 @@ public class PlayerUpdateActivity extends ActionBarActivity {
 
     @InjectView(R.id.tool_bar)
     Toolbar toolbar;
+    @InjectView(R.id.button_player_update)
+    ImageView button_player_update;
 
     @InjectView(R.id.inputPlayerImage)
     ImageView inputPlayerImage;
@@ -70,6 +76,8 @@ public class PlayerUpdateActivity extends ActionBarActivity {
     TextView inputPlayerColor;
     @InjectView(R.id.inputPlayerFontColor)
     TextView inputPlayerFontColor;
+    @InjectView(R.id.inputPlayerIcon)
+    Spinner inputPlayerIcon;
     @InjectView(R.id.inputGameEvent)
     EditText inputGameEvent;
     @InjectView(R.id.inputPlayerCategory)
@@ -129,14 +137,19 @@ public class PlayerUpdateActivity extends ActionBarActivity {
 
         playerId = getIntent().getLongExtra(FanConst.INTENT_PLAYER_ID, 0);
         gameId = getIntent().getLongExtra(FanConst.INTENT_GAME_ID, 0);
+        data = ((MyApplication)getApplication()).getDaoSession().getFandbPlayerDao().load(playerId);
         setData();  //初期表示
         setToolbar();  //ToolBar設定
     }
 
     private void setToolbar(){
+        toolbar.setBackgroundColor(new Integer(data.getPlayerColor()));
         toolbar.setTitle("Player 更新");
-        toolbar.setNavigationIcon(R.drawable.ic_done_grey600_36dp);
+        toolbar.setTitleTextColor(new Integer(data.getPlayerFontColor()));
+        button_player_update.setImageResource(FanUtil.getPlayerIconDone(data.getPlayerIconColor().intValue()));
         setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(FanUtil.getPlayerIconBack(data.getPlayerIconColor().intValue()));
+        toolbar.setNavigationIcon(FanUtil.getPlayerIconBack(data.getPlayerIconColor().intValue()));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                                                  @Override
                                                  public void onClick(View v) {
@@ -148,12 +161,29 @@ public class PlayerUpdateActivity extends ActionBarActivity {
 
         );
     }
+    private void setSpinnerIcon(int iconId){
+        inputPlayerIcon.setOnItemSelectedListener(onItemSelectedListener);
+        KeyValuePairArrayAdapter adapter = new KeyValuePairArrayAdapter(this, android.R.layout.simple_spinner_item, FanMaster.getPlayerIcon());
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        inputPlayerIcon.setAdapter(adapter);
+        inputPlayerIcon.setSelection(adapter.getPosition(iconId));
+
+    }
+    /**
+     * @brief スピナーのOnItemSelectedListener
+     */
+    private AdapterView.OnItemSelectedListener onItemSelectedListener = new AdapterView.OnItemSelectedListener() {
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            KeyValuePair item = (KeyValuePair)inputPlayerIcon.getSelectedItem();
+        }
+        public void onNothingSelected(AdapterView<?> arg0) {
+        }
+    };
 
     /**
      * 初期表示
      */
     private void setData(){
-        FandbPlayer data = ((MyApplication)getApplication()).getDaoSession().getFandbPlayerDao().load(playerId);
         if(data.getPlayerImagePath() == null || data.getPlayerImagePath().isEmpty()){
             Picasso.with(this).load(R.drawable.no_image).into(inputPlayerImage);
         }else{
@@ -168,6 +198,7 @@ public class PlayerUpdateActivity extends ActionBarActivity {
             inputPlayerFontColor.setBackgroundColor(new Integer(data.getPlayerFontColor()));
             inputPlayerFontColor.setText(data.getPlayerFontColor());
         }
+        setSpinnerIcon(data.getPlayerIconColor().intValue());
         inputGameEvent.setText(data.getGameEvent());
         inputPlayerCategory.setText(data.getCategory());
         Long resultType = data.getResultType();
@@ -228,6 +259,7 @@ public class PlayerUpdateActivity extends ActionBarActivity {
                 inputPlayerCategory.getText().toString(),
                 inputPlayerColor.getText().toString(),
                 inputPlayerFontColor.getText().toString(),
+                new Long(((KeyValuePair)inputPlayerIcon.getSelectedItem()).getKey()),
                 path,
                 inputPlayerComment.getText().toString());
         MyApplication app = (MyApplication)getApplication();

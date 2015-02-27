@@ -18,6 +18,7 @@ import com.takawo.fan.adapter.GameInfoTabAdapter;
 import com.takawo.fan.db.FandbPlayer;
 import com.takawo.fan.util.BitmapTransformation;
 import com.takawo.fan.util.FanConst;
+import com.takawo.fan.util.FanUtil;
 
 import java.io.File;
 
@@ -94,13 +95,13 @@ public class GameUpdateActivity extends ActionBarActivity {
                     }
             }
         }
-        toolbar.setNavigationIcon(R.drawable.ic_done_grey600_36dp);
         toolbar.setBackgroundColor(new Integer(playerData.getPlayerColor()));
         toolbar.setTitleTextColor(new Integer(playerData.getPlayerFontColor()));
         toolbar.setSubtitleTextColor(new Integer(playerData.getPlayerFontColor()));
         toolbar.setTitle(playerData.getPlayerName());
         toolbar.setSubtitle(R.string.game_update_view_name);
         setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(FanUtil.getPlayerIconBack(playerData.getPlayerIconColor().intValue()));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                                                  @Override
                                                  public void onClick(View v) {
@@ -111,6 +112,8 @@ public class GameUpdateActivity extends ActionBarActivity {
                                              }
 
         );
+        tab.setBackgroundColor(new Integer(playerData.getPlayerColor()));
+        tab.setTextColor(new Integer(playerData.getPlayerFontColor()));
     }
 
     public void updateFragment(int posision){
