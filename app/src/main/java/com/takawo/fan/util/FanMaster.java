@@ -1,5 +1,7 @@
 package com.takawo.fan.util;
 
+import com.takawo.fan.R;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -36,6 +38,27 @@ public class FanMaster {
         list.add(new KeyValuePair(2, "TV録画観戦"));
         list.add(new KeyValuePair(3, "出場"));
         list.add(new KeyValuePair(4, "その他"));
+        return list;
+    }
+
+    static public List<KeyValuePair> getPlayerIcon(){
+        LinkedList<KeyValuePair> list = new LinkedList<>();
+        list.add(new KeyValuePair(0, "White"));  //白
+        list.add(new KeyValuePair(1, "Grey"));  //グレイ
+        return list;
+    }
+
+    static public List<KeyValuePair> getPlayerIconDelete(){
+        LinkedList<KeyValuePair> list = new LinkedList<>();
+        list.add(new KeyValuePair(0, Integer.toString(R.drawable.ic_delete_white_24dp)));  //白
+        list.add(new KeyValuePair(1, Integer.toString(R.drawable.ic_delete_grey600_24dp)));  //グレイ
+        return list;
+    }
+
+    static public List<KeyValuePair> getPlayerIconUpdate(){
+        LinkedList<KeyValuePair> list = new LinkedList<>();
+        list.add(new KeyValuePair(0, Integer.toString(R.drawable.ic_info_outline_white_24dp)));  //白
+        list.add(new KeyValuePair(1, Integer.toString(R.drawable.ic_info_outline_grey600_24dp)));  //グレイ
         return list;
     }
 

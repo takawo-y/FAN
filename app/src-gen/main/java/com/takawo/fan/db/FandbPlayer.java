@@ -19,6 +19,7 @@ public class FandbPlayer {
     private String category;
     private String playerColor;
     private String playerFontColor;
+    private Long playerIconColor;
     private String playerImagePath;
     private String playerComment;
 
@@ -37,7 +38,7 @@ public class FandbPlayer {
         this.id = id;
     }
 
-    public FandbPlayer(Long id, String playerName, String gameEvent, long resultType, String category, String playerColor, String playerFontColor, String playerImagePath, String playerComment) {
+    public FandbPlayer(Long id, String playerName, String gameEvent, long resultType, String category, String playerColor, String playerFontColor, Long playerIconColor, String playerImagePath, String playerComment) {
         this.id = id;
         this.playerName = playerName;
         this.gameEvent = gameEvent;
@@ -45,6 +46,7 @@ public class FandbPlayer {
         this.category = category;
         this.playerColor = playerColor;
         this.playerFontColor = playerFontColor;
+        this.playerIconColor = playerIconColor;
         this.playerImagePath = playerImagePath;
         this.playerComment = playerComment;
     }
@@ -113,6 +115,14 @@ public class FandbPlayer {
 
     public void setPlayerFontColor(String playerFontColor) {
         this.playerFontColor = playerFontColor;
+    }
+
+    public Long getPlayerIconColor() {
+        return playerIconColor;
+    }
+
+    public void setPlayerIconColor(Long playerIconColor) {
+        this.playerIconColor = playerIconColor;
     }
 
     public String getPlayerImagePath() {

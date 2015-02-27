@@ -22,15 +22,19 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.takawo.fan.MyApplication;
 import com.takawo.fan.R;
+import com.takawo.fan.adapter.KeyValuePairArrayAdapter;
 import com.takawo.fan.db.FandbPlayer;
 import com.takawo.fan.util.FanConst;
+import com.takawo.fan.util.FanMaster;
 import com.takawo.fan.util.FanUtil;
+import com.takawo.fan.util.KeyValuePair;
 
 import java.io.File;
 
@@ -68,6 +72,8 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
     TextView inputPlayerColor;
     @InjectView(R.id.inputPlayerFontColor)
     TextView inputPlayerFontColor;
+    @InjectView(R.id.inputPlayerIcon)
+    Spinner inputPlayerIcon;
     @InjectView(R.id.inputGameEvent)
     EditText inputGameEvent;
     @InjectView(R.id.inputPlayerCategory)
@@ -144,6 +150,25 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
         );
     }
 
+    private void setSpinnerGameType(){
+        inputPlayerIcon.setOnItemSelectedListener(onItemSelectedListener);
+        KeyValuePairArrayAdapter adapter = new KeyValuePairArrayAdapter(this, android.R.layout.simple_spinner_item, FanMaster.getPlayerIcon());
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        inputPlayerIcon.setAdapter(adapter);
+        inputPlayerIcon.setSelection(adapter.getPosition(0));
+
+    }
+    /**
+     * @brief スピナーのOnItemSelectedListener
+     */
+    private AdapterView.OnItemSelectedListener onItemSelectedListener = new AdapterView.OnItemSelectedListener() {
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            KeyValuePair item = (KeyValuePair)inputPlayerIcon.getSelectedItem();
+        }
+        public void onNothingSelected(AdapterView<?> arg0) {
+        }
+    };
+
     /**
      * Player登録
      */
@@ -158,6 +183,7 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
                 inputPlayerCategory.getText().toString(),
                 inputPlayerColor.getText().toString(),
                 inputPlayerFontColor.getText().toString(),
+                new Long(((KeyValuePair)inputPlayerIcon.getSelectedItem()).getKey()),
                 path,
                 inputPlayerComment.getText().toString());
         MyApplication app = (MyApplication)getApplication();

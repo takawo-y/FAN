@@ -30,8 +30,9 @@ public class FandbPlayerDao extends AbstractDao<FandbPlayer, Long> {
         public final static Property Category = new Property(4, String.class, "category", false, "CATEGORY");
         public final static Property PlayerColor = new Property(5, String.class, "playerColor", false, "PLAYER_COLOR");
         public final static Property PlayerFontColor = new Property(6, String.class, "playerFontColor", false, "PLAYER_FONT_COLOR");
-        public final static Property PlayerImagePath = new Property(7, String.class, "playerImagePath", false, "PLAYER_IMAGE_PATH");
-        public final static Property PlayerComment = new Property(8, String.class, "playerComment", false, "PLAYER_COMMENT");
+        public final static Property PlayerIconColor = new Property(7, Long.class, "playerIconColor", false, "PLAYER_ICON_COLOR");
+        public final static Property PlayerImagePath = new Property(8, String.class, "playerImagePath", false, "PLAYER_IMAGE_PATH");
+        public final static Property PlayerComment = new Property(9, String.class, "playerComment", false, "PLAYER_COMMENT");
     };
 
     private DaoSession daoSession;
@@ -57,8 +58,9 @@ public class FandbPlayerDao extends AbstractDao<FandbPlayer, Long> {
                 "'CATEGORY' TEXT," + // 4: category
                 "'PLAYER_COLOR' TEXT," + // 5: playerColor
                 "'PLAYER_FONT_COLOR' TEXT," + // 6: playerFontColor
-                "'PLAYER_IMAGE_PATH' TEXT," + // 7: playerImagePath
-                "'PLAYER_COMMENT' TEXT);"); // 8: playerComment
+                "'PLAYER_ICON_COLOR' INTEGER," + // 7: playerIconColor
+                "'PLAYER_IMAGE_PATH' TEXT," + // 8: playerImagePath
+                "'PLAYER_COMMENT' TEXT);"); // 9: playerComment
     }
 
     /** Drops the underlying database table. */
@@ -95,14 +97,19 @@ public class FandbPlayerDao extends AbstractDao<FandbPlayer, Long> {
             stmt.bindString(7, playerFontColor);
         }
  
+        Long playerIconColor = entity.getPlayerIconColor();
+        if (playerIconColor != null) {
+            stmt.bindLong(8, playerIconColor);
+        }
+ 
         String playerImagePath = entity.getPlayerImagePath();
         if (playerImagePath != null) {
-            stmt.bindString(8, playerImagePath);
+            stmt.bindString(9, playerImagePath);
         }
  
         String playerComment = entity.getPlayerComment();
         if (playerComment != null) {
-            stmt.bindString(9, playerComment);
+            stmt.bindString(10, playerComment);
         }
     }
 
@@ -129,8 +136,9 @@ public class FandbPlayerDao extends AbstractDao<FandbPlayer, Long> {
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // category
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // playerColor
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // playerFontColor
-            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // playerImagePath
-            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8) // playerComment
+            cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7), // playerIconColor
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // playerImagePath
+            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9) // playerComment
         );
         return entity;
     }
@@ -145,8 +153,9 @@ public class FandbPlayerDao extends AbstractDao<FandbPlayer, Long> {
         entity.setCategory(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setPlayerColor(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setPlayerFontColor(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setPlayerImagePath(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
-        entity.setPlayerComment(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
+        entity.setPlayerIconColor(cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7));
+        entity.setPlayerImagePath(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
+        entity.setPlayerComment(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
      }
     
     /** @inheritdoc */
