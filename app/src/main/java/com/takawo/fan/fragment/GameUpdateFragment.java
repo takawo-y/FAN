@@ -1,11 +1,17 @@
 package com.takawo.fan.fragment;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,11 +20,14 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
 import com.takawo.fan.MyApplication;
 import com.takawo.fan.R;
 import com.takawo.fan.activity.GameImageRegistrationActivity;
@@ -31,6 +40,7 @@ import com.takawo.fan.util.FanConst;
 import com.takawo.fan.util.FanMaster;
 import com.takawo.fan.util.KeyValuePair;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -48,6 +58,10 @@ public class GameUpdateFragment extends Fragment {
     private Long gameId;
     private FandbPlayer playerData;
     private GameUpdateFragment myFragment;
+
+    private int RESULT_PICK_FILENAME = 1;
+    private SharedPreferences sharePre;
+    private final String SHARE_IMAGE_PATH_KEY = "imagePath";
 
     @InjectView(R.id.inputGameType)
     Spinner inputGameType;
@@ -69,6 +83,8 @@ public class GameUpdateFragment extends Fragment {
     TextView inputGameEndTime;
     @InjectView(R.id.inputGameOpposition)
     EditText inputGameOpposition;
+    @InjectView(R.id.inputGameOppositionImage)
+    ImageView inputGameOppositionImage;
     @InjectView(R.id.inputGameResult)
     EditText inputGameResult;
     @InjectView(R.id.inputRowResultScore)
@@ -158,6 +174,14 @@ public class GameUpdateFragment extends Fragment {
                 .show();
     }
 
+    @OnClick(R.id.inputGameOppositionImage)
+    void onClickImage(){
+        Intent i = new Intent(
+                Intent.ACTION_PICK,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(i, RESULT_PICK_FILENAME);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -177,6 +201,9 @@ public class GameUpdateFragment extends Fragment {
             //タイム
             tableResultScore.setVisibility(View.GONE);
         }
+        sharePre = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        sharePre.edit().clear().commit();
+
         return view;
     }
 
@@ -191,6 +218,11 @@ public class GameUpdateFragment extends Fragment {
         inputGameStartTime.setText(data.getStartTime());  //開始時間
         inputGameEndTime.setText(data.getEndTime());  //終了時間
         inputGameOpposition.setText(data.getOpposition());  //対戦相手
+        if(data.getOppositionImagePath() == null || data.getOppositionImagePath().isEmpty()){
+            Picasso.with(getActivity()).load(R.drawable.no_image).into(inputGameOppositionImage);
+        }else{
+            Picasso.with(getActivity()).load(new File(data.getOppositionImagePath())).into(inputGameOppositionImage);
+        }
         inputGameResult.setText(data.getResult());  //試合結果
         if(data.getResultScore() != null && data.getResultScore().isEmpty() == false){
             inputGameResultScore.setText(data.getResultScore());
@@ -233,6 +265,8 @@ public class GameUpdateFragment extends Fragment {
      * Game更新
      */
     public void updateGame(){
+        sharePre = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String path = sharePre.getString(SHARE_IMAGE_PATH_KEY, "");
         FandbGame game = new FandbGame(
                 playerId,
                 gameId,
@@ -246,12 +280,45 @@ public class GameUpdateFragment extends Fragment {
                 inputGameStartTime.getText().toString(),
                 inputGameEndTime.getText().toString(),
                 inputGameOpposition.getText().toString(),
+                path,
                 inputGameResult.getText().toString(),
                 inputGameResultScore.getText().toString(),
                 inputGameResultTime.getText().toString(),
                 inputGameComment.getText().toString()
         );
         ((MyApplication)getActivity().getApplication()).getDaoSession().getFandbGameDao().update(game);
+    }
+
+    /**
+     * 画像選択後
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RESULT_PICK_FILENAME
+                && resultCode == getActivity().RESULT_OK
+                && null != data) {
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+            Cursor cursor = getActivity().getContentResolver().query(
+                    selectedImage,
+                    filePathColumn, null, null, null);
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String picturePath = cursor.getString(columnIndex);
+            cursor.close();
+
+            Toast.makeText(getActivity(), picturePath, Toast.LENGTH_LONG).show();
+            Picasso.with(getActivity()).load(new File(picturePath)).resize(200, 200).centerInside().into(inputGameOppositionImage);
+            sharePre = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            sharePre.edit().putString(SHARE_IMAGE_PATH_KEY, picturePath).commit();
+        }
     }
 
 

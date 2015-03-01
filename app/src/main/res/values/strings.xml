@@ -33,6 +33,7 @@
     <string name="game_registration_start_time">開始時間：</string>
     <string name="game_registration_end_time">終了時間：</string>
     <string name="game_registration_opposition">対戦相手：</string>
+    <string name="game_registration_opposition_image">対戦相手画像：</string>
     <string name="game_registration_result">結果：</string>
     <string name="game_registration_result_score">スコア：</string>
     <string name="game_registration_result_time">タイム：</string>

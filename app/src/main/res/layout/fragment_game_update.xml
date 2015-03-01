@@ -132,6 +132,22 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="0.4"
+                    android:layout_gravity="right"
+                    android:textSize="18sp"
+                    android:text="@string/game_registration_opposition_image"/>
+                <ImageView
+                    android:id="@+id/inputGameOppositionImage"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.6"
+                    android:src="@drawable/no_image"
+                    />
+            </TableRow>
+            <TableRow>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:layout_weight="0.4"
                     android:textSize="18sp"

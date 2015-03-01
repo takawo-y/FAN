@@ -40,10 +40,11 @@ public class FandbGameDao extends AbstractDao<FandbGame, Long> {
         public final static Property StartTime = new Property(9, String.class, "startTime", false, "START_TIME");
         public final static Property EndTime = new Property(10, String.class, "endTime", false, "END_TIME");
         public final static Property Opposition = new Property(11, String.class, "opposition", false, "OPPOSITION");
-        public final static Property Result = new Property(12, String.class, "result", false, "RESULT");
-        public final static Property ResultScore = new Property(13, String.class, "resultScore", false, "RESULT_SCORE");
-        public final static Property ResultTime = new Property(14, String.class, "resultTime", false, "RESULT_TIME");
-        public final static Property Comment = new Property(15, String.class, "comment", false, "COMMENT");
+        public final static Property OppositionImagePath = new Property(12, String.class, "oppositionImagePath", false, "OPPOSITION_IMAGE_PATH");
+        public final static Property Result = new Property(13, String.class, "result", false, "RESULT");
+        public final static Property ResultScore = new Property(14, String.class, "resultScore", false, "RESULT_SCORE");
+        public final static Property ResultTime = new Property(15, String.class, "resultTime", false, "RESULT_TIME");
+        public final static Property Comment = new Property(16, String.class, "comment", false, "COMMENT");
     };
 
     private DaoSession daoSession;
@@ -75,10 +76,11 @@ public class FandbGameDao extends AbstractDao<FandbGame, Long> {
                 "'START_TIME' TEXT," + // 9: startTime
                 "'END_TIME' TEXT," + // 10: endTime
                 "'OPPOSITION' TEXT," + // 11: opposition
-                "'RESULT' TEXT," + // 12: result
-                "'RESULT_SCORE' TEXT," + // 13: resultScore
-                "'RESULT_TIME' TEXT," + // 14: resultTime
-                "'COMMENT' TEXT);"); // 15: comment
+                "'OPPOSITION_IMAGE_PATH' TEXT," + // 12: oppositionImagePath
+                "'RESULT' TEXT," + // 13: result
+                "'RESULT_SCORE' TEXT," + // 14: resultScore
+                "'RESULT_TIME' TEXT," + // 15: resultTime
+                "'COMMENT' TEXT);"); // 16: comment
     }
 
     /** Drops the underlying database table. */
@@ -140,24 +142,29 @@ public class FandbGameDao extends AbstractDao<FandbGame, Long> {
             stmt.bindString(12, opposition);
         }
  
+        String oppositionImagePath = entity.getOppositionImagePath();
+        if (oppositionImagePath != null) {
+            stmt.bindString(13, oppositionImagePath);
+        }
+ 
         String result = entity.getResult();
         if (result != null) {
-            stmt.bindString(13, result);
+            stmt.bindString(14, result);
         }
  
         String resultScore = entity.getResultScore();
         if (resultScore != null) {
-            stmt.bindString(14, resultScore);
+            stmt.bindString(15, resultScore);
         }
  
         String resultTime = entity.getResultTime();
         if (resultTime != null) {
-            stmt.bindString(15, resultTime);
+            stmt.bindString(16, resultTime);
         }
  
         String comment = entity.getComment();
         if (comment != null) {
-            stmt.bindString(16, comment);
+            stmt.bindString(17, comment);
         }
     }
 
@@ -189,10 +196,11 @@ public class FandbGameDao extends AbstractDao<FandbGame, Long> {
             cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // startTime
             cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // endTime
             cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // opposition
-            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // result
-            cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13), // resultScore
-            cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14), // resultTime
-            cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15) // comment
+            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // oppositionImagePath
+            cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13), // result
+            cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14), // resultScore
+            cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15), // resultTime
+            cursor.isNull(offset + 16) ? null : cursor.getString(offset + 16) // comment
         );
         return entity;
     }
@@ -212,10 +220,11 @@ public class FandbGameDao extends AbstractDao<FandbGame, Long> {
         entity.setStartTime(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
         entity.setEndTime(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
         entity.setOpposition(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
-        entity.setResult(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
-        entity.setResultScore(cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13));
-        entity.setResultTime(cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14));
-        entity.setComment(cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15));
+        entity.setOppositionImagePath(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
+        entity.setResult(cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13));
+        entity.setResultScore(cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14));
+        entity.setResultTime(cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15));
+        entity.setComment(cursor.isNull(offset + 16) ? null : cursor.getString(offset + 16));
      }
     
     /** @inheritdoc */

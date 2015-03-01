@@ -19,7 +19,9 @@ import com.squareup.picasso.Picasso;
 import com.takawo.fan.adapter.GameAdapter;
 import com.takawo.fan.adapter.KeyValuePairArrayAdapter;
 import com.takawo.fan.db.FandbImage;
+import com.takawo.fan.db.FandbImageDao;
 import com.takawo.fan.db.FandbPlayer;
+import com.takawo.fan.db.data.DBHelper;
 import com.takawo.fan.util.BitmapTransformation;
 import com.takawo.fan.util.FanConst;
 import com.takawo.fan.MyApplication;
@@ -99,13 +101,8 @@ public class GameActivity extends ActionBarActivity {
                 .setPositiveButton("はい",
                         new DialogInterface.OnClickListener(){
                             public void onClick(DialogInterface dialog, int which){
+                                deleteGame();
                                 ((MyApplication)getApplication()).getDaoSession().getFandbPlayerDao().deleteByKey(id);
-                                FandbGame gameEntity = new FandbGame();
-                                gameEntity.setPlayerId(id);
-                                ((MyApplication)getApplication()).getDaoSession().getFandbGameDao().delete(gameEntity);
-                                FandbImage imageEntity = new FandbImage();
-                                imageEntity.setPlayerId(id);
-                                ((MyApplication)getApplication()).getDaoSession().delete(imageEntity);
                                 Intent intent = new Intent(GameActivity.this, MainActivity.class);
                                 intent.putExtra(FanConst.INTENT_PLAYER_ID, id);
                                 startActivity(intent);
@@ -363,4 +360,28 @@ public class GameActivity extends ActionBarActivity {
 
         return rtnList;
     }
+
+    private void deleteGame(){
+        List<FandbGame> list = ((MyApplication)getApplication()).getDaoSession().getFandbGameDao().
+                queryBuilder().where(FandbGameDao.Properties.PlayerId.eq(id)).list();
+
+        for(FandbGame data: list){
+            List<FandbImage> listImage = ((MyApplication)getApplication()).getDaoSession().getFandbImageDao().
+                    queryBuilder().where(FandbImageDao.Properties.GameId.eq(data.getId())).list();
+            for(FandbImage imageData: listImage){
+                ((MyApplication)getApplication()).getDaoSession().getFandbImageDao().deleteByKey(imageData.getId());
+            }
+            ((MyApplication)getApplication()).getDaoSession().getFandbGameDao().deleteByKey(data.getId());
+        }
+    }
+
+    private void deleteImage(Long gameId){
+        List<FandbImage> list = ((MyApplication)getApplication()).getDaoSession().getFandbImageDao().
+                queryBuilder().where(FandbImageDao.Properties.GameId.eq(gameId)).list();
+
+        for(FandbImage data: list){
+            ((MyApplication)getApplication()).getDaoSession().getFandbImageDao().deleteByKey(data.getId());
+        }
+    }
+
 }

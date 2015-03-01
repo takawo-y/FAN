@@ -22,6 +22,7 @@ public class FandbGame {
     private String startTime;
     private String endTime;
     private String opposition;
+    private String oppositionImagePath;
     private String result;
     private String resultScore;
     private String resultTime;
@@ -44,7 +45,7 @@ public class FandbGame {
         this.id = id;
     }
 
-    public FandbGame(long playerId, Long id, long gameType, String gameCategory, String gameInfo, String place, String weather, String temperature, java.util.Date gameDay, String startTime, String endTime, String opposition, String result, String resultScore, String resultTime, String comment) {
+    public FandbGame(long playerId, Long id, long gameType, String gameCategory, String gameInfo, String place, String weather, String temperature, java.util.Date gameDay, String startTime, String endTime, String opposition, String oppositionImagePath, String result, String resultScore, String resultTime, String comment) {
         this.playerId = playerId;
         this.id = id;
         this.gameType = gameType;
@@ -57,6 +58,7 @@ public class FandbGame {
         this.startTime = startTime;
         this.endTime = endTime;
         this.opposition = opposition;
+        this.oppositionImagePath = oppositionImagePath;
         this.result = result;
         this.resultScore = resultScore;
         this.resultTime = resultTime;
@@ -165,6 +167,14 @@ public class FandbGame {
 
     public void setOpposition(String opposition) {
         this.opposition = opposition;
+    }
+
+    public String getOppositionImagePath() {
+        return oppositionImagePath;
+    }
+
+    public void setOppositionImagePath(String oppositionImagePath) {
+        this.oppositionImagePath = oppositionImagePath;
     }
 
     public String getResult() {

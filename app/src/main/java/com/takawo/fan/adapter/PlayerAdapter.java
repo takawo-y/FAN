@@ -107,7 +107,6 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.ViewHolder
                 Picasso.with(context)
                         .load(R.drawable.no_image)
                         .transform(new BitmapTransformation())
-//                        .resize(250, 250)
                         .into(playerImage);
             }else{
                 Picasso.with(context)

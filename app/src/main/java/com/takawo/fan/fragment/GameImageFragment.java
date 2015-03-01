@@ -70,8 +70,8 @@ public class GameImageFragment extends Fragment{
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 FandbImage data = list.get(position);
                 new AlertDialog.Builder(getActivity())
-                        .setTitle("画像:備考")
-                        .setMessage(data.getComment())
+                        .setTitle("画像情報")
+                        .setMessage(data.getComment() + "\r\n" + data.getPath())
                         .setPositiveButton("OK", null)
                         .show();
             }

@@ -140,6 +140,9 @@ public class PlayerUpdateActivity extends ActionBarActivity {
         data = ((MyApplication)getApplication()).getDaoSession().getFandbPlayerDao().load(playerId);
         setData();  //初期表示
         setToolbar();  //ToolBar設定
+
+        inputPlayerColor.setVisibility(View.GONE);
+        inputPlayerFontColor.setVisibility(View.GONE);
     }
 
     private void setToolbar(){
@@ -193,10 +196,12 @@ public class PlayerUpdateActivity extends ActionBarActivity {
         if(data.getPlayerColor() != null && "".equals(data.getPlayerColor()) == false){
             inputPlayerColor.setBackgroundColor(new Integer(data.getPlayerColor()));
             inputPlayerColor.setText(data.getPlayerColor());
+            inputPlayerColor.setTextColor(new Integer(data.getPlayerColor()));
         }
         if(data.getPlayerFontColor() != null && "".equals(data.getPlayerFontColor()) == false){
             inputPlayerFontColor.setBackgroundColor(new Integer(data.getPlayerFontColor()));
             inputPlayerFontColor.setText(data.getPlayerFontColor());
+            inputPlayerFontColor.setTextColor(new Integer(data.getPlayerFontColor()));
         }
         setSpinnerIcon(data.getPlayerIconColor().intValue());
         inputGameEvent.setText(data.getGameEvent());
@@ -384,6 +389,7 @@ public class PlayerUpdateActivity extends ActionBarActivity {
                 final View textView0 = targetV;
                 textView0.setBackgroundColor(mTextColor);
                 ((TextView)textView0).setText(Integer.toString(mColor));
+                ((TextView)textView0).setTextColor(mColor);
             }
         });
         alert.show();

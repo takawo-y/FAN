@@ -49,6 +49,7 @@ task daoGenerator {
         game.addStringProperty("startTime");
         game.addStringProperty("endTime");
         game.addStringProperty("opposition");
+        game.addStringProperty("oppositionImagePath");
         game.addStringProperty("result");
         game.addStringProperty("resultScore");
         game.addStringProperty("resultTime");

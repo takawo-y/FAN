@@ -132,6 +132,7 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
 
         setToolbar();  //ToolBar設定
         setSpinnerIcon();
+
         sharePre = PreferenceManager.getDefaultSharedPreferences(this);
         sharePre.edit().clear().commit();
     }
@@ -217,8 +218,6 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
             cursor.close();
 
             Toast.makeText(this, picturePath, Toast.LENGTH_LONG).show();
-            //inputPlayerImage.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-            //Picasso.with(this).load(new File(picturePath)).transform(new BitmapTransformation()).into(inputPlayerImage);
             Picasso.with(this).load(new File(picturePath)).resize(200, 200).centerInside().into(inputPlayerImage);
             sharePre = PreferenceManager.getDefaultSharedPreferences(this);
             sharePre.edit().putString(SHARE_IMAGE_PATH_KEY, picturePath).commit();
@@ -343,6 +342,7 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
                 final View textView0 = targetV;
                 textView0.setBackgroundColor(mTextColor);
                 ((TextView)textView0).setText(Integer.toString(mColor));
+                ((TextView)textView0).setTextColor(mColor);
             }
         });
         alert.show();

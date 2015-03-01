@@ -11,17 +11,24 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+import com.takawo.fan.MyApplication;
 import com.takawo.fan.activity.GameUpdateActivity;
 import com.takawo.fan.db.DaoSession;
+import com.takawo.fan.db.FandbImage;
+import com.takawo.fan.db.FandbImageDao;
 import com.takawo.fan.db.data.DBHelper;
+import com.takawo.fan.util.BitmapTransformation;
 import com.takawo.fan.util.FanConst;
 import com.takawo.fan.R;
 import com.takawo.fan.db.FandbGame;
 import com.takawo.fan.util.FanUtil;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -84,7 +91,9 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder>{
                         .setPositiveButton("はい",
                                 new DialogInterface.OnClickListener(){
                                     public void onClick(DialogInterface dialog, int which){
-                                        Log.d("Delete Game", "ID:"+data.getId());
+                                        FandbImage imageEntity = new FandbImage();
+                                        imageEntity.setPlayerId(data.getPlayerId());
+                                        deleteImage(data.getId());
                                         (new DBHelper(context, null)).getDaoSession().getFandbGameDao().deleteByKey(data.getId());
                                         Intent intent = new Intent(context, context.getClass());
                                         intent.putExtra(FanConst.INTENT_PLAYER_ID, data.getPlayerId());
@@ -118,6 +127,7 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder>{
         Long playerId;
         Long id;
         TextView cardGameTitle;
+        ImageView oppositionImage;
         TextView opposition;
         TextView result;
         TextView resultScoreTime;
@@ -131,6 +141,7 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder>{
             v.setOnLongClickListener(this);
             cardGameTitle = ButterKnife.findById(v, R.id.cardGameTitle);
             opposition = ButterKnife.findById(v, R.id.gameOpposition);
+            oppositionImage = ButterKnife.findById(v, R.id.oppositionImg);
             result = ButterKnife.findById(v, R.id.gameResult);
             resultScoreTime = ButterKnife.findById(v, R.id.gameScoreTime);
         }
@@ -144,6 +155,19 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder>{
                     +" ("+FanUtil.getGameTypeLabel(data.getGameType())+")");
             cardGameTitle.setBackgroundColor(playeColor);
             cardGameTitle.setTextColor(fontColor);
+            if(null == data.getOppositionImagePath() || "".equals(data.getOppositionImagePath())){
+                Picasso.with(context)
+                        .load(R.drawable.no_image)
+                        .transform(new BitmapTransformation())
+                        .into(oppositionImage);
+            }else{
+                Picasso.with(context)
+                        .load(new File(data.getOppositionImagePath()))
+                        .transform(new BitmapTransformation())
+                        .resize(50, 50)
+                        .centerInside()
+                        .into(oppositionImage);
+            }
             opposition.setText("vs "+data.getOpposition());
             result.setText(data.getResult());
             if(data.getResultScore() != null || TextUtils.isEmpty(data.getResultScore()) == false){
@@ -165,4 +189,12 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder>{
         }
     }
 
+    private void deleteImage(Long gameId){
+        List<FandbImage> list = (new DBHelper(context, null)).getDaoSession().getFandbImageDao().
+                queryBuilder().where(FandbImageDao.Properties.GameId.eq(gameId)).list();
+
+        for(FandbImage data: list){
+            (new DBHelper(context, null)).getDaoSession().getFandbImageDao().deleteByKey(data.getId());
+        }
+    }
 }

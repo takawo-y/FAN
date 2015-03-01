@@ -5,7 +5,12 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -17,6 +22,7 @@ import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.takawo.fan.db.FandbPlayer;
@@ -44,6 +50,10 @@ import butterknife.OnClick;
 public class GameRegistrationActivity extends ActionBarActivity {
     private Long playerId;
     private FandbPlayer playerData;
+
+    private int RESULT_PICK_FILENAME = 1;
+    private SharedPreferences sharePre;
+    private final String SHARE_IMAGE_PATH_KEY = "imagePath";
 
     public GameRegistrationActivity() {
         super();
@@ -74,6 +84,8 @@ public class GameRegistrationActivity extends ActionBarActivity {
     TextView inputGameEndTime;
     @InjectView(R.id.inputGameOpposition)
     EditText inputGameOpposition;
+    @InjectView(R.id.inputGameOppositionImage)
+    ImageView inputGameOppositionImage;
     @InjectView(R.id.inputGameResult)
     EditText inputGameResult;
     @InjectView(R.id.inputRowResultScore)
@@ -165,6 +177,14 @@ public class GameRegistrationActivity extends ActionBarActivity {
         .show();
     }
 
+    @OnClick(R.id.inputGameOppositionImage)
+    void onClickImage(){
+        Intent i = new Intent(
+                Intent.ACTION_PICK,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(i, RESULT_PICK_FILENAME);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -182,6 +202,9 @@ public class GameRegistrationActivity extends ActionBarActivity {
             //タイム
             tableResultScore.setVisibility(View.GONE);
         }
+
+        sharePre = PreferenceManager.getDefaultSharedPreferences(this);
+        sharePre.edit().clear().commit();
     }
 
     /**
@@ -250,6 +273,8 @@ public class GameRegistrationActivity extends ActionBarActivity {
      * Game登録
      */
     private void registGame(){
+        sharePre = PreferenceManager.getDefaultSharedPreferences(this);
+        String path = sharePre.getString(SHARE_IMAGE_PATH_KEY, "");
         FandbGame game = new FandbGame(
                 playerId,
                 null,
@@ -263,6 +288,7 @@ public class GameRegistrationActivity extends ActionBarActivity {
                 inputGameStartTime.getText().toString(),
                 inputGameEndTime.getText().toString(),
                 inputGameOpposition.getText().toString(),
+                path,
                 inputGameResult.getText().toString(),
                 inputGameResultScore.getText().toString(),
                 inputGameResultTime.getText().toString(),
@@ -270,6 +296,38 @@ public class GameRegistrationActivity extends ActionBarActivity {
         );
         MyApplication app = (MyApplication)getApplication();
         app.getDaoSession().getFandbGameDao().insert(game);
+    }
+
+    /**
+     * 画像選択後
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RESULT_PICK_FILENAME
+                && resultCode == RESULT_OK
+                && null != data) {
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+            Cursor cursor = getContentResolver().query(
+                    selectedImage,
+                    filePathColumn, null, null, null);
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String picturePath = cursor.getString(columnIndex);
+            cursor.close();
+
+            Toast.makeText(this, picturePath, Toast.LENGTH_LONG).show();
+            Picasso.with(this).load(new File(picturePath)).resize(200, 200).centerInside().into(inputGameOppositionImage);
+            sharePre = PreferenceManager.getDefaultSharedPreferences(this);
+            sharePre.edit().putString(SHARE_IMAGE_PATH_KEY, picturePath).commit();
+        }
     }
 
 }
