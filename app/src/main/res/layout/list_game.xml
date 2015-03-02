@@ -20,8 +20,8 @@
             android:textColor="@color/grey_1000w"/>
         <ImageView
             android:id="@+id/oppositionImg"
-            android:layout_width="150dp"
-            android:layout_height="100dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:gravity="center_vertical"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
@@ -31,29 +31,29 @@
             android:id="@+id/gameOpposition"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="0.5"
             android:layout_marginRight="8dp"
             android:layout_marginLeft="8dp"
             android:textSize="20dp"
-            android:layout_toRightOf="@id/oppositionImg"/>
+            android:layout_toRightOf="@id/oppositionImg"
+            android:layout_alignTop="@id/oppositionImg"/>
         <TextView
             android:id="@+id/gameResult"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="0.3"
             android:layout_marginRight="8dp"
             android:layout_marginLeft="8dp"
             android:textSize="20dp"
-            android:layout_toRightOf="@id/gameResult"/>
+            android:layout_toRightOf="@id/oppositionImg"
+            android:layout_below="@id/gameOpposition"/>
         <TextView
             android:id="@+id/gameScoreTime"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="0.2"
             android:layout_marginRight="8dp"
             android:layout_marginLeft="8dp"
             android:textSize="20dp"
-            android:layout_toRightOf="@id/gameResult"/>
+            android:layout_toRightOf="@id/gameResult"
+            android:layout_alignTop="@id/gameResult"/>
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>

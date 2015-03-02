@@ -218,10 +218,12 @@ public class GameUpdateFragment extends Fragment {
         inputGameStartTime.setText(data.getStartTime());  //開始時間
         inputGameEndTime.setText(data.getEndTime());  //終了時間
         inputGameOpposition.setText(data.getOpposition());  //対戦相手
+        sharePre = PreferenceManager.getDefaultSharedPreferences(getActivity());
         if(data.getOppositionImagePath() == null || data.getOppositionImagePath().isEmpty()){
             Picasso.with(getActivity()).load(R.drawable.no_image).into(inputGameOppositionImage);
         }else{
             Picasso.with(getActivity()).load(new File(data.getOppositionImagePath())).into(inputGameOppositionImage);
+            sharePre.edit().putString(SHARE_IMAGE_PATH_KEY, data.getOppositionImagePath()).commit();
         }
         inputGameResult.setText(data.getResult());  //試合結果
         if(data.getResultScore() != null && data.getResultScore().isEmpty() == false){

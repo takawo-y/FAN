@@ -141,8 +141,8 @@ public class PlayerUpdateActivity extends ActionBarActivity {
         setData();  //初期表示
         setToolbar();  //ToolBar設定
 
-        inputPlayerColor.setVisibility(View.GONE);
-        inputPlayerFontColor.setVisibility(View.GONE);
+        sharePre = PreferenceManager.getDefaultSharedPreferences(this);
+        sharePre.edit().clear().commit();
     }
 
     private void setToolbar(){
@@ -187,10 +187,12 @@ public class PlayerUpdateActivity extends ActionBarActivity {
      * 初期表示
      */
     private void setData(){
+        sharePre = PreferenceManager.getDefaultSharedPreferences(this);
         if(data.getPlayerImagePath() == null || data.getPlayerImagePath().isEmpty()){
             Picasso.with(this).load(R.drawable.no_image).into(inputPlayerImage);
         }else{
             Picasso.with(this).load(new File(data.getPlayerImagePath())).into(inputPlayerImage);
+            sharePre.edit().putString(SHARE_IMAGE_PATH_KEY, data.getPlayerImagePath()).commit();
         }
         inputPlayerName.setText(data.getPlayerName());
         if(data.getPlayerColor() != null && "".equals(data.getPlayerColor()) == false){

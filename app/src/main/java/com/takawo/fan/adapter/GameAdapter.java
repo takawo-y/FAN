@@ -87,7 +87,7 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder>{
                 final FandbGame data = dataList.get(recyclerView.getChildPosition(v));
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setTitle("試合情報削除")
-                        .setMessage("試合情報を削除しますか？")
+                        .setMessage("試合情報を削除しますか？\r\n紐づく画像情報も削除されます。")
                         .setPositiveButton("はい",
                                 new DialogInterface.OnClickListener(){
                                     public void onClick(DialogInterface dialog, int which){
