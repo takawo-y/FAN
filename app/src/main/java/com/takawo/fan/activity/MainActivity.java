@@ -15,10 +15,17 @@ import android.widget.Toast;
 
 import com.takawo.fan.MyApplication;
 import com.takawo.fan.adapter.PlayerAdapter;
+import com.takawo.fan.db.FandbGame;
+import com.takawo.fan.db.FandbImage;
 import com.takawo.fan.util.MyItemDecoration;
 import com.takawo.fan.R;
 import com.takawo.fan.db.FandbPlayer;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -60,8 +67,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void setList(){
-        MyApplication app = (MyApplication)getApplication();
-        List<FandbPlayer> playerList = app.getDaoSession().getFandbPlayerDao().loadAll(); //Player検索
+        List<FandbPlayer> playerList = ((MyApplication)getApplication()).getDaoSession().getFandbPlayerDao().loadAll(); //Player検索
 
         recyclerViewPlayer.setHasFixedSize(true);
         recyclerViewPlayer.addItemDecoration(new MyItemDecoration(this));
@@ -83,10 +89,117 @@ public class MainActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
             case R.id.action_dl:
-                Toast.makeText(this, "Download", Toast.LENGTH_LONG).show();
+                downloadPlayer();
+                downloadGame();
+                downloadImage();
+                Toast.makeText(this, "Completed downloads All Data\r\n"+"/data/data/com.takawo.fan/files", Toast.LENGTH_SHORT).show();
                 return true;
         }
         return false;
     }
+
+    private void downloadPlayer(){
+        FileOutputStream fs = null;
+        BufferedWriter out = null;
+        List<FandbPlayer> playerList = ((MyApplication)getApplication()).getDaoSession().getFandbPlayerDao().loadAll();
+        try{
+            fs = this.openFileOutput("fandb_player.csv", 0);
+            out = new BufferedWriter(new OutputStreamWriter(fs));
+            for (FandbPlayer data: playerList){
+                out.write(data.getId()+","
+                        +data.getPlayerName()+","
+                        +data.getGameEvent()+","
+                        +data.getResultType()+","
+                        +data.getCategory()+","
+                        +data.getPlayerColor()+","
+                        +data.getPlayerFontColor()+","
+                        +data.getPlayerIconColor()+","
+                        +data.getPlayerImagePath()+","
+                        +data.getPlayerComment());
+            }
+            out.flush();
+        }catch (Exception e){
+            e.printStackTrace();
+            Toast.makeText(this, "Download Error\r\n"+e.getMessage(), Toast.LENGTH_LONG).show();
+        }finally {
+            if(out != null) {
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+    private void downloadGame(){
+        FileOutputStream fs = null;
+        BufferedWriter out = null;
+        List<FandbGame> gameList = ((MyApplication)getApplication()).getDaoSession().getFandbGameDao().loadAll();
+        try{
+            fs = this.openFileOutput("fandb_game.csv", 0);
+            out = new BufferedWriter(new OutputStreamWriter(fs));
+            for (FandbGame data: gameList){
+                out.write(data.getPlayerId()+","
+                        +data.getId()+","
+                        +data.getGameType()+","
+                        +data.getGameCategory()+","
+                        +data.getGameInfo()+","
+                        +data.getPlace()+","
+                        +data.getWeather()+","
+                        +data.getTemperature()+","
+                        +data.getGameDay()+","
+                        +data.getStartTime()+","
+                        +data.getEndTime()+","
+                        +data.getOpposition()+","
+                        +data.getOppositionImagePath()+","
+                        +data.getResult()+","
+                        +data.getResultScore()+","
+                        +data.getResultTime()+","
+                        +data.getComment());
+            }
+            out.flush();
+        }catch (Exception e){
+            e.printStackTrace();
+            Toast.makeText(this, "Download Error\r\n"+e.getMessage(), Toast.LENGTH_LONG).show();
+        }finally {
+            if(out != null) {
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+    private void downloadImage(){
+        FileOutputStream fs = null;
+        BufferedWriter out = null;
+        List<FandbImage> imageList = ((MyApplication)getApplication()).getDaoSession().getFandbImageDao().loadAll();
+        try{
+            fs = this.openFileOutput("fandb_image.csv", 0);
+            out = new BufferedWriter(new OutputStreamWriter(fs));
+            for (FandbImage data: imageList){
+                out.write(data.getPlayerId()+","
+                        +data.getGameId()+","+
+                        +data.getId()+","
+                        +data.getPath()+","
+                        +data.getTitle()+","
+                        +data.getComment());
+            }
+            out.flush();
+        }catch (Exception e){
+            e.printStackTrace();
+            Toast.makeText(this, "Download Error\r\n"+e.getMessage(), Toast.LENGTH_LONG).show();
+        }finally {
+            if(out != null) {
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
 
 }
