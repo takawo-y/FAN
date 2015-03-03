@@ -201,8 +201,6 @@ public class GameUpdateFragment extends Fragment {
             //タイム
             tableResultScore.setVisibility(View.GONE);
         }
-        sharePre = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        sharePre.edit().clear().commit();
 
         return view;
     }

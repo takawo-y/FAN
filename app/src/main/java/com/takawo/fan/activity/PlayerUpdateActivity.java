@@ -141,8 +141,6 @@ public class PlayerUpdateActivity extends ActionBarActivity {
         setData();  //初期表示
         setToolbar();  //ToolBar設定
 
-        sharePre = PreferenceManager.getDefaultSharedPreferences(this);
-        sharePre.edit().clear().commit();
     }
 
     private void setToolbar(){
