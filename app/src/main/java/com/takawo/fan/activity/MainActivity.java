@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -27,6 +28,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -201,5 +204,29 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
+    private volatile boolean mConfirmExit;
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if(event.getAction() == KeyEvent.ACTION_DOWN) {
+            if(event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+                if(!mConfirmExit) {
+                    Toast.makeText(MainActivity.this, "もう1度押すと終了します", Toast.LENGTH_SHORT).show();
+                    new Timer().schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            mConfirmExit = false;
+                        }
+                    }, 1000);
+                    mConfirmExit = true;
+                } else {
+                    finish();
+                }
+                return true;
+            }
+        }
+
+        return super.dispatchKeyEvent(event);
+    }
 
 }
