@@ -97,7 +97,7 @@ public class MainActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
             case R.id.action_dl:
-                String outDir = Environment.getExternalStorageDirectory().getPath()+"/data/fan/db/";
+                String outDir = Environment.getExternalStorageDirectory().getPath()+"/data/fan/dbExport/";
                 String outFile = "fandb.sqlite";
                 if(writeDBFile(outDir, outFile)){
                     Toast.makeText(this, "Completed download Data File.\r\n"+outDir+outFile, Toast.LENGTH_LONG).show();
