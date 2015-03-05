@@ -10,6 +10,12 @@ import android.widget.TimePicker;
 
 import com.takawo.fan.R;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
@@ -124,4 +130,31 @@ public class FanUtil {
         return new Integer(R.drawable.ic_arrow_back_white_24dp);
     }
 
+    static public String filecopy(String file_src,String file_dist) {
+        String err = "";
+        FileInputStream fis;
+        FileOutputStream fos;
+
+        File fi = new File(file_src);
+        File fo = new File(file_dist);
+        try {
+            fis=new FileInputStream(fi);
+            FileChannel chi = fis.getChannel();
+
+            fos=new FileOutputStream(fo);
+            FileChannel cho = fos.getChannel();
+
+            chi.transferTo(0, chi.size(), cho);
+            chi.close();
+            cho.close();
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+            err = "FileNotFoundException " + e.getMessage();
+        }catch (IOException e) {
+            e.printStackTrace();
+            err = "FileNotFoundException " + e.getMessage();
+        }
+        return err;
+    }
 }

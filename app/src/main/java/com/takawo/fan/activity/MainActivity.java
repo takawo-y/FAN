@@ -2,6 +2,7 @@ package com.takawo.fan.activity;
 
 import android.content.ClipData;
 import android.content.Intent;
+import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,14 +19,18 @@ import com.takawo.fan.MyApplication;
 import com.takawo.fan.adapter.PlayerAdapter;
 import com.takawo.fan.db.FandbGame;
 import com.takawo.fan.db.FandbImage;
+import com.takawo.fan.util.FanUtil;
 import com.takawo.fan.util.MyItemDecoration;
 import com.takawo.fan.R;
 import com.takawo.fan.db.FandbPlayer;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.List;
 import java.util.Timer;
@@ -92,116 +97,43 @@ public class MainActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
             case R.id.action_dl:
-                downloadPlayer();
-                downloadGame();
-                downloadImage();
-                Toast.makeText(this, "Completed downloads All Data\r\n"+"/data/data/com.takawo.fan/files", Toast.LENGTH_SHORT).show();
+                String outDir = Environment.getExternalStorageDirectory().getPath()+"/data/fan/db/";
+                String outFile = "fandb.sqlite";
+                if(writeDBFile(outDir, outFile)){
+                    Toast.makeText(this, "Completed download Data File.\r\n"+outDir+outFile, Toast.LENGTH_LONG).show();
+                }
                 return true;
         }
         return false;
     }
 
-    private void downloadPlayer(){
-        FileOutputStream fs = null;
-        BufferedWriter out = null;
-        List<FandbPlayer> playerList = ((MyApplication)getApplication()).getDaoSession().getFandbPlayerDao().loadAll();
-        try{
-            fs = this.openFileOutput("fandb_player.csv", 0);
-            out = new BufferedWriter(new OutputStreamWriter(fs));
-            for (FandbPlayer data: playerList){
-                out.write(data.getId()+","
-                        +data.getPlayerName()+","
-                        +data.getGameEvent()+","
-                        +data.getResultType()+","
-                        +data.getCategory()+","
-                        +data.getPlayerColor()+","
-                        +data.getPlayerFontColor()+","
-                        +data.getPlayerIconColor()+","
-                        +data.getPlayerImagePath()+","
-                        +data.getPlayerComment());
-            }
-            out.flush();
-        }catch (Exception e){
-            e.printStackTrace();
-            Toast.makeText(this, "Download Error\r\n"+e.getMessage(), Toast.LENGTH_LONG).show();
-        }finally {
-            if(out != null) {
-                try {
-                    out.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+    /**
+     * DBファイルコピー
+     *
+     * @return
+     */
+    private boolean writeDBFile(String outDirString, String outFile){
+
+        if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED) == false){
+            Toast.makeText(this, "Export Error:SDカードをマウントしてください", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        String dbFile = ((MyApplication)getApplication()).getDaoSession().getDatabase().getPath();
+        File outDir = new File(outDirString);
+        if(outDir.exists() == false){
+            if(outDir.mkdirs() == false){
+                Toast.makeText(this, "Export Error:ディレクトリ作成に失敗しました\r\n"+outDir.getPath(), Toast.LENGTH_LONG).show();
+                return false;
             }
         }
-    }
-    private void downloadGame(){
-        FileOutputStream fs = null;
-        BufferedWriter out = null;
-        List<FandbGame> gameList = ((MyApplication)getApplication()).getDaoSession().getFandbGameDao().loadAll();
-        try{
-            fs = this.openFileOutput("fandb_game.csv", 0);
-            out = new BufferedWriter(new OutputStreamWriter(fs));
-            for (FandbGame data: gameList){
-                out.write(data.getPlayerId()+","
-                        +data.getId()+","
-                        +data.getGameType()+","
-                        +data.getGameCategory()+","
-                        +data.getGameInfo()+","
-                        +data.getPlace()+","
-                        +data.getWeather()+","
-                        +data.getTemperature()+","
-                        +data.getGameDay()+","
-                        +data.getStartTime()+","
-                        +data.getEndTime()+","
-                        +data.getOpposition()+","
-                        +data.getOppositionImagePath()+","
-                        +data.getResult()+","
-                        +data.getResultScore()+","
-                        +data.getResultTime()+","
-                        +data.getComment());
-            }
-            out.flush();
-        }catch (Exception e){
-            e.printStackTrace();
-            Toast.makeText(this, "Download Error\r\n"+e.getMessage(), Toast.LENGTH_LONG).show();
-        }finally {
-            if(out != null) {
-                try {
-                    out.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+
+        String err = FanUtil.filecopy(dbFile, outDirString+outFile);
+        if(err.isEmpty() == false){
+            Toast.makeText(this, err, Toast.LENGTH_LONG).show();
+            return false;
         }
-    }
-    private void downloadImage(){
-        FileOutputStream fs = null;
-        BufferedWriter out = null;
-        List<FandbImage> imageList = ((MyApplication)getApplication()).getDaoSession().getFandbImageDao().loadAll();
-        try{
-            fs = this.openFileOutput("fandb_image.csv", 0);
-            out = new BufferedWriter(new OutputStreamWriter(fs));
-            for (FandbImage data: imageList){
-                out.write(data.getPlayerId()+","
-                        +data.getGameId()+","+
-                        +data.getId()+","
-                        +data.getPath()+","
-                        +data.getTitle()+","
-                        +data.getComment());
-            }
-            out.flush();
-        }catch (Exception e){
-            e.printStackTrace();
-            Toast.makeText(this, "Download Error\r\n"+e.getMessage(), Toast.LENGTH_LONG).show();
-        }finally {
-            if(out != null) {
-                try {
-                    out.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+        return true;
     }
 
     private volatile boolean mConfirmExit;
