@@ -1,37 +1,32 @@
 package com.takawo.fan.activity;
 
-import android.content.ClipData;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.CountDownTimer;
 import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.takawo.fan.MyApplication;
 import com.takawo.fan.adapter.PlayerAdapter;
-import com.takawo.fan.db.FandbGame;
-import com.takawo.fan.db.FandbImage;
+import com.takawo.fan.util.FanConst;
 import com.takawo.fan.util.FanUtil;
 import com.takawo.fan.util.MyItemDecoration;
 import com.takawo.fan.R;
 import com.takawo.fan.db.FandbPlayer;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -97,27 +92,52 @@ public class MainActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
             case R.id.action_dl:
+                //データエクスポート
                 String outDir = Environment.getExternalStorageDirectory().getPath()+"/data/fan/dbExport/";
                 String outFile = "fandb.sqlite";
-                if(writeDBFile(outDir, outFile)){
+                if(exportDBFile(outDir, outFile)){
                     Toast.makeText(this, "Completed download Data File.\r\n"+outDir+outFile, Toast.LENGTH_LONG).show();
                 }
                 return true;
+            case R.id.action_up:
+                //sqliteファイル取込
+                final String inDir = Environment.getExternalStorageDirectory().getPath()+"/data/fan/dbImport/";
+                final String inFile = "fandb.sqlite";
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                final Context context = this;
+                builder.setTitle("データの取込")
+                        .setMessage("下記DBファイルを取り込みますか。\r\n実行前に現在のデータをエクスポートしておいてください。\r\n"+
+                        inDir+inFile)
+                        .setPositiveButton("はい",
+                                new DialogInterface.OnClickListener(){
+                                    public void onClick(DialogInterface dialog, int which){
+                                        if(importDBFile(inDir, inFile)){
+                                            Toast.makeText(context, "Completed Import Data File.\r\n"+inDir+inFile, Toast.LENGTH_LONG).show();
+                                            Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                                            startActivity(intent);
+                                        }
+                                    }
+                                }
+                        )
+                        .setNegativeButton("いいえ",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                    }
+                                }
+                        )
+                        .show();
+
         }
         return false;
     }
 
     /**
-     * DBファイルコピー
+     * DBファイル出力
      *
      * @return
      */
-    private boolean writeDBFile(String outDirString, String outFile){
-
-        if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED) == false){
-            Toast.makeText(this, "Export Error:SDカードをマウントしてください", Toast.LENGTH_LONG).show();
-            return false;
-        }
+    private boolean exportDBFile(String outDirString, String outFile){
 
         String dbFile = ((MyApplication)getApplication()).getDaoSession().getDatabase().getPath();
         File outDir = new File(outDirString);
@@ -136,14 +156,28 @@ public class MainActivity extends ActionBarActivity {
         return true;
     }
 
-    private volatile boolean mConfirmExit;
+    private boolean importDBFile(String inDirString, String inFileString){
+        String dbFile = ((MyApplication)getApplication()).getDaoSession().getDatabase().getPath();
+        File inFile = new File(inDirString+inFileString);
+        if(inFile.exists() == false){
+            Toast.makeText(this, "Import Error:該当ファイルが存在しません\r\n"+inFile.getPath(), Toast.LENGTH_LONG).show();
+            return false;
+        }
+        String err = FanUtil.filecopy(inDirString+inFileString, dbFile);
+        if(err.isEmpty() == false){
+            Toast.makeText(this, err, Toast.LENGTH_LONG).show();
+            return false;
+        }
+        return true;
+    }
 
+    private volatile boolean mConfirmExit;
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         if(event.getAction() == KeyEvent.ACTION_DOWN) {
             if(event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
                 if(!mConfirmExit) {
-                    Toast.makeText(MainActivity.this, "もう1度押すと終了します", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "もう1度押すと、終了します。", Toast.LENGTH_SHORT).show();
                     new Timer().schedule(new TimerTask() {
                         @Override
                         public void run() {
@@ -152,7 +186,10 @@ public class MainActivity extends ActionBarActivity {
                     }, 1000);
                     mConfirmExit = true;
                 } else {
-                    finish();
+                    Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+                    homeIntent.addCategory(Intent.CATEGORY_HOME);
+                    homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    MainActivity.this.startActivity(homeIntent);
                 }
                 return true;
             }
@@ -160,5 +197,4 @@ public class MainActivity extends ActionBarActivity {
 
         return super.dispatchKeyEvent(event);
     }
-
 }

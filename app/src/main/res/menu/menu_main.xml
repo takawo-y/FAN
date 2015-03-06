@@ -8,4 +8,11 @@
         android:orderInCategory="100"
         app:showAsAction="ifRoom|withText"/>
 
+    <item
+        android:title="Upload All Data"
+        android:id="@+id/action_up"
+        android:icon="@drawable/ic_file_upload_white_24dp"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom|withText"/>
+
 </menu>
