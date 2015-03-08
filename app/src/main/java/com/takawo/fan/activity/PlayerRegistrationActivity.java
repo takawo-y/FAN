@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -206,16 +207,24 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
                 && resultCode == RESULT_OK
                 && null != data) {
             Uri selectedImage = data.getData();
-            String[] filePathColumn = { MediaStore.Images.Media.DATA };
 
-            Cursor cursor = getContentResolver().query(
-                    selectedImage,
-                    filePathColumn, null, null, null);
-            cursor.moveToFirst();
+            String picturePath = "";
+            if(selectedImage != null &&
+                    "content".equals(selectedImage.getScheme())){
+                String[] filePathColumn = { MediaStore.Images.Media.DATA };
 
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String picturePath = cursor.getString(columnIndex);
-            cursor.close();
+                Cursor cursor = getContentResolver().query(
+                        selectedImage,
+                        filePathColumn,
+                        null, null, null);
+                cursor.moveToFirst();
+
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                picturePath = cursor.getString(columnIndex);
+                cursor.close();
+            }else{
+                picturePath = selectedImage.getPath();
+            }
 
             Toast.makeText(this, picturePath, Toast.LENGTH_LONG).show();
             Picasso.with(this).load(new File(picturePath)).resize(200, 200).centerInside().into(inputPlayerImage);
