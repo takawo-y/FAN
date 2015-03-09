@@ -2,17 +2,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto" >
 
     <item
-        android:title="Download All Data"
+        android:title="Download Data"
         android:id="@+id/action_dl"
-        android:icon="@drawable/ic_get_app_white_24dp"
-        android:orderInCategory="100"
-        app:showAsAction="ifRoom|withText"/>
+        android:icon="@drawable/ic_get_app_white_24dp"/>
 
     <item
-        android:title="Upload All Data"
+        android:title="Upload Data"
         android:id="@+id/action_up"
-        android:icon="@drawable/ic_file_upload_white_24dp"
-        android:orderInCategory="100"
-        app:showAsAction="ifRoom|withText"/>
+        android:icon="@drawable/ic_file_upload_white_24dp"/>
 
 </menu>

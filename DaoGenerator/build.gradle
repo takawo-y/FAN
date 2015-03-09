@@ -5,7 +5,7 @@ import de.greenrobot.daogenerator.Property;
 import de.greenrobot.daogenerator.ToMany;
 
 // DBのバージョン
-def dbVersion = 3
+def dbVersion = 0.1
 // 出力先のパッケージ名
 def daoOutputPackage = "com.takawo.fan.db"
 // 出力先のディレクトリパス（generator実行前にcleanするのでソースは分けたほうがいい）

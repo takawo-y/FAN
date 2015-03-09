@@ -1,18 +1,29 @@
 package com.takawo.fan.fragment;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Point;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.text.Layout;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
+import com.squareup.picasso.Picasso;
 import com.takawo.fan.MyApplication;
 import com.takawo.fan.R;
 import com.takawo.fan.activity.GameImageRegistrationActivity;
@@ -24,6 +35,7 @@ import com.takawo.fan.db.data.DBHelper;
 import com.takawo.fan.util.FanConst;
 import com.takawo.fan.view.GridViewScrollable;
 
+import java.io.File;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -69,8 +81,14 @@ public class GameImageFragment extends Fragment{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 FandbImage data = list.get(position);
+
+                LinearLayout layput = new LinearLayout(getActivity());
+                ImageView imageView = new ImageView(getActivity());
+                Picasso.with(getActivity()).load(new File(data.getPath())).fit().into(imageView);
+
                 new AlertDialog.Builder(getActivity())
-                        .setTitle("画像情報")
+                        .setTitle(data.getTitle())
+                        .setView(imageView)
                         .setMessage(data.getComment() + "\r\n" + data.getPath())
                         .setPositiveButton("OK", null)
                         .show();
