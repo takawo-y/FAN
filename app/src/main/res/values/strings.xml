@@ -52,9 +52,11 @@
     <string name="game_image_title">タイトル:</string>
     <string name="game_image_comment">備考:</string>
 
-    <string name="hello">Hello World, ColorSelectDialog!</string>
     <string name="color_picker_viewer">Color Viewer(Click to select 16Color)</string>
     <string name="color_picker_red">RED</string>
     <string name="color_picker_green">GREEN</string>
     <string name="color_picker_blue">BLUE</string>
+
+    <string name="validation_compulsory_input">必須入力です</string>
+
 </resources>

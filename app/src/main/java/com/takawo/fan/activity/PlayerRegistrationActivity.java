@@ -42,6 +42,9 @@ import java.io.File;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import eu.inmite.android.lib.validations.form.FormValidator;
+import eu.inmite.android.lib.validations.form.annotations.NotEmpty;
+import eu.inmite.android.lib.validations.form.callback.SimpleErrorPopupCallback;
 
 /**
  * Created by Takawo on 2015/01/20.
@@ -68,6 +71,7 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
     @InjectView(R.id.inputPlayerImage)
     ImageView inputPlayerImage;
     @InjectView(R.id.inputPlayerName)
+    @NotEmpty(messageId = R.string.validation_compulsory_input)
     EditText inputPlayerName;
     @InjectView(R.id.inputPlayerColor)
     TextView inputPlayerColor;
@@ -130,12 +134,19 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_regist);
         ButterKnife.inject(this);
+        FormValidator.validate(this, new SimpleErrorPopupCallback(this));
 
         setToolbar();  //ToolBar設定
         setSpinnerIcon();
 
         sharePre = PreferenceManager.getDefaultSharedPreferences(this);
         sharePre.edit().clear().commit();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        FormValidator.stopLiveValidation(this);
     }
 
     private void setToolbar(){
