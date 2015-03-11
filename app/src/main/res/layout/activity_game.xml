@@ -35,17 +35,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <TextView
-            android:id="@+id/game_filter"
-            android:layout_width="0dp"
-            android:layout_weight="0.1"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_margin="8dp"
-            android:text="@string/game_list_view_filter"/>
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="0.3"
+            android:layout_weight="0.4"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
@@ -54,12 +46,25 @@
                 android:id="@+id/searchKeyDate_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="試合日"/>
-            <Spinner
-                android:id="@+id/searchKeyDate"
+                android:text="試合日"
+                android:textSize="14dp"/>
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@android:style/Widget.Holo.Light.Spinner"/>
+                android:orientation="horizontal">
+                <Spinner
+                    android:id="@+id/searchKeyDateYear"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content"
+                    style="@android:style/Widget.Holo.Light.Spinner"/>
+                <Spinner
+                    android:id="@+id/searchKeyDate"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content"
+                    style="@android:style/Widget.Holo.Light.Spinner"/>
+            </LinearLayout>
         </LinearLayout>
         <LinearLayout
             android:layout_width="0dp"
@@ -72,7 +77,8 @@
                 android:id="@+id/searchKeyCategory_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="カテゴリー"/>
+                android:text="カテゴリー"
+                android:textSize="14dp"/>
             <Spinner
                 android:id="@+id/searchKeyCategory"
                 android:layout_width="wrap_content"
@@ -91,6 +97,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="タイプ"
+                android:textSize="14dp"
                 android:layout_toRightOf="@+id/searchKeyCategory_title"
                 android:layout_alignTop="@+id/game_filter"/>
             <Spinner

@@ -69,6 +69,8 @@ public class GameActivity extends ActionBarActivity {
     @InjectView(R.id.list_game)
     RecyclerView recyclerViewGame;
 
+    @InjectView(R.id.searchKeyDateYear)
+    Spinner searchKeyDateYear;
     @InjectView(R.id.searchKeyDate)
     Spinner searchKeyDate;
     @InjectView(R.id.searchKeyCategory)
@@ -128,6 +130,7 @@ public class GameActivity extends ActionBarActivity {
 
         setToolbar();  //ToolBar設定
         setList();  //一覧取得
+        setSerachKeyDateYear();  //検索キー設定
         setSerachKeyDate();  //検索キー設定
         setSerachKeyCategory();  //検索キー設定
         setSerachKeyType();  //検索キー設定
@@ -192,6 +195,7 @@ public class GameActivity extends ActionBarActivity {
         recyclerViewGame.setAdapter(new GameAdapter(this, gameList, new Integer(playerData.getPlayerColor()), new Integer(playerData.getPlayerFontColor())));
     }
     private void setQueryList(){
+        String gameYear = searchKeyDateYear.getSelectedItem().toString();
         String gameDay = searchKeyDate.getSelectedItem().toString();
         String category = searchKeyCategory.getSelectedItem().toString();
         int type = ((KeyValuePair)searchKeyType.getSelectedItem()).getKey();
@@ -199,8 +203,13 @@ public class GameActivity extends ActionBarActivity {
         QueryBuilder qb = ((MyApplication)getApplication()).getDaoSession().getFandbGameDao().queryBuilder()
                 .where(FandbGameDao.Properties.PlayerId.eq(id));
 
+        if(FILTER_NOTHING.equals(gameYear) == false){
+            Date from = new Date(gameYear+"/01/01");
+            Date to = new Date(gameYear+"/12/31");
+            qb.where(FandbGameDao.Properties.GameDay.ge(from));
+            qb.where(FandbGameDao.Properties.GameDay.lt(to));
+        }
         if(FILTER_NOTHING.equals(gameDay) == false){
-            Log.d("ReSearchGame", "試合日：「"+gameDay+"」");
             Date from = new Date(gameDay+"/01");
             Calendar cal = Calendar.getInstance();
             cal.setTime(from);
@@ -227,6 +236,30 @@ public class GameActivity extends ActionBarActivity {
     /**
      * 検索キーセット
      */
+    private void setSerachKeyDateYear(){
+        ArrayAdapter<String> dateAdapter =
+                (new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, getGameDateYearGroup(gameList)));
+        dateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        searchKeyDateYear.setAdapter(dateAdapter);
+        searchKeyDateYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                //初回起動時の動作
+                if (searchKeyDateYear.isFocusable() == false) {
+                    searchKeyDateYear.setFocusable(true);
+                    return;
+                }
+                searchKeyDate.setEnabled(FILTER_NOTHING.equals(searchKeyDateYear.getSelectedItem()));  //年が"全てなら"年月は活性状態
+                setQueryList();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        searchKeyDateYear.setFocusable(false);
+    }
     private void setSerachKeyDate(){
         ArrayAdapter<String> dateAdapter =
                 (new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, getGameDateGroup(gameList)));
@@ -240,6 +273,7 @@ public class GameActivity extends ActionBarActivity {
                     searchKeyDate.setFocusable(true);
                     return;
                 }
+                searchKeyDateYear.setEnabled(FILTER_NOTHING.equals(searchKeyDate.getSelectedItem()));  //年月が"全てなら"年は活性状態
                 setQueryList();
             }
             @Override
@@ -307,6 +341,33 @@ public class GameActivity extends ActionBarActivity {
         }
     };
 
+    /**
+     * 試合日の集約(yyyy)
+     *
+     * @param result
+     * @return
+     */
+    private List<String> getGameDateYearGroup(List<FandbGame> result){
+        List<FandbGame> list = result;
+        HashSet<String> dateList = new HashSet<>();
+        for(FandbGame data: list){
+            SimpleDateFormat formatA = new SimpleDateFormat("yyyy/MM/dd");
+            String formatDate = formatA.format(data.getGameDay());
+            dateList.add(formatDate.substring(0,4));
+        }
+
+        List<String> rtnList = new ArrayList<>();
+        rtnList.add(FILTER_NOTHING);
+
+        List<String> tmpList = new ArrayList<>();
+        for(String value: dateList){
+            tmpList.add(value);
+        }
+        Collections.sort(tmpList);
+        rtnList.addAll(tmpList);
+
+        return rtnList;
+    }
     /**
      * 試合日の集約(yyyy/mm)
      *
