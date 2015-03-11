@@ -303,16 +303,24 @@ public class GameUpdateFragment extends Fragment {
                 && resultCode == getActivity().RESULT_OK
                 && null != data) {
             Uri selectedImage = data.getData();
-            String[] filePathColumn = { MediaStore.Images.Media.DATA };
 
-            Cursor cursor = getActivity().getContentResolver().query(
-                    selectedImage,
-                    filePathColumn, null, null, null);
-            cursor.moveToFirst();
+            String picturePath = "";
+            if(selectedImage != null &&
+                    "content".equals(selectedImage.getScheme())){
+                String[] filePathColumn = { MediaStore.Images.Media.DATA };
 
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String picturePath = cursor.getString(columnIndex);
-            cursor.close();
+                Cursor cursor = getActivity().getContentResolver().query(
+                        selectedImage,
+                        filePathColumn,
+                        null, null, null);
+                cursor.moveToFirst();
+
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                picturePath = cursor.getString(columnIndex);
+                cursor.close();
+            }else{
+                picturePath = selectedImage.getPath();
+            }
 
             Toast.makeText(getActivity(), picturePath, Toast.LENGTH_LONG).show();
             Picasso.with(getActivity()).load(new File(picturePath)).resize(200, 200).centerInside().into(inputGameOppositionImage);
