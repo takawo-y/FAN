@@ -2,10 +2,10 @@ package com.takawo.fan.activity;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -109,14 +109,18 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
     @OnClick(R.id.button_player_registration)
     void onClickRegist(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final Context context = this;
         builder.setTitle("Player登録")
         .setMessage("登録しますか？")
         .setPositiveButton("はい",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        registPlayer();
-                        Intent intent = new Intent(PlayerRegistrationActivity.this, MainActivity.class);
-                        startActivity(intent);
+                        final boolean isValid = FormValidator.validate((PlayerRegistrationActivity)context, new SimpleErrorPopupCallback(context));
+                        if(isValid){
+                            registPlayer();
+                            Intent intent = new Intent(PlayerRegistrationActivity.this, MainActivity.class);
+                            startActivity(intent);
+                        }
                     }
                 }
         )
@@ -141,12 +145,6 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
 
         sharePre = PreferenceManager.getDefaultSharedPreferences(this);
         sharePre.edit().clear().commit();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        FormValidator.stopLiveValidation(this);
     }
 
     private void setToolbar(){

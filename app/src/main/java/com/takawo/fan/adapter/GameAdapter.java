@@ -31,6 +31,7 @@ import com.takawo.fan.util.FanUtil;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.ButterKnife;
 
@@ -149,7 +150,7 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder>{
         public void setItem(FandbGame data, int playeColor, int fontColor){
             playerId = data.getPlayerId();
             id = data.getId();
-            SimpleDateFormat formatA = new SimpleDateFormat("yyyy/MM/dd");
+            SimpleDateFormat formatA = new SimpleDateFormat("yyyy/MM/dd(E)", Locale.JAPAN);
             String formatDate = formatA.format(data.getGameDay());
             cardGameTitle.setText(formatDate+" "+data.getGameCategory()+" "+data.getGameInfo()
                     +" ("+FanUtil.getGameTypeLabel(data.getGameType())+")");

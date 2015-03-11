@@ -86,7 +86,7 @@
                         android:layout_height="50dp"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:text="クリックして選択"
+                        android:hint="クリックして選択"
                         android:background="@color/grey_1000w"/>
                 </FrameLayout>
             </TableRow>
@@ -110,7 +110,7 @@
                         android:layout_height="50dp"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:text="クリックして選択"
+                        android:hint="クリックして選択"
                         android:background="@color/grey_1000w"/>
                 </FrameLayout>
             </TableRow>

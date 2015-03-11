@@ -77,6 +77,8 @@ public class GameUpdateFragment extends Fragment {
     EditText inputGameTemperature;
     @InjectView(R.id.inputGameDate)
     TextView inputGameDate;
+    @InjectView(R.id.gameDateWeek)
+    TextView gameDateWeek;
     @InjectView(R.id.inputGameStartTime)
     TextView inputGameStartTime;
     @InjectView(R.id.inputGameEndTime)
@@ -110,7 +112,9 @@ public class GameUpdateFragment extends Fragment {
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        inputGameDate.setText(year + "/" + (monthOfYear + 1) + "/" + dayOfMonth);
+                        String dateString = year + "/" + (monthOfYear + 1) + "/" + dayOfMonth;
+                        inputGameDate.setText(dateString);
+                        gameDateWeek.setText("("+new SimpleDateFormat("E").format(new Date(dateString))+")");
                     }
                 },
                 year, month, day);
@@ -213,6 +217,7 @@ public class GameUpdateFragment extends Fragment {
         inputGameCategory.setText(data.getGameCategory());  //Gameカテゴリ
         inputGameInfo.setText(data.getGameInfo());  //Gameインフォメーション
         inputGameDate.setText(new SimpleDateFormat("yyyy/MM/dd").format(data.getGameDay()));  //試合日
+        gameDateWeek.setText("("+new SimpleDateFormat("E").format(data.getGameDay())+")");  //曜日
         inputGameStartTime.setText(data.getStartTime());  //開始時間
         inputGameEndTime.setText(data.getEndTime());  //終了時間
         inputGameOpposition.setText(data.getOpposition());  //対戦相手

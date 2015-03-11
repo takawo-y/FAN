@@ -17,11 +17,13 @@ public class FanMaster {
      */
     static public List<KeyValuePair> getGameType(){
         LinkedList<KeyValuePair> list = new LinkedList<>();
-        list.add(new KeyValuePair(0, "生観戦"));
+        list.add(new KeyValuePair(0, "現地観戦"));
         list.add(new KeyValuePair(1, "TV生観戦"));
         list.add(new KeyValuePair(2, "TV録画観戦"));
-        list.add(new KeyValuePair(3, "出場"));
-        list.add(new KeyValuePair(4, "その他"));
+        list.add(new KeyValuePair(3, "ネット速報"));
+        list.add(new KeyValuePair(4, "結果のみ"));
+        list.add(new KeyValuePair(11, "出場"));
+        list.add(new KeyValuePair(99, "その他"));
         return list;
     }
 
@@ -33,13 +35,7 @@ public class FanMaster {
     static public List<KeyValuePair> getGameTypeForSearch(){
         LinkedList<KeyValuePair> list = new LinkedList<>();
         list.add(new KeyValuePair(99, "すべて"));
-        list.add(new KeyValuePair(0, "現地観戦"));
-        list.add(new KeyValuePair(1, "TV生観戦"));
-        list.add(new KeyValuePair(2, "TV録画観戦"));
-        list.add(new KeyValuePair(3, "ネット速報"));
-        list.add(new KeyValuePair(4, "結果のみ"));
-        list.add(new KeyValuePair(11, "出場"));
-        list.add(new KeyValuePair(99, "その他"));
+        list.addAll(getGameType());
         return list;
     }
 

@@ -95,9 +95,13 @@ public class GameUpdateActivity extends ActionBarActivity {
                     }
             }
         }
-        toolbar.setBackgroundColor(new Integer(playerData.getPlayerColor()));
-        toolbar.setTitleTextColor(new Integer(playerData.getPlayerFontColor()));
-        toolbar.setSubtitleTextColor(new Integer(playerData.getPlayerFontColor()));
+        if(playerData.getPlayerColor().isEmpty() == false && "".equals(playerData.getPlayerColor()) == false){
+            toolbar.setBackgroundColor(new Integer(playerData.getPlayerColor()));
+        }
+        if(playerData.getPlayerFontColor().isEmpty() == false && "".equals(playerData.getPlayerFontColor()) == false){
+            toolbar.setTitleTextColor(new Integer(playerData.getPlayerFontColor()));
+            toolbar.setSubtitleTextColor(new Integer(playerData.getPlayerFontColor()));
+        }
         toolbar.setTitle(playerData.getPlayerName());
         toolbar.setSubtitle(R.string.game_update_view_name);
         setSupportActionBar(toolbar);

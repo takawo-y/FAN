@@ -68,14 +68,25 @@
                     android:layout_weight="0.4"
                     android:textSize="18sp"
                     android:text="@string/game_registration_date"/>
-                <TextView
-                    android:id="@+id/inputGameDate"
-                    android:layout_width="0dp"
+                <LinearLayout
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.6"
-                    android:textSize="18sp"
-                    android:hint="クリックして設定"
-                    />
+                    android:layout_width="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/inputGameDate"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.8"
+                        android:textSize="18sp"
+                        android:hint="クリックして設定"
+                        />
+                    <TextView
+                        android:id="@+id/gameDateWeek"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.2"
+                        android:textSize="18sp"/>
+                </LinearLayout>
             </TableRow>
             <TableRow>
                 <TextView

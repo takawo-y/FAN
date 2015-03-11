@@ -16,6 +16,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
@@ -35,6 +36,18 @@ public class FanUtil {
     static public String getTimeString(TimePicker time){
         if(time == null) return null;
         return time.getCurrentHour()+":"+time.getCurrentMinute();
+    }
+
+    /**
+     * 日付変換
+     *
+     * @param date
+     * @param format yyyy/MM/ddなど
+     * @return
+     */
+    static public String getDateString(Date date, String format){
+        SimpleDateFormat formatA = new SimpleDateFormat(format);
+        return formatA.format(date);
     }
 
     /**

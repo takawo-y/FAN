@@ -159,9 +159,13 @@ public class GameActivity extends ActionBarActivity {
                     }
             }
         }
-        toolbar.setBackgroundColor(new Integer(playerData.getPlayerColor()));
-        toolbar.setTitleTextColor(new Integer(playerData.getPlayerFontColor()));
-        toolbar.setSubtitleTextColor(new Integer(playerData.getPlayerFontColor()));
+        if(playerData.getPlayerColor().isEmpty() == false && "".equals(playerData.getPlayerColor()) == false){
+            toolbar.setBackgroundColor(new Integer(playerData.getPlayerColor()));
+        }
+        if(playerData.getPlayerFontColor().isEmpty() == false && "".equals(playerData.getPlayerFontColor()) == false){
+            toolbar.setTitleTextColor(new Integer(playerData.getPlayerFontColor()));
+            toolbar.setSubtitleTextColor(new Integer(playerData.getPlayerFontColor()));
+        }
         toolbar.setTitle(playerData.getPlayerName());
         toolbar.setSubtitle(R.string.game_list_view_name);
         button_player_update.setImageResource(FanUtil.getPlayerIconUpdate(playerData.getPlayerIconColor().intValue()));
@@ -192,7 +196,15 @@ public class GameActivity extends ActionBarActivity {
 
         layoutManagerGame = new LinearLayoutManager(this);
         recyclerViewGame.setLayoutManager(layoutManagerGame);
-        recyclerViewGame.setAdapter(new GameAdapter(this, gameList, new Integer(playerData.getPlayerColor()), new Integer(playerData.getPlayerFontColor())));
+        int playerColor = -1;
+        int playerFontColor = -1;
+        if("".equals(playerData.getPlayerColor()) == false){
+            playerColor = Integer.parseInt(playerData.getPlayerColor());
+        }
+        if("".equals(playerData.getPlayerFontColor()) == false){
+            playerFontColor = Integer.parseInt(playerData.getPlayerFontColor());
+        }
+        recyclerViewGame.setAdapter(new GameAdapter(this, gameList, playerColor, playerFontColor));
     }
     private void setQueryList(){
         String gameYear = searchKeyDateYear.getSelectedItem().toString();
@@ -363,7 +375,7 @@ public class GameActivity extends ActionBarActivity {
         for(String value: dateList){
             tmpList.add(value);
         }
-        Collections.sort(tmpList);
+        Collections.reverse(tmpList);
         rtnList.addAll(tmpList);
 
         return rtnList;
@@ -390,7 +402,7 @@ public class GameActivity extends ActionBarActivity {
         for(String value: dateList){
             tmpList.add(value);
         }
-        Collections.sort(tmpList);
+        Collections.reverse(tmpList);
         rtnList.addAll(tmpList);
 
         return rtnList;

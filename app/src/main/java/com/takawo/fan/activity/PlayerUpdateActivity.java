@@ -2,6 +2,7 @@ package com.takawo.fan.activity;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -41,6 +42,9 @@ import java.io.File;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import eu.inmite.android.lib.validations.form.FormValidator;
+import eu.inmite.android.lib.validations.form.annotations.NotEmpty;
+import eu.inmite.android.lib.validations.form.callback.SimpleErrorPopupCallback;
 
 /**
  * Created by Takawo on 2015/02/11.
@@ -71,6 +75,7 @@ public class PlayerUpdateActivity extends ActionBarActivity {
     @InjectView(R.id.inputPlayerImage)
     ImageView inputPlayerImage;
     @InjectView(R.id.inputPlayerName)
+    @NotEmpty(messageId = R.string.validation_compulsory_input)
     EditText inputPlayerName;
     @InjectView(R.id.inputPlayerColor)
     TextView inputPlayerColor;
@@ -108,16 +113,20 @@ public class PlayerUpdateActivity extends ActionBarActivity {
     @OnClick(R.id.button_player_update)
     void onClickRegist(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final Context context = this;
         builder.setTitle("Player更新")
                 .setMessage("更新しますか？")
                 .setPositiveButton("はい",
                         new DialogInterface.OnClickListener(){
                             public void onClick(DialogInterface dialog, int which){
-                                updatePlayer();
-                                Intent intent = new Intent(PlayerUpdateActivity.this, PlayerUpdateActivity.class);
-                                intent.putExtra(FanConst.INTENT_PLAYER_ID, playerId);
-                                intent.putExtra(FanConst.INTENT_GAME_ID, gameId);
-                                startActivity(intent);
+                                final boolean isValid = FormValidator.validate((PlayerUpdateActivity) context, new SimpleErrorPopupCallback(context));
+                                if(isValid){
+                                    updatePlayer();
+                                    Intent intent = new Intent(PlayerUpdateActivity.this, PlayerUpdateActivity.class);
+                                    intent.putExtra(FanConst.INTENT_PLAYER_ID, playerId);
+                                    intent.putExtra(FanConst.INTENT_GAME_ID, gameId);
+                                    startActivity(intent);
+                                }
                             }
                         }
                 )
@@ -134,6 +143,7 @@ public class PlayerUpdateActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_update);
         ButterKnife.inject(this);
+        FormValidator.validate(this, new SimpleErrorPopupCallback(this));
 
         playerId = getIntent().getLongExtra(FanConst.INTENT_PLAYER_ID, 0);
         gameId = getIntent().getLongExtra(FanConst.INTENT_GAME_ID, 0);
@@ -144,9 +154,14 @@ public class PlayerUpdateActivity extends ActionBarActivity {
     }
 
     private void setToolbar(){
-        toolbar.setBackgroundColor(new Integer(data.getPlayerColor()));
         toolbar.setTitle("Player 更新");
-        toolbar.setTitleTextColor(new Integer(data.getPlayerFontColor()));
+        if(data.getPlayerColor().isEmpty() == false && "".equals(data.getPlayerColor()) == false){
+            toolbar.setBackgroundColor(new Integer(data.getPlayerColor()));
+        }
+        if(data.getPlayerFontColor().isEmpty() == false && "".equals(data.getPlayerFontColor()) == false){
+            toolbar.setTitleTextColor(new Integer(data.getPlayerFontColor()));
+            toolbar.setSubtitleTextColor(new Integer(data.getPlayerFontColor()));
+        }
         button_player_update.setImageResource(FanUtil.getPlayerIconDone(data.getPlayerIconColor().intValue()));
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(FanUtil.getPlayerIconBack(data.getPlayerIconColor().intValue()));

@@ -3,6 +3,7 @@ package com.takawo.fan.activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -43,6 +44,9 @@ import java.util.Date;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import eu.inmite.android.lib.validations.form.FormValidator;
+import eu.inmite.android.lib.validations.form.annotations.NotEmpty;
+import eu.inmite.android.lib.validations.form.callback.SimpleErrorPopupCallback;
 
 /**
  * Created by Takawo on 2015/01/20.
@@ -157,6 +161,7 @@ public class GameRegistrationActivity extends ActionBarActivity {
     @OnClick(R.id.button_game_registration)
     void onClickRegist(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final Context context = this;
         builder.setTitle("試合情報登録")
         .setMessage("登録しますか？")
         .setPositiveButton("はい",
@@ -194,6 +199,7 @@ public class GameRegistrationActivity extends ActionBarActivity {
         playerData = ((MyApplication)getApplication()).getDaoSession().getFandbPlayerDao().load(playerId);
 
         setToolbar();  //ToolBar設定
+        inputGameDate.setText(FanUtil.getDateString(new Date(), "yyyy/MM/dd"));
         setSpinnerGameType();
         if(playerData.getResultType()== 0){
             //スコア
@@ -229,9 +235,13 @@ public class GameRegistrationActivity extends ActionBarActivity {
                     }
             }
         }
-        toolbar.setBackgroundColor(new Integer(playerData.getPlayerColor()));
-        toolbar.setTitleTextColor(new Integer(playerData.getPlayerFontColor()));
-        toolbar.setSubtitleTextColor(new Integer(playerData.getPlayerFontColor()));
+        if(playerData.getPlayerColor().isEmpty() == false && "".equals(playerData.getPlayerColor()) == false){
+            toolbar.setBackgroundColor(new Integer(playerData.getPlayerColor()));
+        }
+        if(playerData.getPlayerFontColor().isEmpty() == false && "".equals(playerData.getPlayerFontColor()) == false){
+            toolbar.setTitleTextColor(new Integer(playerData.getPlayerFontColor()));
+            toolbar.setSubtitleTextColor(new Integer(playerData.getPlayerFontColor()));
+        }
         toolbar.setTitle(playerData.getPlayerName());
         toolbar.setSubtitle(R.string.game_registration_view_name);
         button_game_registration.setImageResource(FanUtil.getPlayerIconDone(playerData.getPlayerIconColor().intValue()));
