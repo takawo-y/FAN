@@ -3,8 +3,10 @@ package com.takawo.fan.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -60,6 +62,12 @@ public class GameActivity extends ActionBarActivity {
     private FandbPlayer playerData;
     private List<FandbGame> gameList;
     private RecyclerView.LayoutManager layoutManagerGame;
+
+    private SharedPreferences sharePre;
+    private final String SHARE_GAME_SEARCH_KEY_YEAR = "shareGameSearchKeyYear";
+    private final String SHARE_GAME_SEARCH_KEY_YEARMONTH = "shareGameSearchKeyYearMonth";
+    private final String SHARE_GAME_SEARCH_KEY_CATEGORY = "shareGameSearchKeyCategory";
+    private final String SHARE_GAME_SEARCH_KEY_TYPE = "shareGameSearchKeyType";
 
     private final String FILTER_NOTHING = "すべて";
 
@@ -128,6 +136,8 @@ public class GameActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         ButterKnife.inject(this);
+        sharePre = PreferenceManager.getDefaultSharedPreferences(this);
+
         Intent intent = getIntent();
         id = intent.getLongExtra(FanConst.INTENT_PLAYER_ID, 0);
         playerData = ((MyApplication)getApplication()).getDaoSession().getFandbPlayerDao().load(id);
@@ -240,12 +250,14 @@ public class GameActivity extends ActionBarActivity {
                 .where(FandbGameDao.Properties.PlayerId.eq(id));
 
         if(FILTER_NOTHING.equals(gameYear) == false){
+            sharePre.edit().putString(SHARE_GAME_SEARCH_KEY_YEAR, gameYear).commit();
             Date from = new Date(gameYear+"/01/01");
             Date to = new Date(gameYear+"/12/31");
             qb.where(FandbGameDao.Properties.GameDay.ge(from));
             qb.where(FandbGameDao.Properties.GameDay.lt(to));
         }
         if(FILTER_NOTHING.equals(gameDay) == false){
+            sharePre.edit().putString(SHARE_GAME_SEARCH_KEY_YEARMONTH, gameDay).commit();
             Date from = new Date(gameDay+"/01");
             Calendar cal = Calendar.getInstance();
             cal.setTime(from);
@@ -255,9 +267,11 @@ public class GameActivity extends ActionBarActivity {
             qb.where(FandbGameDao.Properties.GameDay.lt(to));
         }
         if(FILTER_NOTHING.equals(category) == false){
+            sharePre.edit().putString(SHARE_GAME_SEARCH_KEY_CATEGORY, category).commit();
             qb.where(FandbGameDao.Properties.GameCategory.eq(category));
         }
         if(type != 99){
+            sharePre.edit().putInt(SHARE_GAME_SEARCH_KEY_TYPE, type).commit();
             qb.where(FandbGameDao.Properties.GameType.eq(type));
         }
         List<FandbGame> list = qb.orderDesc(FandbGameDao.Properties.GameDay).list();
