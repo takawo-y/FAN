@@ -177,7 +177,9 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder>{
                         .centerInside()
                         .into(oppositionImage);
             }
-            if(imagecountMap.get(data.getId()) != null){
+            if(imagecountMap.get(data.getId()) == null){
+                imageCount.setImageDrawable(null);
+            }else{
                 Picasso.with(context).load(Integer.parseInt(FanUtil.getImageCount(imagecountMap.get(data.getId())))).into(imageCount);
             }
             opposition.setText("vs "+data.getOpposition());
