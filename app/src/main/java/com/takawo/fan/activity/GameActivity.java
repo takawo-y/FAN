@@ -3,6 +3,7 @@ package com.takawo.fan.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -39,8 +40,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -52,6 +55,7 @@ import de.greenrobot.dao.query.QueryBuilder;
  */
 public class GameActivity extends ActionBarActivity {
 
+    public static final String SQL_IMAGE_GROUPBY_GAME = "Select GAME_ID, count(*) AS cnt From FANDB_IMAGE Where PLAYER_ID = ? Group BY GAME_ID Order By GAME_ID";
     private Long id;
     private FandbPlayer playerData;
     private List<FandbGame> gameList;
@@ -188,6 +192,7 @@ public class GameActivity extends ActionBarActivity {
      * Listセット
      */
     private void setList(){
+
         gameList = ((MyApplication)getApplication()).getDaoSession().getFandbGameDao().queryBuilder()
                 .where(FandbGameDao.Properties.PlayerId.eq(id)).orderDesc(FandbGameDao.Properties.GameDay).list();
 
@@ -204,7 +209,26 @@ public class GameActivity extends ActionBarActivity {
         if("".equals(playerData.getPlayerFontColor()) == false){
             playerFontColor = Integer.parseInt(playerData.getPlayerFontColor());
         }
-        recyclerViewGame.setAdapter(new GameAdapter(this, gameList, playerColor, playerFontColor));
+        recyclerViewGame.setAdapter(new GameAdapter(this, gameList, playerColor, playerFontColor, getGameGroupByList()));
+    }
+
+    /**
+     * GameIdでImageテーブルの集約検索
+     *
+     * @return
+     */
+    private Map<Long, Integer> getGameGroupByList(){
+        Cursor imageList = ((MyApplication)getApplication()).getDaoSession().getDatabase()
+                .rawQuery(SQL_IMAGE_GROUPBY_GAME, new String[]{playerData.getId().toString()});
+        Map<Long, Integer> map = new HashMap<>();
+        boolean isExists = imageList.moveToFirst();
+        while (isExists){
+            map.put(new Long(imageList.getInt(0)), imageList.getInt(1));
+            isExists = imageList.moveToNext();
+        }
+        imageList.close();
+
+        return map;
     }
     private void setQueryList(){
         String gameYear = searchKeyDateYear.getSelectedItem().toString();
@@ -242,7 +266,7 @@ public class GameActivity extends ActionBarActivity {
 
         layoutManagerGame = new LinearLayoutManager(this);
         recyclerViewGame.setLayoutManager(layoutManagerGame);
-        recyclerViewGame.setAdapter(new GameAdapter(this, list, new Integer(playerData.getPlayerColor()), new Integer(playerData.getPlayerFontColor())));
+        recyclerViewGame.setAdapter(new GameAdapter(this, list, new Integer(playerData.getPlayerColor()), new Integer(playerData.getPlayerFontColor()), getGameGroupByList()));
     }
 
     /**
@@ -375,6 +399,7 @@ public class GameActivity extends ActionBarActivity {
         for(String value: dateList){
             tmpList.add(value);
         }
+        Collections.sort(tmpList);
         Collections.reverse(tmpList);
         rtnList.addAll(tmpList);
 
@@ -402,6 +427,7 @@ public class GameActivity extends ActionBarActivity {
         for(String value: dateList){
             tmpList.add(value);
         }
+        Collections.sort(tmpList);
         Collections.reverse(tmpList);
         rtnList.addAll(tmpList);
 

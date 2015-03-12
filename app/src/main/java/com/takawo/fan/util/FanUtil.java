@@ -170,4 +170,31 @@ public class FanUtil {
         }
         return err;
     }
+
+    static public String getImageCount(int count){
+        switch (count){
+            case 0:
+                return null;
+            case 1:
+                return Integer.toString(R.drawable.ic_filter_1_grey600_18dp);
+            case 2:
+                return Integer.toString(R.drawable.ic_filter_2_grey600_18dp);
+            case 3:
+                return Integer.toString(R.drawable.ic_filter_3_grey600_18dp);
+            case 4:
+                return Integer.toString(R.drawable.ic_filter_4_grey600_18dp);
+            case 5:
+                return Integer.toString(R.drawable.ic_filter_5_grey600_18dp);
+            case 6:
+                return Integer.toString(R.drawable.ic_filter_6_grey600_18dp);
+            case 7:
+                return Integer.toString(R.drawable.ic_filter_7_grey600_18dp);
+            case 8:
+                return Integer.toString(R.drawable.ic_filter_8_grey600_18dp);
+            case 9:
+                return Integer.toString(R.drawable.ic_filter_9_grey600_18dp);
+            default:
+                return Integer.toString(R.drawable.ic_filter_9_plus_grey600_18dp);
+        }
+    }
 }

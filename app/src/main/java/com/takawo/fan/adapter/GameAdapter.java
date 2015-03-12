@@ -32,6 +32,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 
@@ -46,20 +47,23 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder>{
     private int playerColor;
     private int playerFontColor;
     private Context context;
+    private Map<Long, Integer> imageCountMap;
 
-    public GameAdapter(Context context, List<FandbGame> dataList, int playerColor, int playerFontColor){
+    public GameAdapter(Context context, List<FandbGame> dataList, int playerColor, int playerFontColor,
+                       Map<Long, Integer> imageCountMap){
         super();
         this.context = context;
         inf = LayoutInflater.from(context);
         this.dataList = dataList;
         this.playerColor = playerColor;
         this.playerFontColor = playerFontColor;
+        this.imageCountMap = imageCountMap;
     }
 
     @Override
     public GameAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view = inf.inflate(R.layout.list_game, null);
-        ViewHolder viewHolder = new ViewHolder(context, view);
+        ViewHolder viewHolder = new ViewHolder(context, view, imageCountMap);
         return viewHolder;
     }
 
@@ -124,6 +128,7 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder>{
     implements View.OnClickListener, View.OnLongClickListener{
         Context context;
         CardView linearLayout;
+        Map<Long, Integer> imagecountMap;
 
         Long playerId;
         Long id;
@@ -132,10 +137,12 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder>{
         TextView opposition;
         TextView result;
         TextView resultScoreTime;
+        ImageView imageCount;
 
-        public ViewHolder(Context context, View v) {
+        public ViewHolder(Context context, View v, Map<Long, Integer> imageCountMap) {
             super(v);
             this.context = context;
+            this.imagecountMap = imageCountMap;
             linearLayout = (CardView)v.findViewById(R.id.lily_game);
 
             v.setOnClickListener(this);
@@ -145,6 +152,7 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder>{
             oppositionImage = ButterKnife.findById(v, R.id.oppositionImg);
             result = ButterKnife.findById(v, R.id.gameResult);
             resultScoreTime = ButterKnife.findById(v, R.id.gameScoreTime);
+            imageCount = ButterKnife.findById(v, R.id.imageCount);
         }
 
         public void setItem(FandbGame data, int playeColor, int fontColor){
@@ -152,8 +160,8 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder>{
             id = data.getId();
             SimpleDateFormat formatA = new SimpleDateFormat("yyyy/MM/dd(E)", Locale.JAPAN);
             String formatDate = formatA.format(data.getGameDay());
-            cardGameTitle.setText(formatDate+" "+data.getGameCategory()+" "+data.getGameInfo()
-                    +" ("+FanUtil.getGameTypeLabel(data.getGameType())+")");
+            cardGameTitle.setText(formatDate + " " + data.getGameCategory() + " " + data.getGameInfo()
+                    + " (" + FanUtil.getGameTypeLabel(data.getGameType()) + ")");
             cardGameTitle.setBackgroundColor(playeColor);
             cardGameTitle.setTextColor(fontColor);
             if(null == data.getOppositionImagePath() || "".equals(data.getOppositionImagePath())){
@@ -168,6 +176,9 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder>{
                         .resize(50, 50)
                         .centerInside()
                         .into(oppositionImage);
+            }
+            if(imagecountMap.get(data.getId()) != null){
+                Picasso.with(context).load(Integer.parseInt(FanUtil.getImageCount(imagecountMap.get(data.getId())))).into(imageCount);
             }
             opposition.setText("vs "+data.getOpposition());
             result.setText(data.getResult());

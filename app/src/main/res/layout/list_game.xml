@@ -27,6 +27,14 @@
             android:layout_marginBottom="8dp"
             android:scaleType="fitCenter"
             android:layout_below="@id/cardGameTitle"/>
+        <ImageView
+            android:id="@+id/imageCount"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@id/oppositionImg"
+            android:layout_alignBottom="@id/oppositionImg"/>
         <TextView
             android:id="@+id/gameOpposition"
             android:layout_width="wrap_content"
@@ -34,7 +42,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginLeft="8dp"
             android:textSize="20dp"
-            android:layout_toRightOf="@id/oppositionImg"
+            android:layout_toRightOf="@id/imageCount"
             android:layout_alignTop="@id/oppositionImg"/>
         <TextView
             android:id="@+id/gameResult"
@@ -43,7 +51,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginLeft="8dp"
             android:textSize="20dp"
-            android:layout_toRightOf="@id/oppositionImg"
+            android:layout_toRightOf="@id/imageCount"
             android:layout_below="@id/gameOpposition"/>
         <TextView
             android:id="@+id/gameScoreTime"
