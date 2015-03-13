@@ -197,4 +197,26 @@ public class FanUtil {
                 return Integer.toString(R.drawable.ic_filter_9_plus_grey600_18dp);
         }
     }
+
+    static public GameSearchKey setGameSearchKey(String gameYear, String gameYearMonth, String category, int type){
+        GameSearchKey key = new GameSearchKey();
+        key.setIsSet(true);
+        if("".equals(gameYear)){
+            key.setGameYear(null);
+        }else{
+            key.setGameYear(gameYear);
+        }
+        if("".equals(gameYearMonth)){
+            key.setGameYearMonth(null);
+        }else{
+            key.setGameYearMonth(gameYearMonth);
+        }
+        if("".equals(category)){
+            key.setCategory(null);
+        }else{
+            key.setCategory(category);
+        }
+        key.setType(type);
+        return key;
+    }
 }

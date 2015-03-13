@@ -18,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.takawo.fan.adapter.GameAdapter;
 import com.takawo.fan.adapter.KeyValuePairArrayAdapter;
@@ -30,6 +31,7 @@ import com.takawo.fan.util.FanConst;
 import com.takawo.fan.MyApplication;
 import com.takawo.fan.util.FanMaster;
 import com.takawo.fan.util.FanUtil;
+import com.takawo.fan.util.GameSearchKey;
 import com.takawo.fan.util.KeyValuePair;
 import com.takawo.fan.util.MyItemDecoration;
 import com.takawo.fan.R;
@@ -60,16 +62,9 @@ public class GameActivity extends ActionBarActivity {
     public static final String SQL_IMAGE_GROUPBY_GAME = "Select GAME_ID, count(*) AS cnt From FANDB_IMAGE Where PLAYER_ID = ? Group BY GAME_ID Order By GAME_ID";
     private Long id;
     private FandbPlayer playerData;
-    private List<FandbGame> gameList;
     private RecyclerView.LayoutManager layoutManagerGame;
 
     private SharedPreferences sharePre;
-    private final String SHARE_GAME_SEARCH_KEY_YEAR = "shareGameSearchKeyYear";
-    private final String SHARE_GAME_SEARCH_KEY_YEARMONTH = "shareGameSearchKeyYearMonth";
-    private final String SHARE_GAME_SEARCH_KEY_CATEGORY = "shareGameSearchKeyCategory";
-    private final String SHARE_GAME_SEARCH_KEY_TYPE = "shareGameSearchKeyType";
-
-    private final String FILTER_NOTHING = "すべて";
 
     @InjectView(R.id.tool_bar_game_list)
     Toolbar toolbar;
@@ -142,12 +137,29 @@ public class GameActivity extends ActionBarActivity {
         id = intent.getLongExtra(FanConst.INTENT_PLAYER_ID, 0);
         playerData = ((MyApplication)getApplication()).getDaoSession().getFandbPlayerDao().load(id);
 
+        //Spinnerの値用の全件検索
+        List<FandbGame> gameList = ((MyApplication)getApplication()).getDaoSession().getFandbGameDao().queryBuilder()
+                .where(FandbGameDao.Properties.PlayerId.eq(id)).orderDesc(FandbGameDao.Properties.GameDay).list();
+
+        Gson gson = new Gson();
+        GameSearchKey key = gson.fromJson(sharePre.getString(FanConst.SHARED_GAME_SEARCH_KEY, ""), GameSearchKey.class);
+        String defaultKeyGameYear = FanConst.FILTER_NOTHING;
+        String defaultKeyGameYearMonth = FanConst.FILTER_NOTHING;
+        String defaultKeyCategory = FanConst.FILTER_NOTHING;
+        int defaultType = 99;
+        if(key != null && key.isSet()){
+            defaultKeyGameYear = key.getGameYear();
+            defaultKeyGameYearMonth = key.getGameYearMonth();
+            defaultKeyCategory = key.getCategory();
+            defaultType = key.getType();
+        }
+
         setToolbar();  //ToolBar設定
-        setList();  //一覧取得
-        setSerachKeyDateYear();  //検索キー設定
-        setSerachKeyDate();  //検索キー設定
-        setSerachKeyCategory();  //検索キー設定
-        setSerachKeyType();  //検索キー設定
+        setSerachKeyDateYear(gameList, defaultKeyGameYear);  //検索キー設定
+        setSerachKeyDate(gameList, defaultKeyGameYearMonth);  //検索キー設定
+        setSerachKeyCategory(gameList, defaultKeyCategory);  //検索キー設定
+        setSerachKeyType(defaultType);  //検索キー設定
+        setList(defaultKeyGameYear, defaultKeyGameYearMonth, defaultKeyCategory, defaultType);  //一覧取得
 
     }
 
@@ -201,10 +213,7 @@ public class GameActivity extends ActionBarActivity {
     /**
      * Listセット
      */
-    private void setList(){
-
-        gameList = ((MyApplication)getApplication()).getDaoSession().getFandbGameDao().queryBuilder()
-                .where(FandbGameDao.Properties.PlayerId.eq(id)).orderDesc(FandbGameDao.Properties.GameDay).list();
+    private void setList(String gameYear, String gameYearMonth, String category, int type){
 
         recyclerViewGame.setHasFixedSize(true);
         recyclerViewGame.addItemDecoration(new MyItemDecoration(this));
@@ -219,6 +228,7 @@ public class GameActivity extends ActionBarActivity {
         if("".equals(playerData.getPlayerFontColor()) == false){
             playerFontColor = Integer.parseInt(playerData.getPlayerFontColor());
         }
+        List<FandbGame> gameList = getQuery(gameYear, gameYearMonth, category, type);
         recyclerViewGame.setAdapter(new GameAdapter(this, gameList, playerColor, playerFontColor, getGameGroupByList()));
     }
 
@@ -246,35 +256,10 @@ public class GameActivity extends ActionBarActivity {
         String category = searchKeyCategory.getSelectedItem().toString();
         int type = ((KeyValuePair)searchKeyType.getSelectedItem()).getKey();
 
-        QueryBuilder qb = ((MyApplication)getApplication()).getDaoSession().getFandbGameDao().queryBuilder()
-                .where(FandbGameDao.Properties.PlayerId.eq(id));
+        Gson gson = new Gson();
+        sharePre.edit().putString(FanConst.SHARED_GAME_SEARCH_KEY, gson.toJson(FanUtil.setGameSearchKey(gameYear, gameDay, category, type))).commit();
 
-        if(FILTER_NOTHING.equals(gameYear) == false){
-            sharePre.edit().putString(SHARE_GAME_SEARCH_KEY_YEAR, gameYear).commit();
-            Date from = new Date(gameYear+"/01/01");
-            Date to = new Date(gameYear+"/12/31");
-            qb.where(FandbGameDao.Properties.GameDay.ge(from));
-            qb.where(FandbGameDao.Properties.GameDay.lt(to));
-        }
-        if(FILTER_NOTHING.equals(gameDay) == false){
-            sharePre.edit().putString(SHARE_GAME_SEARCH_KEY_YEARMONTH, gameDay).commit();
-            Date from = new Date(gameDay+"/01");
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(from);
-            cal.add(Calendar.MONTH, 1);
-            Date to = cal.getTime();
-            qb.where(FandbGameDao.Properties.GameDay.ge(from));
-            qb.where(FandbGameDao.Properties.GameDay.lt(to));
-        }
-        if(FILTER_NOTHING.equals(category) == false){
-            sharePre.edit().putString(SHARE_GAME_SEARCH_KEY_CATEGORY, category).commit();
-            qb.where(FandbGameDao.Properties.GameCategory.eq(category));
-        }
-        if(type != 99){
-            sharePre.edit().putInt(SHARE_GAME_SEARCH_KEY_TYPE, type).commit();
-            qb.where(FandbGameDao.Properties.GameType.eq(type));
-        }
-        List<FandbGame> list = qb.orderDesc(FandbGameDao.Properties.GameDay).list();
+        List<FandbGame> list = getQuery(gameYear, gameDay, category, type);
         recyclerViewGame.setHasFixedSize(true);
         recyclerViewGame.addItemDecoration(new MyItemDecoration(this));
 
@@ -283,12 +268,40 @@ public class GameActivity extends ActionBarActivity {
         recyclerViewGame.setAdapter(new GameAdapter(this, list, new Integer(playerData.getPlayerColor()), new Integer(playerData.getPlayerFontColor()), getGameGroupByList()));
     }
 
+    private List<FandbGame> getQuery(String gameYear, String gameDay, String category, int type) {
+        QueryBuilder qb = ((MyApplication)getApplication()).getDaoSession().getFandbGameDao().queryBuilder()
+                .where(FandbGameDao.Properties.PlayerId.eq(id));
+
+        if(FanConst.FILTER_NOTHING.equals(gameYear) == false){
+            Date from = new Date(gameYear+"/01/01");
+            Date to = new Date(gameYear+"/12/31");
+            qb.where(FandbGameDao.Properties.GameDay.ge(from));
+            qb.where(FandbGameDao.Properties.GameDay.lt(to));
+        }
+        if(FanConst.FILTER_NOTHING.equals(gameDay) == false){
+            Date from = new Date(gameDay+"/01");
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(from);
+            cal.add(Calendar.MONTH, 1);
+            Date to = cal.getTime();
+            qb.where(FandbGameDao.Properties.GameDay.ge(from));
+            qb.where(FandbGameDao.Properties.GameDay.lt(to));
+        }
+        if(FanConst.FILTER_NOTHING.equals(category) == false){
+            qb.where(FandbGameDao.Properties.GameCategory.eq(category));
+        }
+        if(type != 99){
+            qb.where(FandbGameDao.Properties.GameType.eq(type));
+        }
+        return qb.orderDesc(FandbGameDao.Properties.GameDay).list();
+    }
+
     /**
      * 検索キーセット
      */
-    private void setSerachKeyDateYear(){
+    private void setSerachKeyDateYear(List<FandbGame> allData, String defaultVal){
         ArrayAdapter<String> dateAdapter =
-                (new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, getGameDateYearGroup(gameList)));
+                (new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, getGameDateYearGroup(allData)));
         dateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         searchKeyDateYear.setAdapter(dateAdapter);
         searchKeyDateYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -299,7 +312,7 @@ public class GameActivity extends ActionBarActivity {
                     searchKeyDateYear.setFocusable(true);
                     return;
                 }
-                searchKeyDate.setEnabled(FILTER_NOTHING.equals(searchKeyDateYear.getSelectedItem()));  //年が"全てなら"年月は活性状態
+                searchKeyDate.setEnabled(FanConst.FILTER_NOTHING.equals(searchKeyDateYear.getSelectedItem()));  //年が"全てなら"年月は活性状態
                 setQueryList();
             }
 
@@ -309,10 +322,13 @@ public class GameActivity extends ActionBarActivity {
             }
         });
         searchKeyDateYear.setFocusable(false);
+        if(defaultVal != null){
+            searchKeyDateYear.setSelection(dateAdapter.getPosition(defaultVal));
+        }
     }
-    private void setSerachKeyDate(){
+    private void setSerachKeyDate(List<FandbGame> allData, String defaultVal){
         ArrayAdapter<String> dateAdapter =
-                (new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, getGameDateGroup(gameList)));
+                (new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, getGameDateGroup(allData)));
         dateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         searchKeyDate.setAdapter(dateAdapter);
         searchKeyDate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -323,7 +339,7 @@ public class GameActivity extends ActionBarActivity {
                     searchKeyDate.setFocusable(true);
                     return;
                 }
-                searchKeyDateYear.setEnabled(FILTER_NOTHING.equals(searchKeyDate.getSelectedItem()));  //年月が"全てなら"年は活性状態
+                searchKeyDateYear.setEnabled(FanConst.FILTER_NOTHING.equals(searchKeyDate.getSelectedItem()));  //年月が"全てなら"年は活性状態
                 setQueryList();
             }
             @Override
@@ -332,10 +348,13 @@ public class GameActivity extends ActionBarActivity {
             }
         });
         searchKeyDate.setFocusable(false);
+        if(defaultVal != null){
+            searchKeyDateYear.setSelection(dateAdapter.getPosition(defaultVal)+1);
+        }
     }
-    private void setSerachKeyCategory(){
+    private void setSerachKeyCategory(List<FandbGame> allData, String defaultVal){
         ArrayAdapter<String> categoryAdapter =
-                new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, getGameCategoryGroup(gameList));
+                new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, getGameCategoryGroup(allData));
         searchKeyCategory.setAdapter(categoryAdapter);
         categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         searchKeyCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -356,8 +375,12 @@ public class GameActivity extends ActionBarActivity {
         });
         searchKeyCategory.setFocusable(false);
         searchKeyCategory.setPromptId(R.string.game_list_view_filter_category);
+        if(defaultVal != null){
+            searchKeyDateYear.setSelection(categoryAdapter.getPosition(defaultVal)+1);
+        }
+
     }
-    private void setSerachKeyType(){
+    private void setSerachKeyType(Integer defaultVal){
         searchKeyType.setOnItemSelectedListener(onItemSelectedListenerOfType);
         KeyValuePairArrayAdapter typeAdapter = new KeyValuePairArrayAdapter(this, android.R.layout.simple_spinner_item, FanMaster.getGameTypeForSearch());
         typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -380,6 +403,9 @@ public class GameActivity extends ActionBarActivity {
         });
         searchKeyType.setFocusable(false);
         searchKeyType.setPromptId(R.string.game_list_view_filter_type);
+        if(defaultVal != null){
+            searchKeyDateYear.setSelection(typeAdapter.getPosition(defaultVal)+1);
+        }
     }
 
     private AdapterView.OnItemSelectedListener onItemSelectedListenerOfType = new AdapterView.OnItemSelectedListener() {
@@ -407,7 +433,7 @@ public class GameActivity extends ActionBarActivity {
         }
 
         List<String> rtnList = new ArrayList<>();
-        rtnList.add(FILTER_NOTHING);
+        rtnList.add(FanConst.FILTER_NOTHING);
 
         List<String> tmpList = new ArrayList<>();
         for(String value: dateList){
@@ -435,7 +461,7 @@ public class GameActivity extends ActionBarActivity {
         }
 
         List<String> rtnList = new ArrayList<>();
-        rtnList.add(FILTER_NOTHING);
+        rtnList.add(FanConst.FILTER_NOTHING);
 
         List<String> tmpList = new ArrayList<>();
         for(String value: dateList){
@@ -462,7 +488,7 @@ public class GameActivity extends ActionBarActivity {
         }
 
         List<String> rtnList = new ArrayList<>();
-        rtnList.add(FILTER_NOTHING);
+        rtnList.add(FanConst.FILTER_NOTHING);
 
         List<String> tmpList = new ArrayList<>();
         for(String value: categoryList){

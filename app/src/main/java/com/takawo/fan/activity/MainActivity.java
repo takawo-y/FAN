@@ -4,8 +4,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.CountDownTimer;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,10 +20,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.takawo.fan.MyApplication;
 import com.takawo.fan.adapter.PlayerAdapter;
 import com.takawo.fan.util.FanConst;
 import com.takawo.fan.util.FanUtil;
+import com.takawo.fan.util.GameSearchKey;
 import com.takawo.fan.util.MyItemDecoration;
 import com.takawo.fan.R;
 import com.takawo.fan.db.FandbPlayer;
@@ -61,6 +65,11 @@ public class MainActivity extends ActionBarActivity {
 
         setToolbar();  //ToolBar設定
         setList();  //一覧取得
+
+        SharedPreferences sharePre = PreferenceManager.getDefaultSharedPreferences(this);
+        Gson gson = new Gson();
+        sharePre.edit().putString(FanConst.SHARED_GAME_SEARCH_KEY, gson.toJson(new GameSearchKey())).commit();  //検索キー保持をクリア
+
     }
 
     private void setToolbar(){

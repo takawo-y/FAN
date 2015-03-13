@@ -4,10 +4,13 @@ package com.takawo.fan.util;
  * Created by 9004027600 on 2015/02/06.
  */
 public class FanConst {
-    static public String INTENT_PLAYER_ID = "playerId";
-    static public String INTENT_GAME_ID = "gameId";
+    static public final String INTENT_PLAYER_ID = "playerId";
+    static public final String INTENT_GAME_ID = "gameId";
+    static public final String INTENT_FRAGMENT_POSITION = "fragmentPosition";
 
-    static public String INTENT_FRAGMENT_POSITION = "fragmentPosition";
+    static public final String FILTER_NOTHING = "すべて";
+
+    static public final String SHARED_GAME_SEARCH_KEY = "gameSearchKey";
 
     static public final int COLOR_TABLE[] = {
             0xffffffff, 0xffc0c0c0, 0xff808080, 0xff000000,
