@@ -349,7 +349,7 @@ public class GameActivity extends ActionBarActivity {
         });
         searchKeyDate.setFocusable(false);
         if(defaultVal != null){
-            searchKeyDateYear.setSelection(dateAdapter.getPosition(defaultVal)+1);
+            searchKeyDate.setSelection(dateAdapter.getPosition(defaultVal));
         }
     }
     private void setSerachKeyCategory(List<FandbGame> allData, String defaultVal){
@@ -376,7 +376,7 @@ public class GameActivity extends ActionBarActivity {
         searchKeyCategory.setFocusable(false);
         searchKeyCategory.setPromptId(R.string.game_list_view_filter_category);
         if(defaultVal != null){
-            searchKeyDateYear.setSelection(categoryAdapter.getPosition(defaultVal)+1);
+            searchKeyCategory.setSelection(categoryAdapter.getPosition(defaultVal));
         }
 
     }
@@ -404,7 +404,7 @@ public class GameActivity extends ActionBarActivity {
         searchKeyType.setFocusable(false);
         searchKeyType.setPromptId(R.string.game_list_view_filter_type);
         if(defaultVal != null){
-            searchKeyDateYear.setSelection(typeAdapter.getPosition(defaultVal)+1);
+            searchKeyType.setSelection(typeAdapter.getPosition(defaultVal));
         }
     }
 
