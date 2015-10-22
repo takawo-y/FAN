@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.CountDownTimer;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
@@ -13,7 +12,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,6 +21,8 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.takawo.fan.MyApplication;
 import com.takawo.fan.adapter.PlayerAdapter;
+import com.takawo.fan.db.FandbGame;
+import com.takawo.fan.db.FandbGameDao;
 import com.takawo.fan.util.FanConst;
 import com.takawo.fan.util.FanUtil;
 import com.takawo.fan.util.GameSearchKey;
@@ -31,13 +31,18 @@ import com.takawo.fan.R;
 import com.takawo.fan.db.FandbPlayer;
 
 import java.io.File;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import de.greenrobot.dao.query.QueryBuilder;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -84,10 +89,61 @@ public class MainActivity extends ActionBarActivity {
         recyclerViewPlayer.setHasFixedSize(true);
         recyclerViewPlayer.addItemDecoration(new MyItemDecoration(this));
 
+        Calendar today = Calendar.getInstance();
+        String todayYear = Integer.toString(today.get(Calendar.YEAR));
+
         layoutManagerPlayer = new LinearLayoutManager(this);
         recyclerViewPlayer.setLayoutManager(layoutManagerPlayer);
-        recyclerViewPlayer.setAdapter(new PlayerAdapter(this, playerList));
+        recyclerViewPlayer.setAdapter(new PlayerAdapter(this, playerList, todayYear, getPlayerCount(playerList, todayYear),
+                getPlayerWatchGameCount(playerList, todayYear)));
 
+    }
+
+    /**
+     * Player毎のGame数
+     *
+     * @param playerList
+     * @return
+     */
+    private Map<Long, Integer> getPlayerCount(List<FandbPlayer> playerList, String searchKeyYear){
+        Map map = new HashMap();
+
+        for(FandbPlayer player: playerList){
+            QueryBuilder countQB = ((MyApplication)getApplication()).getDaoSession().getFandbGameDao().queryBuilder();
+            countQB.where(FandbGameDao.Properties.PlayerId.eq(player.getId()));
+            Date from = new Date(searchKeyYear+"/01/01");
+            Date to = new Date(searchKeyYear+"/12/31");
+            countQB.where(FandbGameDao.Properties.GameDay.ge(from));
+            countQB.where(FandbGameDao.Properties.GameDay.lt(to));
+            List<FandbGame> gameList = countQB.list();
+            map.put(player.getId(), new Integer(gameList.size()));
+        }
+
+        return map;
+    }
+
+    /**
+     * Player毎の現地観戦数
+     *
+     * @param playerList
+     * @return
+     */
+    private Map<Long, Integer> getPlayerWatchGameCount(List<FandbPlayer> playerList, String searchKeyYear){
+        Map map = new HashMap();
+
+        for(FandbPlayer player: playerList){
+            QueryBuilder countQB = ((MyApplication)getApplication()).getDaoSession().getFandbGameDao().queryBuilder();
+            countQB.where(FandbGameDao.Properties.PlayerId.eq(player.getId()),
+                    FandbGameDao.Properties.GameType.eq(new Integer(0)) );
+            Date from = new Date(searchKeyYear+"/01/01");
+            Date to = new Date(searchKeyYear+"/12/31");
+            countQB.where(FandbGameDao.Properties.GameDay.ge(from));
+            countQB.where(FandbGameDao.Properties.GameDay.lt(to));
+            List<FandbGame> gameList = countQB.list();
+            map.put(player.getId(), new Integer(gameList.size()));
+        }
+
+        return map;
     }
 
     @Override

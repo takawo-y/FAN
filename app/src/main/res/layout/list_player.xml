@@ -35,10 +35,10 @@
             android:layout_toRightOf="@id/playerImg"
             android:layout_below="@id/playerName"/>
         <TextView
-            android:id="@+id/category"
+            android:id="@+id/numberOfWatch"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textSize="20dp"
+            android:textSize="16dp"
             android:layout_toRightOf="@id/playerImg"
             android:layout_below="@id/gameEvent"/>
     </RelativeLayout>

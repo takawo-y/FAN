@@ -20,6 +20,7 @@ import com.takawo.fan.db.FandbPlayer;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Takawo on 2014/12/31.
@@ -30,12 +31,18 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.ViewHolder
     private LayoutInflater inf;
     private List<FandbPlayer> dataList;
     private Context context;
+    private String watchYear;
+    private Map<Long, Integer> allCountMap;
+    private Map<Long, Integer> watchGameCountMap;
 
-    public PlayerAdapter(Context context, List<FandbPlayer> dataList){
+    public PlayerAdapter(Context context, List<FandbPlayer> dataList, String watchYear, Map allCountMap, Map watchGameCountMap){
         super();
         this.context = context;
         inf = LayoutInflater.from(context);
         this.dataList = dataList;
+        this.watchYear = watchYear;
+        this.allCountMap = allCountMap;
+        this.watchGameCountMap = watchGameCountMap;
     }
 
     @Override
@@ -59,7 +66,9 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
-        viewHolder.setItem(dataList.get(i));
+        String count = watchGameCountMap.get(dataList.get(i).getId())+" / "+allCountMap.get(dataList.get(i).getId())
+                +" ("+watchYear+"年の現地観戦数)";
+        viewHolder.setItem(dataList.get(i), count);
         viewHolder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,7 +96,7 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.ViewHolder
         ImageView playerImage;
         TextView playerName;
         TextView gameEvent;
-        TextView category;
+        TextView numberOfWatch;
 
         public ViewHolder(Context context, View v) {
             super(v);
@@ -98,10 +107,10 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.ViewHolder
             playerImage = (ImageView)v.findViewById(R.id.playerImg);
             playerName = (TextView)v.findViewById(R.id.playerName);
             gameEvent = (TextView)v.findViewById(R.id.gameEvent);
-            category = (TextView)v.findViewById(R.id.category);
+            numberOfWatch = (TextView)v.findViewById(R.id.numberOfWatch);
         }
 
-        public void setItem(FandbPlayer data){
+        public void setItem(FandbPlayer data, String numOfWatchString){
             playerId = data.getId();
             if(null == data.getPlayerImagePath() || "".equals(data.getPlayerImagePath())){
                 Picasso.with(context)
@@ -118,7 +127,7 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.ViewHolder
             }
             playerName.setText(data.getPlayerName());
             gameEvent.setText(data.getGameEvent());
-            category.setText(data.getCategory());
+            numberOfWatch.setText(numOfWatchString);
         }
 
         @Override
